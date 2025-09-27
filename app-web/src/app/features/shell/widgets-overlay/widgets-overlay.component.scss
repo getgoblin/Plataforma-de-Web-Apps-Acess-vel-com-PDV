@@ -1,0 +1,110 @@
+:host{ position: fixed; inset: 0; z-index: 50; pointer-events: none; }
+:host.is-fading dialog{ animation: woFadeOut .20s ease forwards !important; }
+
+/* só colapsa quando ativarmos a 2ª fase */
+:host.is-rippling-close .wo__wave--dark  { animation: woCollapse .35s ease-in forwards !important; }
+:host.is-rippling-close .wo__wave--green { animation: woCollapse .45s ease-in .30s forwards !important; }
+
+dialog{
+  pointer-events: auto; z-index: 2;
+  border: 0; border-radius: 16px; padding: 0;
+  width: min(960px, 92vw); max-height: min(78dvh, 720px);
+  background: #1f1f1f; color: var(--text);
+  box-shadow: 0 30px 80px rgba(0,0,0,.55);
+  opacity: 0; animation: woFadeIn .30s ease forwards; animation-delay: .55s;
+}
+/* backdrop precisa ser transparente para ver as ondas */
+dialog::backdrop{ background: transparent; }
+
+
+/* FX */
+.wo__fx{
+  position: fixed; inset: 0; pointer-events: none;
+  z-index: 1;
+  --cx: 50vw;
+  --cy: 28px;
+  --r0: 18px;
+}
+
+.wo__wave{
+  position: absolute; inset: 0;
+  clip-path: circle(var(--r0) at var(--cx) var(--cy));
+  will-change: clip-path;
+}
+
+.wo__wave--green{ background:#53E3A6; animation: woExpand .35s ease-out forwards; }
+.wo__wave--dark { background:#292929; animation: woExpand .45s ease-out .30s forwards; }
+
+/* header */
+.wo__header{
+  display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 8px;
+  padding: 12px 14px; border-bottom: 1px solid var(--line);
+}
+.wo__close{ --size: 28px; background:#292929; border:1px solid var(--line); color:var(--text); }
+
+/* conteúdo centralizado */
+.wo__content{
+  padding: 16px; overflow: auto; max-height: calc(min(78dvh, 720px) - 56px);
+}
+.wo__empty{ display: grid; place-items: center; gap: 6px; height: 240px; color: #bfbfbf; }
+
+/* seções/categorias */
+.wo__section{ margin: 18px 0; }
+.wo__cat{ margin: 0 0 10px 0; font-size: 14px; color: #d7d7d7; text-align: center; }
+
+/* grid centralizada */
+.wo__grid{
+  list-style: none; margin: 0; padding: 0;
+  display: grid; justify-content: center;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 14px; max-width: 820px; margin-inline: auto;
+}
+
+/* card do app */
+.wo__card{
+  width: 100%; border: 1px solid var(--line); border-radius: 12px;
+  background: #232323; color: var(--text);
+  padding: 14px; display: grid; place-items: center; gap: 10px;
+  transition: background-color .2s ease, border-color .2s ease, transform .05s ease;
+}
+.wo__card:hover{ background: #2a2a2a; }
+.wo__card:active{ transform: scale(.99); }
+
+.wo__icon{ font-size: 26px; background:#292929; border:1px solid var(--line); color: var(--text); }
+.wo__title{ font-size: 14px; }
+
+/* botão de widgets dentro do overlay, central no topo */
+.wo__topbtn{
+  position: fixed;
+  left: var(--btn-x, 50%);
+  top:  var(--btn-y, 8px);
+  width:  var(--btn-w, 36px);
+  height: var(--btn-h, 36px);
+  z-index: 3;            /* acima das ondas (1) e do dialog (2) */
+  pointer-events: auto;
+}
+
+
+
+@keyframes woExpand{
+  from { clip-path: circle(var(--r0) at var(--cx) var(--cy)); }
+  to   { clip-path: circle(150vmax    at var(--cx) var(--cy)); }
+}
+
+
+/* FECHAMENTO: host ganha .is-closing */
+:host.is-closing .wo__wave--dark  { animation: woCollapse .35s ease-in forwards; }
+:host.is-closing .wo__wave--green { animation: woCollapse .45s ease-in .30s forwards; }
+:host.is-closing dialog { animation: woFadeOut .20s ease forwards; animation-delay: 0s; }
+
+/* animação inversa */
+@keyframes woCollapse {
+  from { clip-path: circle(150vmax at var(--cx) var(--cy)); }
+  to   { clip-path: circle(var(--r0)    at var(--cx) var(--cy)); }
+}
+
+/* fade do dialog ao fechar */
+@keyframes woFadeOut {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(6px); }
+}

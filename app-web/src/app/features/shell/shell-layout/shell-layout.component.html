@@ -1,5 +1,5 @@
-<header class="shell__header" role="banner">
-    <app-top-bar></app-top-bar>
+<header class="shell__header" role="banner" *ngIf="!overlayOpen()">
+  <app-top-bar></app-top-bar>
 </header>
 
 <div class="shell__body" [style.gridTemplateColumns]="gridCols()">
@@ -18,4 +18,7 @@
 </div>
 
 <!-- Overlay de Widgets (usará <dialog>)-->
-<app-widgets-overlay></app-widgets-overlay>
+
+debug: overlay = {{ overlayOpen() }}
+
+<app-widgets-overlay *ngIf="overlayOpen()"></app-widgets-overlay>

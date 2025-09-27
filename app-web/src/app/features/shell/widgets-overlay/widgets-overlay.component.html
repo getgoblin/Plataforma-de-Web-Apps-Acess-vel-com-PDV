@@ -1,13 +1,44 @@
-<dialog #dlg id="widgets-dialog" aria-labelledby="widgets-title" aria-modal="true">
-  <header>
-    <h2 id="widgets-title">Aplicativos</h2>
-    <button type="button" data-helper-id="widgets-close" (click)="close()">Fechar</button>
+<!-- botão fixo no mesmo lugar -->
+<div #topbtn class="wo__topbtn">
+  <app-widgets-button></app-widgets-button>
+</div>
+
+<!-- ondas -->
+<div #fx class="wo__fx" aria-hidden="true">
+  <div class="wo__wave wo__wave--green" (animationend)="onGreenWaveEnd()"></div>
+  <div class="wo__wave wo__wave--dark"  (animationend)="onDarkWaveEnd()"></div>
+</div>
+
+<!-- dialog aparece DEPOIS da 2ª onda abrir -->
+<dialog #dlg
+        id="widgets-dialog"
+        [attr.open]="dialogOpen() ? '' : null"
+        aria-labelledby="widgets-title"
+        aria-modal="true"
+        (cancel)="onCancel($event)"
+        (animationend)="onDialogAnimEnd()">  <!-- 👈 fim do fade -->
+  <header class="wo__header">
+    <h2 id="widgets-title">Widget-apps</h2>
+    <button type="button" class="wo__close btn-circle" aria-label="Fechar" (click)="close()">✕</button>
   </header>
 
-  <section aria-label="Lista de aplicativos">
-    <ul role="list" class="widgets-grid">
-      <!-- cards dos widgets virão aqui -->
-    </ul>
+  <!-- catálogo -->
+  <section class="wo__content" aria-label="Catálogo de aplicativos">
+    <div class="wo__empty" *ngIf="categories().length === 0">
+      <p>Sem apps disponíveis.</p>
+      <small>Use o botão de Widgets quando os aplicativos forem adicionados.</small>
+    </div>
+
+    <div class="wo__section" *ngFor="let cat of categories()">
+      <h3 class="wo__cat">{{ cat[0] }}</h3>
+      <ul class="wo__grid" role="list">
+        <li *ngFor="let app of cat[1]">
+          <button type="button" class="wo__card" (click)="openApp(app)">
+            <span class="wo__icon btn-circle" style="--size:56px">{{ app.icon }}</span>
+            <strong class="wo__title">{{ app.name }}</strong>
+          </button>
+        </li>
+      </ul>
+    </div>
   </section>
 </dialog>
-

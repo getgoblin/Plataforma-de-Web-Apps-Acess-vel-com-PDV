@@ -1,0 +1,20 @@
+@use 'sass:color';
+$accent: #53E3A6;
+
+:host{ display: contents; } /* herda posicionamento do pai */
+
+.widgets-btn{
+  background: $accent;
+  color: #fff;
+  border-color: transparent;
+  transition: background-color .25s ease, transform .05s ease;
+
+  &:hover{ background: color.adjust($accent, $lightness: -6%); }
+  &:active{ transform: scale(.98); }
+  &:focus-visible{ outline: 2px solid #fff; outline-offset: 2px; }
+
+  &.is-firing{
+    transition-delay: .30s;
+    background: #292929;
+  }
+}

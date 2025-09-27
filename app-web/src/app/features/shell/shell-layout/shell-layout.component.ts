@@ -5,6 +5,7 @@ import { RightBarComponent } from '../right-bar/right-bar.component';
 import { MainAreaComponent } from '../main-area/main-area.component';
 import { WidgetsOverlayComponent } from '../widgets-overlay/widgets-overlay.component';
 import { UIService } from '../../../core/services/ui.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-shell-layout',
@@ -13,7 +14,8 @@ import { UIService } from '../../../core/services/ui.service';
     LeftBarComponent,
     RightBarComponent,
     MainAreaComponent,
-    WidgetsOverlayComponent
+    WidgetsOverlayComponent,
+    CommonModule
   ],
   templateUrl: './shell-layout.component.html',
   styleUrl: './shell-layout.component.scss'
@@ -21,6 +23,7 @@ import { UIService } from '../../../core/services/ui.service';
 export class ShellLayoutComponent {
 
 private readonly ui = inject(UIService);
+overlayOpen = this.ui.widgetsOverlayOpen;
 leftOpen  = this.ui.leftOpen;
 rightOpen = this.ui.rightOpen;
 

@@ -53,12 +53,19 @@ $darkText: #292929;
   background: $accent;
   color: #fff;                   /* cor do SVG */
   border-color: transparent;
+  transition: background-color .25s ease, transform .05s ease;
+
 
   &:hover{ background: color.adjust($accent, $lightness: -6%); }
   &:active{ transform: scale(.98); }
   &:focus-visible{ outline: 2px solid #fff; outline-offset: 2px; }
-}
 
+    /* quando dispara a animação: troca pra #292929 com um pequeno delay */
+  &.is-firing{
+    transition-delay: .30s;        /* começa após a onda verde iniciar */
+    background: #292929;
+}
+}
 /* User: pílula verde com texto #292929 */
 .user-btn{
   background: $accent;

@@ -4,9 +4,12 @@
 :host { display:block; }
 
 .shell__header{
+  position: relative;      
+  z-index: 100;            /* + mantém top-bar clicável acima das ondas/dialog */
   background: transparent;
   border-bottom: 1px solid var(--line);
 }
+
 
 .shell__body{
   height: calc(100dvh - 56px);
