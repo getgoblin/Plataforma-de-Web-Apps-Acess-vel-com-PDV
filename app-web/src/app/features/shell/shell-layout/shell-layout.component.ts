@@ -26,8 +26,8 @@ rightOpen = this.ui.rightOpen;
 
 // colunas reativas do grid
 gridCols = computed(() => {
-  const left  = this.leftOpen()  ? '220px' : '72px';
-  const right = this.rightOpen() ? '320px' : '8px'; // <- handle visível
+  const left  = this.leftOpen()  ? '300px' : '68px';
+  const right = this.rightOpen() ? '300px' : '4px'; // <- handle visível
   return `${left} 1fr ${right}`;
 });
 
