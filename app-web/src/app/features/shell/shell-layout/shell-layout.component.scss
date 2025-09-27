@@ -1,0 +1,23 @@
+/* ===========================
+   🧱 GRID DO SHELL
+   =========================== */
+:host { display:block; }
+
+.shell__header{
+  background: transparent;
+  border-bottom: 1px solid var(--line);
+}
+
+.shell__body{
+  height: calc(100dvh - 56px);
+  display: grid;
+  grid-template-columns: 72px 1fr 280px;
+  min-height: 0;
+  overflow: hidden;            /* <- evita rolagem */
+}
+
+
+.shell__left, .shell__main, .shell__right { min-height: 0; }
+.shell__left  { background: transparent; border-right: 1px solid var(--line); }
+.shell__right { background: transparent; border-left:  1px solid var(--line); }
+.shell__main  { background: transparent; color: var(--text); overflow: hidden; }

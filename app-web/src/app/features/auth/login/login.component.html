@@ -1,0 +1,37 @@
+<!-- 🔐 Login (semântico) -->
+<div class="login-wrapper" [class.form-success]="formSuccess">
+  <section class="login-container" aria-label="Autenticação">
+    <h1 class="login-title">Welcome</h1>
+
+    <form class="login-form"
+          (ngSubmit)="submit()"
+          [class.fade-out]="fading"
+          autocomplete="off">
+      <label class="visually-hidden" for="login-user">Username</label>
+      <input id="login-user"
+             type="text"
+             name="user"                 
+             autocomplete="off"
+             [readonly]="userReadonly"   
+             (focus)="userReadonly=false"
+             [(ngModel)]="name"
+             placeholder="Username"
+             spellcheck="false"
+             autocapitalize="off"
+             autocorrect="off"
+             required />
+
+      <label class="visually-hidden" for="login-pw">Password</label>
+      <input id="login-pw"
+             type="password"
+             name="password"
+             autocomplete="new-password"
+             [readonly]="pwReadonly"
+             (focus)="pwReadonly=false"
+             [(ngModel)]="pw"
+             placeholder="Password" />
+
+      <button type="submit" id="login-button" class="btn-primary">Login</button>
+    </form>
+  </section>
+</div>

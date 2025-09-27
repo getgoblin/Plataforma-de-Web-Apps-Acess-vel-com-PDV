@@ -1,0 +1,95 @@
+@use 'sass:color';
+
+// TOKENS
+$primary: #53E3A6;
+
+// PLACEHOLDER
+::placeholder { color: grey; opacity: 1; }
+::-ms-input-placeholder { color: rgba(255,255,255,.9); }
+:-ms-input-placeholder  { color: rgba(255,255,255,.9); }
+
+// LAYOUT
+:host { display:block; min-height:100dvh; background: var(--bg); color:#fff; }
+
+.login-wrapper{
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+
+  &.form-success .login-title { transform: translateY(85px); }
+}
+
+.login-container{
+  width: 100%;
+  max-width: 600px;
+  padding: 80px 16px;
+  text-align: center;
+}
+
+.login-title{
+  font-size: 40px;
+  font-weight: 200;
+  transition: transform 1s ease-in-out;
+}
+
+// FORM / CONTROLES
+.login-form{
+  padding: 20px 0;
+  position: relative;
+  transition: opacity .5s ease;
+
+  &.fade-out { opacity: 0; }
+
+  input{
+    display: block;
+    width: 250px;
+    margin: 0 auto 10px;
+    padding: 10px 15px;
+    text-align: center;
+
+    color: #fff;
+    background: rgba(255,255,255,.20);
+    border: 1px solid rgba(255,255,255,.40);
+    border-radius: 3px;
+
+    font-size: 18px;
+    font-weight: 300;
+    outline: 0;
+    transition: all .25s ease;
+
+    &:hover { background: rgba(255,255,255,.40); }
+    &:focus {
+      background: #fff;
+      color: $primary;
+      width: 300px;
+    }
+  }
+
+  button{
+    display: block;
+    width: 250px;
+    margin: 10px auto 0;
+    padding: 10px 15px;
+
+    background: $primary;
+    color: #fff;
+    border: 0;
+    border-radius: 3px;
+    font-size: 18px;
+
+    transition: background-color .25s ease, transform .05s ease;
+
+    &:hover  { background: color.adjust($primary, $lightness: -8%); }
+    &:active { transform: translateY(1px); }
+    &:disabled { opacity: .6; cursor: not-allowed; }
+    &:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+  }
+}
+
+// VARIAÇÃO DE BOTÃO
+.btn-primary { background: #fff; color: $primary; }
+
+// REDUZIR ANIMAÇÕES
+@media (prefers-reduced-motion: reduce){
+  .login-title, .login-form, .login-form input, .login-form button { transition: none !important; }
+}

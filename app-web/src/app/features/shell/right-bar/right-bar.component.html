@@ -1,0 +1,17 @@
+<section class="rightbar" [class.is-open]="rightOpen()" aria-labelledby="logger-title">
+  <!-- Alça fixa: metade visível para expandir/retrair -->
+  <button type="button"
+          class="rightbar__toggle"
+          [attr.aria-expanded]="rightOpen() ? 'true' : 'false'"
+          aria-controls="logger-panel"
+          (click)="toggleRight()">
+    {{ rightOpen() ? '⟩' : '⟨' }}
+  </button>
+
+  <header class="rightbar__header">
+    <h2 id="logger-title">Logger</h2>
+  </header>
+
+  <!-- Renderiza o conteúdo só quando aberto -->
+  <app-logger *ngIf="rightOpen()" id="logger-panel"></app-logger>
+</section>

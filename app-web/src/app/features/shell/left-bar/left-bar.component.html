@@ -1,0 +1,35 @@
+<section class="leftbar" [class.is-open]="leftOpen()" aria-label="Menu Helper">
+  <!-- Alça circular (metade visível quando retraído) -->
+  <button type="button"
+          class="leftbar__toggle"
+          [attr.aria-expanded]="leftOpen() ? 'true' : 'false'"
+          aria-controls="leftbar-panel"
+          (click)="toggleLeft()">
+    {{ leftOpen() ? '⟨' : '⟩' }}
+  </button>
+
+  <nav aria-label="Ações do Helper">
+    <ul role="list" class="leftbar__list">
+      <li>
+        <button type="button" aria-pressed="false" aria-describedby="hotkeys-desc" data-helper-id="hotkeys">
+          Hotkeys
+        </button>
+        <span id="hotkeys-desc" class="visually-hidden">Exibe atalhos da aplicação</span>
+      </li>
+      <li>
+        <button type="button" aria-pressed="false" aria-describedby="helper-desc" data-helper-id="helper">
+          Helper
+        </button>
+        <span id="helper-desc" class="visually-hidden">Mostra dicas sobre componentes focados</span>
+      </li>
+      <li>
+        <button type="button" aria-pressed="false" aria-describedby="visual-desc" data-helper-id="visual">
+          Visual
+        </button>
+        <span id="visual-desc" class="visually-hidden">Leitor de textos para acessibilidade</span>
+      </li>
+    </ul>
+  </nav>
+
+  <section id="leftbar-panel" hidden aria-label="Opções do Helper"></section>
+</section>
