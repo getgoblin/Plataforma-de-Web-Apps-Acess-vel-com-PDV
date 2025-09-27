@@ -7,9 +7,9 @@ export const routes: Routes = [
     { path: 'login', component: LoginComponent, title: 'Login'},
 
     //Área Principal (LayoutBase) - protegida pelo guard
-    {path: 'app', component: ShellLayoutComponent, canMatch: [authGuard], title: 'Aplicação'},
+    { path: 'app', component: ShellLayoutComponent, canMatch: [authGuard], title: 'Aplicação'},
 
     //Redirecionamentos
-    {path: '', pathMatch: 'full', redirectTo: 'login'},
-    {path: '**', redirectTo: 'app'}
+    { path: '', pathMatch: 'full', redirectTo: 'login'},
+    { path: '**', redirectTo: 'app'}
 ];

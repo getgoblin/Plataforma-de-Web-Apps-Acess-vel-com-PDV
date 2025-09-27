@@ -1,10 +1,11 @@
 import { Component, inject } from '@angular/core';
 import { LoggerComponent } from './logger/logger.component';
 import { UIService } from '../../../core/services/ui.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-right-bar',
-  imports: [LoggerComponent],
+  imports: [LoggerComponent, CommonModule],
   templateUrl: './right-bar.component.html',
   styleUrl: './right-bar.component.scss'
 })

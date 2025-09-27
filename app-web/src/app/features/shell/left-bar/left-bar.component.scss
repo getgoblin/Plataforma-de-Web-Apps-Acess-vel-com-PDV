@@ -2,22 +2,70 @@
   position: relative;
   height: 100%;
   padding: 8px;
-  overflow: visible;                 /* permite o botão “sair” pra direita */
+  overflow: visible;
   border-right: 1px solid var(--line);
   background: transparent;
 }
 
 .leftbar__list{
   list-style: none; margin: 0; padding: 0;
-  display: grid; gap: 6px;
+  display: grid; gap: 10px;
+  justify-items:left;  /* ícones sempre centralizados */
 }
 
-/* Botão circular alinhado na borda entre Left e Main */
+.leftbar__list li{
+  display: grid;
+  justify-items: left;
+}
+
+/* expandido: ícone + texto em linha, mantendo o botão do mesmo tamanho */
+.leftbar.is-open .leftbar__list{
+  justify-items: start;
+}
+
+.leftbar.is-open .leftbar__list li{
+  grid-auto-flow: column;             /* ícone -> texto */
+  align-items: center;
+  column-gap: 10px;
+}
+
+/* rótulo */
+.leftbar__label{
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.2;
+  white-space: nowrap;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Botões circulares do Left: tamanho e fundo fixos */
+.leftbar .btn-circle{
+  --size: 36px;           /* 🔒 tamanho único */
+  background: #292929;    /* 🔒 fundo maciço */
+  border: 1px solid var(--line);
+  color: var(--text);
+  font-size: 16px;        /* tamanho do ícone */
+  line-height: 1;         /* evita “pular” */
+}
+.leftbar .btn-circle:hover{ background: #2f2f2f; }
+
+/* estado ativo (usa seu padrão de glow verde) */
+.leftbar .btn-circle.is-active{
+  border-color: #53E3A6;
+  box-shadow:
+    0 0 0 2px rgba(83,227,166,.65),
+    0 0 0 6px rgba(83,227,166,.15);
+}
+
+
+/* alça circular (mantém padrão) */
 .leftbar__toggle{
-  --size: 36px;                      /* 2 × 8px = 16px (metade visível) */
+  --size: 36px;
   position: absolute;
   top: 50%;
-  right: calc(-1 * var(--size) / 2); /* metade pra fora, em direção ao Main */
+  right: calc(-1 * var(--size) / 2);
   transform: translateY(-50%);
   width: var(--size); height: var(--size);
   border-radius: 50%;
@@ -26,7 +74,6 @@
   color: var(--text);
   display: grid; place-items: center;
   z-index: 2;
-
   transition: background-color .2s ease, transform .05s ease;
 }
 .leftbar__toggle:hover        { background: #333; }
