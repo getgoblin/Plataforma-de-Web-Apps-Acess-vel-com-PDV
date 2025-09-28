@@ -71,3 +71,8 @@ button{
     0 0 0 2px rgba(83,227,166,.65),
     0 0 0 6px rgba(83,227,166,.15);
 }
+
+/* evita "pulo" quando o body fica sem scroll ao abrir o <dialog> */
+html {
+  scrollbar-gutter: stable both-edges;
+}

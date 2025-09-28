@@ -1,52 +1,36 @@
-import { Component, ElementRef, ViewChild, inject, signal } from '@angular/core';
-import { UIService } from '../../../core/services/ui.service';
+import { Component, ElementRef, ViewChild, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { UIService } from '../../../core/services/ui.service';
 
 @Component({
   selector: 'app-widgets-button',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './widgets-button.component.html',
-  styleUrl: './widgets-button.component.scss'
+  template: `
+    <button #btn type="button" class="btn-circle widgets-btn" (click)="onClick()"
+            aria-label="Abrir/fechar catálogo de apps">
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+        <circle cx="4"  cy="4"  r="2"/><circle cx="12" cy="4"  r="2"/><circle cx="20" cy="4"  r="2"/>
+        <circle cx="4"  cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="20" cy="12" r="2"/>
+        <circle cx="4"  cy="20" r="2"/><circle cx="12" cy="20" r="2"/><circle cx="20" cy="20" r="2"/>
+      </svg>
+    </button>
+  `,
+  styleUrls: ['./widgets-button.component.scss'],
 })
 export class WidgetsButtonComponent {
   private readonly ui = inject(UIService);
-
   @ViewChild('btn', { static: true }) btn!: ElementRef<HTMLButtonElement>;
-  isFiring = signal(false);
 
-  state = this.ui.overlayState;
-
-
-
-
-onClick = (ev?: MouseEvent) => {
-  ev?.stopPropagation();
-  const s = this.ui.overlayState();
-
-  if (s === 'ready') {            // aberto -> fecha com ripple inverso
-    this.ui.requestClose();
-    return;
+  onClick() {
+    // se já está montado, fecha
+    if (this.ui.isOverlayMounted()) {
+      this.ui.closeOverlay();
+      return;
+    }
+    // salva a posição atual do botão (na TopBar) e abre
+    const r = this.btn.nativeElement.getBoundingClientRect();
+    this.ui.setBtnRect({ x: r.left, y: r.top, w: r.width, h: r.height });
+    this.ui.openOverlay();
   }
-  if (s !== 'idle') return;       // se está animando, ignora
-
-  const el = this.btn.nativeElement;
-  const r = el.getBoundingClientRect();
-  const cx = r.left + r.width / 2;
-  const cy = r.top  + r.height / 2;
-  const radius = r.width / 2;
-
-  this.ui.setWidgetsBtnRect({ x: r.left, y: r.top, w: r.width, h: r.height });
-
-  this.isFiring.set(true);
-  setTimeout(() => this.isFiring.set(false), 700);
-
-  this.ui.openAt(cx, cy, radius);
-};
-
-
-
-
-
-
 }

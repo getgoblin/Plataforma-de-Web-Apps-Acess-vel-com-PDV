@@ -1,47 +1,41 @@
-<!-- CAMADA 3: botão fixo no mesmo ponto do topo -->
-<div #topbtn class="wo__topbtn">
-  <app-widgets-button></app-widgets-button>
-</div>
+<div class="wo" (click)="noop($event)">
+  <!-- Painel do overlay colado no topo -->
+  <section class="wo__panel" role="dialog" aria-labelledby="widgets-title" aria-modal="true" (click)="noop($event)">
 
-<!-- CAMADA 1: FX (ripple) -->
-<div #fx class="wo__fx" aria-hidden="true">
-  <!-- Onda verde (abre primeiro / fecha por último) -->
-  <div class="wo__wave wo__wave--green"
-       (animationend)="onGreenAnimEnd()"></div>
+    <!-- HEADER do overlay: botão centralizado na MESMA faixa da top-bar -->
+    <header class="wo__hdr">
+      <div class="wo__hdr-side"></div>
 
-  <!-- Onda escura (abre depois / fecha primeiro) -->
-  <div class="wo__wave wo__wave--dark"
-       (animationend)="onDarkAnimEnd()"></div>
-</div>
+      <!-- 👇 o mesmo componente do topo, agora NO MEIO do header do overlay -->
+      <app-widgets-button></app-widgets-button>
 
-<!-- CAMADA 2: Catálogo (só em ready / fading) -->
-<div *ngIf="state() === 'ready' || state() === 'fading'"
-     class="wo__dialog"
-     role="dialog" aria-modal="true"
-     [class.is-fading]="state() === 'fading'"
-     (animationend)="onDialogFadeEnd($event)">
+      <div class="wo__hdr-side"></div>
+    </header>
 
-  <header class="wo__header">
-    <h2 id="widgets-title">Widget-apps</h2>
-    <button type="button" class="wo__close btn-circle" aria-label="Fechar" (click)="close()">✕</button>
-  </header>
-
-  <section class="wo__content" aria-label="Catálogo de aplicativos">
-    <div class="wo__empty" *ngIf="categories().length === 0">
-      <p>Sem apps disponíveis.</p>
-      <small>Adicione apps para vê-los aqui.</small>
+    <!-- Título do catálogo logo abaixo do header -->
+    <div class="wo__titlebar">
+      <h2 id="widgets-title">Widget-apps</h2>
     </div>
 
-    <div class="wo__section" *ngFor="let cat of categories()">
-      <h3 class="wo__cat">{{ cat[0] }}</h3>
-      <ul class="wo__grid" role="list">
-        <li *ngFor="let app of cat[1]">
-          <button type="button" class="wo__card" (click)="openApp(app)">
-            <span class="wo__icon btn-circle" style="--size:56px">{{ app.icon }}</span>
-            <strong class="wo__title">{{ app.name }}</strong>
-          </button>
-        </li>
-      </ul>
-    </div>
+    <!-- Catálogo -->
+    <section class="wo__content" aria-label="Catálogo de aplicativos">
+      <div class="wo__empty" *ngIf="categories().length === 0">
+        <p>Sem apps disponíveis.</p>
+        <small>Cadastre seus apps para vê-los aqui.</small>
+      </div>
+
+      <div class="wo__section" *ngFor="let cat of categories()">
+        <h3 class="wo__cat">{{ cat[0] }}</h3>
+        <ul class="wo__grid" role="list">
+          <li *ngFor="let app of cat[1]">
+            <button type="button" class="wo__card" (click)="openApp(app)">
+              <span class="wo__icon btn-circle" style="--size:56px">{{ app.icon }}</span>
+              <strong class="wo__title">{{ app.name }}</strong>
+            </button>
+          </li>
+        </ul>
+      </div>
+    </section>
+
   </section>
 </div>

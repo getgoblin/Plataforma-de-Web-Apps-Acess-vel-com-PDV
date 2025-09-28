@@ -1,10 +1,9 @@
 import { Component, inject, signal, HostListener, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
-
 import { UserService } from '../../../core/services/user.service';
-import { UIService } from '../../../core/services/ui.service';
 import { WindowManagerComponent } from './window-manager/window-manager.component';
+import { UIService } from '../../../core/services/ui.service';
+import { Router } from '@angular/router';
 import { WidgetsButtonComponent } from '../../../shared/components/widgets-button/widgets-button.component';
 
 @Component({
@@ -16,16 +15,14 @@ import { WidgetsButtonComponent } from '../../../shared/components/widgets-butto
 })
 export class TopBarComponent {
   private readonly userSvc = inject(UserService);
-  private readonly router = inject(Router);
-  private readonly ui = inject(UIService);
+  private readonly router  = inject(Router);
+  private readonly ui      = inject(UIService);
 
-  // esconde áreas laterais quando o overlay está montado
+  // quando overlay abre, escondemos a TopBar inteira
   overlayOpen = this.ui.isOverlayMounted;
 
-  // nome do usuário no botão verde
-  userName = this.userSvc.userName; // signal<string>
+  userName = this.userSvc.userName;
 
-  // dropdown do usuário
   menuOpen = signal(false);
   @ViewChild('userMenuWrap') userMenuWrap?: ElementRef<HTMLElement>;
 
@@ -38,7 +35,6 @@ export class TopBarComponent {
     if (!wrap) return;
     if (!wrap.contains(e.target as Node)) this.closeUserMenu();
   }
-
   @HostListener('document:keydown.escape')
   onEsc() { this.closeUserMenu(); }
 

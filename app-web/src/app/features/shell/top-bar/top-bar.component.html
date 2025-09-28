@@ -1,6 +1,6 @@
 <div class="topbar" role="none">
   <!-- Navegação de janelas (guia/app switcher) -->
-<nav class="topbar__windows" aria-label="Janelas abertas" *ngIf="!overlayOpen()">
+<nav class="topbar__windows" aria-label="Janelas abertas" >
   <app-window-manager></app-window-manager>
 </nav>
 
@@ -10,7 +10,7 @@
 </div>
 
 <!-- Menu do usuário (ESCONDE quando overlay está aberto) -->
-<nav class="topbar__user" aria-label="Menu do usuário" #userMenuWrap *ngIf="!overlayOpen()">
+<nav class="topbar__user" aria-label="Menu do usuário" #userMenuWrap>
   <!-- mantém seu conteúdo atual do menu -->
   <button
     type="button"

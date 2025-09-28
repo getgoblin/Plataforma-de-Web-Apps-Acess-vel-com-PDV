@@ -1,6 +1,7 @@
-<header class="shell__header" role="banner" *ngIf="!isOverlayMounted()">
+<header class="shell__header" role="banner">
   <app-top-bar></app-top-bar>
 </header>
+
 
 <div class="shell__body" [style.gridTemplateColumns]="gridCols()">
   <aside class="shell__left" aria-label="Menu auxiliar (Helper)">
@@ -16,5 +17,5 @@
   </aside>
 </div>
 
-<!-- Overlay de Widgets -->
-<app-widgets-overlay *ngIf="isOverlayMounted()"></app-widgets-overlay>
+<!-- Overlay (montado somente quando aberto) -->
+<app-widgets-overlay *ngIf="overlayOpen()"></app-widgets-overlay>

@@ -1,41 +1,38 @@
 import { Component, inject, computed } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { TopBarComponent } from '../top-bar/top-bar.component';
 import { LeftBarComponent } from '../left-bar/left-bar.component';
 import { RightBarComponent } from '../right-bar/right-bar.component';
 import { MainAreaComponent } from '../main-area/main-area.component';
 import { WidgetsOverlayComponent } from '../widgets-overlay/widgets-overlay.component';
 import { UIService } from '../../../core/services/ui.service';
-import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-shell-layout',
+  standalone: true,
   imports: [
+    CommonModule,
     TopBarComponent,
     LeftBarComponent,
     RightBarComponent,
     MainAreaComponent,
     WidgetsOverlayComponent,
-    CommonModule
   ],
   templateUrl: './shell-layout.component.html',
-  styleUrl: './shell-layout.component.scss'
+  styleUrl: './shell-layout.component.scss',
 })
 export class ShellLayoutComponent {
+  private readonly ui = inject(UIService);
 
-private readonly ui = inject(UIService);
-isOverlayMounted = this.ui.isOverlayMounted;
+  // ✅ use o nome correto do sinal
+  overlayOpen = this.ui.isOverlayMounted;
 
-leftOpen  = this.ui.leftOpen;
-rightOpen = this.ui.rightOpen;
+  leftOpen  = this.ui.leftOpen;
+  rightOpen = this.ui.rightOpen;
 
-
-
-// colunas reativas do grid
-gridCols = computed(() => {
-  const left  = this.leftOpen()  ? '300px' : '54px';
-  const right = this.rightOpen() ? '300px' : '54px'; // <- handle visível
-  return `${left} 1fr ${right}`;
-});
-
-
+  gridCols = computed(() => {
+    const left  = this.leftOpen()  ? '300px' : '54px';
+    const right = this.rightOpen() ? '300px' : '54px';
+    return `${left} 1fr ${right}`;
+  });
 }

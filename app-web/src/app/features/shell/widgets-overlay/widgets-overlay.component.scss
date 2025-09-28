@@ -1,40 +1,74 @@
-:host{ position: fixed; inset: 0; z-index: 999; }
+:host{
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  pointer-events: none;
+  isolation: isolate;
+  margin: 0;          /* <- só pra garantir */
+  padding: 0;         /* idem */
+  background: transparent;
+}
 
-/* dialog */
-dialog{
-  border: 0;
-  border-radius: 16px;
-  padding: 0;
-  width: min(960px, 92vw);
-  max-height: min(78dvh, 720px);
+
+
+/* overlay ocupa tela toda; painel colado no topo */
+.wo{
+  position: absolute; inset: 0;
+  background: rgba(0,0,0,.50);
+  backdrop-filter: blur(2px);
+  display: grid;
+  place-items: start center;   /* ⬅️ cola no topo e centraliza horizontal */
+  pointer-events: auto;
+}
+
+/* painel principal */
+.wo__panel{
+  width: min(1040px, 92vw);
+  max-height: min(86dvh, 820px);
+  margin-top: 0;               /* ⬅️ encosta no topo do overlay */
   background: #1f1f1f;
   color: var(--text);
-  box-shadow: 0 30px 80px rgba(0,0,0,.55);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 16px;
+  box-shadow: 0 20px 80px rgba(0,0,0,.55);
+  overflow: hidden;
 }
 
-/* backdrop */
-dialog::backdrop{
-  background: rgba(0,0,0,.55);
-  backdrop-filter: blur(2px);
-}
+/* header com a MESMA altura da top-bar */
+$topbar-h: 56px;
 
-/* header */
-.wo__header{
+.wo__hdr{
+  height: $topbar-h;
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: 1fr auto 1fr; /* lado | botão | lado */
   align-items: center;
-  gap: 8px;
-  padding: 12px 14px;
+  border-bottom: 1px solid var(--line);
+  padding: 0 12px;
+}
+
+/* garante que o botão fique centralizado e clique no overlay */
+.wo__hdr app-widgets-button{
+  display: grid;
+  place-items: center;
+}
+
+/* faixa de título abaixo do header */
+.wo__titlebar{
+  padding: 12px 16px;
   border-bottom: 1px solid var(--line);
 }
-.wo__close{ --size: 28px; background:#292929; border:1px solid var(--line); color:var(--text); }
+.wo__titlebar h2{ margin: 0; }
 
 /* conteúdo */
-.wo__content{ padding: 16px; overflow: auto; max-height: calc(min(78dvh, 720px) - 56px); }
-.wo__empty{ display: grid; place-items: center; gap: 6px; height: 240px; color: #bfbfbf; }
+.wo__content{
+  padding: 16px;
+  overflow: auto;
+  max-height: calc(min(86dvh, 820px) - #{$topbar-h} - 56px); /* header + titlebar */
+}
+.wo__empty{ display:grid; place-items:center; gap:6px; height:240px; color:#bfbfbf; }
 
 .wo__section{ margin: 18px 0; }
-.wo__cat{ margin: 0 0 10px 0; font-size: 14px; color: #d7d7d7; text-align: center; }
+.wo__cat{ margin: 0 0 10px 0; font-size: 14px; color:#d7d7d7; text-align: center; }
 
 .wo__grid{
   list-style: none; margin: 0; padding: 0;
@@ -45,12 +79,11 @@ dialog::backdrop{
 
 .wo__card{
   width: 100%; border: 1px solid var(--line); border-radius: 12px;
-  background: #232323; color: var(--text);
-  padding: 14px; display: grid; place-items: center; gap: 10px;
+  background:#232323; color: var(--text);
+  padding: 14px; display:grid; place-items:center; gap:10px;
   transition: background-color .2s ease, border-color .2s ease, transform .05s ease;
+  &:hover{ background:#2a2a2a; }
+  &:active{ transform: scale(.99); }
 }
-.wo__card:hover{ background: #2a2a2a; }
-.wo__card:active{ transform: scale(.99); }
-
 .wo__icon{ font-size: 26px; background:#292929; border:1px solid var(--line); color: var(--text); }
 .wo__title{ font-size: 14px; }
