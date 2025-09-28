@@ -23,9 +23,12 @@ import { CommonModule } from '@angular/common';
 export class ShellLayoutComponent {
 
 private readonly ui = inject(UIService);
-overlayOpen = this.ui.widgetsOverlayOpen;
+isOverlayMounted = this.ui.isOverlayMounted;
+
 leftOpen  = this.ui.leftOpen;
 rightOpen = this.ui.rightOpen;
+
+
 
 // colunas reativas do grid
 gridCols = computed(() => {

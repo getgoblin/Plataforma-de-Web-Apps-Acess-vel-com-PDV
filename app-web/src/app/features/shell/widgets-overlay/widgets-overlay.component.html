@@ -1,32 +1,35 @@
-<!-- botão fixo no mesmo lugar -->
+<!-- CAMADA 3: botão fixo no mesmo ponto do topo -->
 <div #topbtn class="wo__topbtn">
   <app-widgets-button></app-widgets-button>
 </div>
 
-<!-- ondas -->
+<!-- CAMADA 1: FX (ripple) -->
 <div #fx class="wo__fx" aria-hidden="true">
-  <div class="wo__wave wo__wave--green" (animationend)="onGreenWaveEnd()"></div>
-  <div class="wo__wave wo__wave--dark"  (animationend)="onDarkWaveEnd()"></div>
+  <!-- Onda verde (abre primeiro / fecha por último) -->
+  <div class="wo__wave wo__wave--green"
+       (animationend)="onGreenAnimEnd()"></div>
+
+  <!-- Onda escura (abre depois / fecha primeiro) -->
+  <div class="wo__wave wo__wave--dark"
+       (animationend)="onDarkAnimEnd()"></div>
 </div>
 
-<!-- dialog aparece DEPOIS da 2ª onda abrir -->
-<dialog #dlg
-        id="widgets-dialog"
-        [attr.open]="dialogOpen() ? '' : null"
-        aria-labelledby="widgets-title"
-        aria-modal="true"
-        (cancel)="onCancel($event)"
-        (animationend)="onDialogAnimEnd()">  <!-- 👈 fim do fade -->
+<!-- CAMADA 2: Catálogo (só em ready / fading) -->
+<div *ngIf="state() === 'ready' || state() === 'fading'"
+     class="wo__dialog"
+     role="dialog" aria-modal="true"
+     [class.is-fading]="state() === 'fading'"
+     (animationend)="onDialogFadeEnd($event)">
+
   <header class="wo__header">
     <h2 id="widgets-title">Widget-apps</h2>
     <button type="button" class="wo__close btn-circle" aria-label="Fechar" (click)="close()">✕</button>
   </header>
 
-  <!-- catálogo -->
   <section class="wo__content" aria-label="Catálogo de aplicativos">
     <div class="wo__empty" *ngIf="categories().length === 0">
       <p>Sem apps disponíveis.</p>
-      <small>Use o botão de Widgets quando os aplicativos forem adicionados.</small>
+      <small>Adicione apps para vê-los aqui.</small>
     </div>
 
     <div class="wo__section" *ngFor="let cat of categories()">
@@ -41,4 +44,4 @@
       </ul>
     </div>
   </section>
-</dialog>
+</div>

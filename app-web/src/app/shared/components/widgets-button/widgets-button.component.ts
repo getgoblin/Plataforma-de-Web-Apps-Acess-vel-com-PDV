@@ -15,15 +15,20 @@ export class WidgetsButtonComponent {
   @ViewChild('btn', { static: true }) btn!: ElementRef<HTMLButtonElement>;
   isFiring = signal(false);
 
-  overlayOpen = this.ui.widgetsOverlayOpen;
+  state = this.ui.overlayState;
+
+
+
 
 onClick = (ev?: MouseEvent) => {
   ev?.stopPropagation();
+  const s = this.ui.overlayState();
 
-  if (this.ui.widgetsOverlayOpen()) {   // overlay aberto? fecha
-    this.ui.requestWidgetsClose();
+  if (s === 'ready') {            // aberto -> fecha com ripple inverso
+    this.ui.requestClose();
     return;
   }
+  if (s !== 'idle') return;       // se está animando, ignora
 
   const el = this.btn.nativeElement;
   const r = el.getBoundingClientRect();
@@ -32,9 +37,16 @@ onClick = (ev?: MouseEvent) => {
   const radius = r.width / 2;
 
   this.ui.setWidgetsBtnRect({ x: r.left, y: r.top, w: r.width, h: r.height });
+
   this.isFiring.set(true);
   setTimeout(() => this.isFiring.set(false), 700);
-  this.ui.openWidgetsAt(cx, cy, radius);
+
+  this.ui.openAt(cx, cy, radius);
 };
+
+
+
+
+
 
 }

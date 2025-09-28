@@ -1,10 +1,18 @@
 import { Injectable, signal, computed, effect } from '@angular/core';
 
+export type OverlayState =
+  | 'idle'
+  | 'expandingGreen'
+  | 'expandingDark'
+  | 'ready'
+  | 'fading'
+  | 'collapsingDark'
+  | 'collapsingGreen';
+
 
 const LS_UI = {
   left: 'app:ui:leftOpen',
   right: 'app:ui:rightOpen',
-  widgets: 'app:ui:widgetsOpen',
 };
 
 @Injectable({ providedIn: 'root' })
@@ -12,76 +20,74 @@ export class UIService {
   // barras
   private readonly _leftOpen    = signal(readBool(LS_UI.left,  false));
   private readonly _rightOpen   = signal(readBool(LS_UI.right, false));
-  private readonly _widgetsOpen = signal(readBool(LS_UI.widgets, false));
+  
 
-  private readonly _widgetsFxDone   = signal(false); // ondas de abertura concluídas
-  widgetsFxDone = computed(() => this._widgetsFxDone());
-
-  private readonly _widgetsClosing  = signal(false); // estamos fechando com ripple inverso?
-  widgetsClosing = computed(() => this._widgetsClosing());
-
-
-
-// setter simples para marcar fim das ondas
-setWidgetsFxDone(v: boolean) { this._widgetsFxDone.set(v); }
-
-  requestWidgetsClose() {
-  if (this._widgetsOpen()) this._widgetsClosing.set(true);
-}
-
-  confirmWidgetsClosed() {
-  this._widgetsOpen.set(false);
-  this._widgetsClosing.set(false);
-  this._widgetsFxDone.set(false);
-  this._widgetsBtnRect.set(null);
-}
 
 
   
-// posição/tamanho exatos do botão de widgets (para fixar no overlay)
   private readonly _widgetsBtnRect = signal<{ x:number; y:number; w:number; h:number } | null>(null);
   widgetsBtnRect = () => this._widgetsBtnRect();                     // getter (função)
   setWidgetsBtnRect(r: { x:number; y:number; w:number; h:number }) { // setter
     this._widgetsBtnRect.set(r);
   }
 
+    // origem do ripple
+  private readonly _cx = signal<number>(0);
+  private readonly _cy = signal<number>(0);
+  private readonly _r0 = signal<number>(18);
 
-  //Centro Botão Widget para SCSS
-  private readonly _widgetsCX = signal<number | null>(null);
-  private readonly _widgetsCY = signal<number | null>(null);
-  private readonly _widgetsR  = signal<number | null>(null);
-  widgetsCX = computed(() => this._widgetsCX());
-  widgetsCY = computed(() => this._widgetsCY());
-  widgetsR  = computed(() => this._widgetsR());
+  widgetsCX = () => this._cx();
+  widgetsCY = () => this._cy();
+  widgetsR  = () => this._r0();
 
-  /** abre overlay informando o centro (cx, cy) e o raio (r) do botão */
-openWidgetsAt(cx: number, cy: number, r: number) {
-  this._widgetsCX.set(Math.round(cx));
-  this._widgetsCY.set(Math.round(cy));
-  this._widgetsR.set(Math.round(r));
-  // reset do ciclo
-  this._widgetsFxDone.set(false);
-  this._widgetsClosing.set(false);
-  this._widgetsOpen.set(true);
+    // estado do overlay
+  private readonly _overlayState = signal<OverlayState>('idle');
+  overlayState = () => this._overlayState();
+
+  // montar/desmontar overlay pelo estado
+  isOverlayMounted = computed(() => this._overlayState() !== 'idle');
+
+  // abrir overlay a partir do centro/raio do botão
+  openAt(cx:number, cy:number, r0:number) {
+    this._cx.set(Math.round(cx));
+    this._cy.set(Math.round(cy));
+    this._r0.set(Math.round(r0));
+    this._overlayState.set('expandingGreen');
 }
+
+  // pedir fechamento (quando catálogo está visível)
+  requestClose() {
+    if (this._overlayState() === 'ready') this._overlayState.set('fading');
+  }
+
+  // transições dirigidas por animationend (chamadas pelo Overlay)
+  toExpandingDark()   { if (this._overlayState() === 'expandingGreen') this._overlayState.set('expandingDark'); }
+  toReady()           { if (this._overlayState() === 'expandingDark')  this._overlayState.set('ready'); }
+  toCollapsingDark()  { if (this._overlayState() === 'fading')         this._overlayState.set('collapsingDark'); }
+  toCollapsingGreen() { if (this._overlayState() === 'collapsingDark') this._overlayState.set('collapsingGreen'); }
+
+
+  confirmClosed() {
+    if (this._overlayState() === 'collapsingGreen') {
+      this._overlayState.set('idle');
+      this._widgetsBtnRect.set(null); // ✅ correto
+    }
+  }
+
+
 
   leftOpen  = computed(() => this._leftOpen());
   rightOpen = computed(() => this._rightOpen());
-  widgetsOverlayOpen = computed(() => this._widgetsOpen());
 
   
-  
-
     constructor() {
     // persiste mudanças
     effect(() => writeBool(LS_UI.left,    this._leftOpen()));
     effect(() => writeBool(LS_UI.right,   this._rightOpen()));
-    effect(() => writeBool(LS_UI.widgets, this._widgetsOpen()));
   }
 
   toggleLeft()  { this._leftOpen.update(v => !v); }
   toggleRight() { this._rightOpen.update(v => !v); }
-  toggleWidgets() { this._widgetsOpen.update(v => !v); }
 
     // se precisar abrir/fechar diretamente:
   openLeft()  { this._leftOpen.set(true); }
@@ -89,6 +95,8 @@ openWidgetsAt(cx: number, cy: number, r: number) {
   openRight() { this._rightOpen.set(true); }
   closeRight(){ this._rightOpen.set(false); }
 }
+
+
 
 
 

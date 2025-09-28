@@ -1,121 +1,83 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild, HostBinding, inject, signal, effect } from '@angular/core';
+import { Component, ElementRef, ViewChild, HostBinding, HostListener, inject, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UIService } from '../../../core/services/ui.service';
 import { WidgetsService, type WidgetApp } from '../../../core/services/widgets.service';
 import { WindowsService } from '../../../core/services/windows.service';
 import { WidgetsButtonComponent } from '../../../shared/components/widgets-button/widgets-button.component';
 
-
-
 @Component({
   selector: 'app-widgets-overlay',
+  standalone: true,
   imports: [CommonModule, WidgetsButtonComponent],
   templateUrl: './widgets-overlay.component.html',
   styleUrl: './widgets-overlay.component.scss',
 })
-export class WidgetsOverlayComponent implements AfterViewInit, OnDestroy {
+export class WidgetsOverlayComponent {
   private readonly ui = inject(UIService);
   private readonly widgets = inject(WidgetsService);
   private readonly windows = inject(WindowsService);
 
-  // fase 1: sumir diálogo
-private readonly fading = signal(false);
-@HostBinding('class.is-fading') get _isFading(){ return this.fading(); }
+  state = this.ui.overlayState;           // 'idle' | ... | 'ready' | ...
 
-// fase 2: fechar ripple
-private readonly ripplingClose = signal(false);
-@HostBinding('class.is-rippling-close') get _isRippling(){ return this.ripplingClose(); }
+  // classe no host = nome do estado (controla CSS de ondas)
+  @HostBinding('class') hostClass = '';
 
+  @ViewChild('fx',     { static: true }) fx?: ElementRef<HTMLDivElement>;
+  @ViewChild('topbtn', { static: true }) topbtn?: ElementRef<HTMLDivElement>;
 
   categories = this.widgets.categories;
 
-  @ViewChild('dlg', { static: true }) dlg?: ElementRef<HTMLDialogElement>;
-  @ViewChild('fx',  { static: true }) fx?:  ElementRef<HTMLDivElement>; 
-  @ViewChild('topbtn', { static: true }) topbtn?: ElementRef<HTMLDivElement>;
+  constructor() {
+    effect(() => {
+      // 1) aplica classe do estado
+      this.hostClass = this.state();
 
-  readonly dialogOpen = signal(false);
-
-  @HostBinding('class.is-closing') get closing() { return this.ui.widgetsClosing(); }
-
-
-
-    ngAfterViewInit(): void {
-      const cx = this.ui.widgetsCX() ?? window.innerWidth / 2;
-      const cy = this.ui.widgetsCY() ?? 28;
-      const r0 = this.ui.widgetsR()  ?? 18;
-
+      // 2) atualiza variáveis do ripple
       const fxEl = this.fx?.nativeElement;
       if (fxEl) {
-        fxEl.style.setProperty('--cx', `${cx}px`);
-        fxEl.style.setProperty('--cy', `${cy}px`);
-        fxEl.style.setProperty('--r0', `${r0}px`);
+        fxEl.style.setProperty('--cx', `${this.ui.widgetsCX()}px`);
+        fxEl.style.setProperty('--cy', `${this.ui.widgetsCY()}px`);
+        fxEl.style.setProperty('--r0', `${this.ui.widgetsR()}px`);
       }
 
-        const br = this.ui.widgetsBtnRect();
-      if (br && this.topbtn) {
-        const el = this.topbtn.nativeElement;
-        el.style.setProperty('--btn-x', `${br.x}px`);
-        el.style.setProperty('--btn-y', `${br.y}px`);
-        el.style.setProperty('--btn-w', `${br.w}px`);
-        el.style.setProperty('--btn-h', `${br.h}px`);
+      // 3) posiciona o botão no mesmo lugar da TopBar
+      const br = this.ui.widgetsBtnRect();
+      const tb = this.topbtn?.nativeElement;
+      if (br && tb) {
+        tb.style.setProperty('--btn-x', `${br.x}px`);
+        tb.style.setProperty('--btn-y', `${br.y}px`);
+        tb.style.setProperty('--btn-w', `${br.w}px`);
+        tb.style.setProperty('--btn-h', `${br.h}px`);
       }
-
-      const d = this.dlg?.nativeElement;
-      if (d) {
-        if (typeof d.showModal === 'function') d.showModal();
-        else d.setAttribute('open', '');
-      }
-
-        effect(() => {
-    if (this.ui.widgetsClosing()) {
-      // começa a sumir o dialog
-      this.fading.set(true);
-    }
-  });
-
-  
-
-      
-      
-    }
-
-    
-
-  ngOnDestroy(): void { try { this.dlg?.nativeElement.close(); } catch {} }
-
-  close = () => { try { this.dlg?.nativeElement.close(); } catch {}; this.ui.toggleWidgets(); };
-
-  onDarkWaveEnd(){
-    if (!this.ui.widgetsClosing()){
-      this.ui.setWidgetsFxDone(true);
-      this.dialogOpen.set(true); // só aparece depois da 2ª onda abrir
-    }
-  }
-  onGreenWaveEnd(){
-    if (this.ui.widgetsClosing()){
-      this.ui.confirmWidgetsClosed();
-      this.fading.set(false);
-      this.ripplingClose.set(false);
-    }
+    });
   }
 
-  onCancel(ev: Event) {
-  ev.preventDefault();
-  this.ui.requestWidgetsClose();
-}
+  // ESC fecha (pede fechamento com ripple inverso)
+  @HostListener('document:keydown.escape')
+  onEsc() { this.close(); }
 
-onDialogAnimEnd() {
-  if (this.ui.widgetsClosing()) {
-    this.dialogOpen.set(false);   // tira o [open] e o conteúdo
-    this.ripplingClose.set(true); // ativa o colapso das ondas
-  }
-}
+  close() { this.ui.requestClose(); }
 
-  
-
-    openApp(app: WidgetApp) {
-    this.windows.open(app); // abre na MainArea (futuramente o conteúdo real)
-    this.close();           // fecha o overlay
+  // eventos das ondas (abrir/fechar)
+  onGreenAnimEnd() {
+    const s = this.state();
+    if (s === 'expandingGreen') this.ui.toExpandingDark();
+    if (s === 'collapsingGreen') this.ui.confirmClosed();
   }
 
+  onDarkAnimEnd() {
+    const s = this.state();
+    if (s === 'expandingDark')  this.ui.toReady();            // aqui o catálogo aparece
+    if (s === 'collapsingDark') this.ui.toCollapsingGreen();
+  }
+
+  // fim do fade do catálogo -> começa colapso escuro
+  onDialogFadeEnd(_: AnimationEvent) {
+    if (this.state() === 'fading') this.ui.toCollapsingDark();
+  }
+
+  openApp(app: WidgetApp) {
+    this.windows.open(app);
+    this.close();
+  }
 }
