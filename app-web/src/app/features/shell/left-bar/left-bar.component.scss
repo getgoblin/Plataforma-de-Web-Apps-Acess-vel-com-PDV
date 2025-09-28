@@ -30,16 +30,29 @@
   column-gap: 10px;
 }
 
+/* quando a leftbar está aberta, libera espaço para o texto */
+.leftbar.is-open .leftbar__label{
+  max-width: 180px;   /* pode ajustar */
+  opacity: 1;
+  margin-left: 8px;   /* espacinho entre o ícone e o texto */
+}
+
 /* rótulo */
 .leftbar__label{
+  display: inline-block;
   color: var(--text);
   font-size: 14px;
   line-height: 1.2;
   white-space: nowrap;
-  max-width: 00px;
   overflow: hidden;
   text-overflow: ellipsis;
-  
+
+  /* estado base (colapsado) */
+  max-width: 0;
+  opacity: 0;
+  margin-left: 0;
+
+  transition: max-width .25s ease, opacity .2s ease, margin-left .2s ease;
 }
 
 /* Botões circulares do Left: tamanho e fundo fixos */

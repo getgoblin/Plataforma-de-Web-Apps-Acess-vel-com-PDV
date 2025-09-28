@@ -1,33 +1,33 @@
 <div class="topbar" role="none">
-  <!-- Navegação de janelas (guia/app switcher) -->
-<nav class="topbar__windows" aria-label="Janelas abertas" >
-  <app-window-manager></app-window-manager>
-</nav>
+  <!-- slots de tabs (fundo) -->
+  <app-tab-slots [count]="6"
+                 [occupied]="occupiedCount()"
+                 [focusedIndex]="focusedIndex()"></app-tab-slots>
 
-<!-- Botão Widgets (sempre visível na TopBar) -->
-<div class="topbar__widgets" role="group" aria-label="Abrir lista de aplicativos">
-  <app-widgets-button></app-widgets-button>
-</div>
+  <!-- abas/bolinhas (por cima dos slots) -->
+  <nav class="topbar__windows" aria-label="Janelas abertas">
+    <app-window-manager></app-window-manager>
+  </nav>
 
-<!-- Menu do usuário (ESCONDE quando overlay está aberto) -->
-<nav class="topbar__user" aria-label="Menu do usuário" #userMenuWrap>
-  <!-- mantém seu conteúdo atual do menu -->
-  <button
-    type="button"
-    class="user-btn"
-    aria-haspopup="menu"
-    [attr.aria-expanded]="menuOpen() ? 'true' : 'false'"
-    aria-controls="user-menu"
-    (click)="toggleUserMenu()">
-    {{ userName() || '—' }}
-  </button>
+  <!-- botão Widgets centralizado -->
+  <div class="topbar__widgets" role="group" aria-label="Abrir lista de aplicativos">
+    <app-widgets-button></app-widgets-button>
+  </div>
 
-  <ul id="user-menu" class="topbar__dropdown" role="menu" [hidden]="!menuOpen()">
-    <li role="none"><button role="menuitem" type="button" (click)="openHelp()">Help</button></li>
-    <li role="none"><button role="menuitem" type="button" (click)="onLogoff()">Logoff</button></li>
-  </ul>
-</nav>
+  <!-- menu do usuário (direita) -->
+  <nav class="topbar__user" aria-label="Menu do usuário" #userMenuWrap>
+    <button type="button"
+            class="user-btn"
+            aria-haspopup="menu"
+            [attr.aria-expanded]="menuOpen() ? 'true' : 'false'"
+            aria-controls="user-menu"
+            (click)="toggleUserMenu()">
+      {{ userName() || '—' }}
+    </button>
 
-
-
+    <ul id="user-menu" class="topbar__dropdown" role="menu" [hidden]="!menuOpen()">
+      <li role="none"><button role="menuitem" type="button" (click)="openHelp()">Help</button></li>
+      <li role="none"><button role="menuitem" type="button" (click)="onLogoff()">Logoff</button></li>
+    </ul>
+  </nav>
 </div>

@@ -1,0 +1,64 @@
+.wframe{
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #1f1f1f;
+  color: var(--text);
+  box-shadow: 0 10px 30px rgba(0,0,0,.35);
+  display: grid;
+  grid-template-rows: auto 1fr;
+  min-height: 220px;
+  max-height: 100%;
+  overflow: hidden;
+  position: relative; /* p/ linhas laterais */
+  &.is-max{ border-radius: 0; }
+}
+
+/* linhas finas nas laterais internas do frame */
+.wframe::before,
+.wframe::after{
+  content: "";
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 1px;
+  background: var(--line);
+  pointer-events: none;
+  z-index: 1;
+}
+.wframe::before{ left: 0; }
+.wframe::after { right: 0; }
+
+/* barra superior */
+.wframe__titlebar{
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--line);
+  background: #232323;
+}
+.wframe__left{ display: inline-flex; align-items: center; gap: 8px; min-width: 0; }
+.wframe__icon{ font-size: 14px; line-height: 1; }
+.wframe__title{
+  margin: 0; font-size: 14px; font-weight: 600;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+/* controles */
+.wframe__right{ display: inline-flex; align-items: center; gap: 6px; }
+.ctrl{
+  min-width: 24px; height: 24px; display: grid; place-items: center;
+  background: #2a2a2a; color: var(--text);
+  border: 1px solid var(--line); border-radius: 6px;
+  font-size: 12px; line-height: 1;
+  transition: background-color .2s ease, transform .05s ease;
+  &:hover{ background:#2f2f2f; }
+  &:active{ transform: translateY(1px); }
+}
+.ctrl.is-danger{ border-color: #8a2b2b; }
+
+/* conteúdo do app: rola aqui dentro */
+.wframe__content{
+  overflow: auto;
+  padding: 12px;
+}

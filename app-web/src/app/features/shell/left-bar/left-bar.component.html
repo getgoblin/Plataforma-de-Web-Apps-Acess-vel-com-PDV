@@ -10,39 +10,38 @@
 
   <nav aria-label="Ações do Helper">
     <ul role="list" class="leftbar__list">
-<li>
-  <button type="button"
-          class="btn-circle"
-          [class.is-active]="hotkeysOn()"
-          [attr.aria-pressed]="hotkeysOn() ? 'true' : 'false'"
-          aria-label="Atalhos"
-          data-helper-id="hotkeys"
-          (click)="toggleHotkeys()">⌨</button>
-  <span class="leftbar__label" *ngIf="leftOpen()">Hotkeys</span>
-</li>
+      <li>
+        <button type="button"
+                class="btn-circle"
+                [class.is-active]="hotkeysOn()"
+                [attr.aria-pressed]="hotkeysOn() ? 'true' : 'false'"
+                aria-label="Atalhos"
+                data-helper-id="hotkeys"
+                (click)="toggleHotkeys()">⌨</button>
+        <span class="leftbar__label">Hotkeys</span>
+      </li>
 
-<li>
-  <button type="button"
-          class="btn-circle"
-          [class.is-active]="helperOn()"
-          [attr.aria-pressed]="helperOn() ? 'true' : 'false'"
-          aria-label="Helper"
-          data-helper-id="helper"
-          (click)="toggleHelper()">?</button>
-  <span class="leftbar__label" *ngIf="leftOpen()">Helper</span>
-</li>
+      <li>
+        <button type="button"
+                class="btn-circle"
+                [class.is-active]="helperOn()"
+                [attr.aria-pressed]="helperOn() ? 'true' : 'false'"
+                aria-label="Helper"
+                data-helper-id="helper"
+                (click)="toggleHelper()">?</button>
+        <span class="leftbar__label">Helper</span>
+      </li>
 
-<li>
-  <button type="button"
-          class="btn-circle"
-          [class.is-active]="visualOn()"
-          [attr.aria-pressed]="visualOn() ? 'true' : 'false'"
-          aria-label="Leitor de tela"
-          data-helper-id="visual"
-          (click)="toggleVisual()">👁</button>
-  <span class="leftbar__label" *ngIf="leftOpen()">Visual</span>
-</li>
-
+      <li>
+        <button type="button"
+                class="btn-circle"
+                [class.is-active]="visualOn()"
+                [attr.aria-pressed]="visualOn() ? 'true' : 'false'"
+                aria-label="Leitor de tela"
+                data-helper-id="visual"
+                (click)="toggleVisual()">👁</button>
+        <span class="leftbar__label">Visual</span>
+      </li>
     </ul>
   </nav>
 

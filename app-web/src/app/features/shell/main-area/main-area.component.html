@@ -1,7 +1,24 @@
 <section class="workspace" aria-label="Área principal de trabalho">
-  <!-- BG animado (fica atrás do conteúdo) -->
   <div class="ambient-bg" #ambient aria-hidden="true"></div>
 
-  <!-- conteúdo futuro (janelas/widgets) -->
-  <div class="content-slot"></div>
+  <div class="content-slot">
+    <ng-container *ngIf="focused() as w; else empty">
+      <ng-container *ngIf="cmpFor(w.appId) as Cmp; else missing">
+        <app-window-frame
+          [windowId]="w.id"
+          [title]="w.title"
+          [icon]="metaFor(w.appId)?.icon || '•'"
+          [state]="w.state || 'normal'">
+          <ng-container *ngComponentOutlet="Cmp"></ng-container>
+        </app-window-frame>
+      </ng-container>
+    </ng-container>
+
+    <ng-template #empty>
+      <div class="empty-state"></div>
+    </ng-template>
+    <ng-template #missing>
+      <div class="empty-state">Registro do widget não encontrado.</div>
+    </ng-template>
+  </div>
 </section>

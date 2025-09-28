@@ -27,12 +27,12 @@
       <div class="wo__section" *ngFor="let cat of categories()">
         <h3 class="wo__cat">{{ cat[0] }}</h3>
         <ul class="wo__grid" role="list">
-          <li *ngFor="let app of cat[1]">
-            <button type="button" class="wo__card" (click)="openApp(app)">
-              <span class="wo__icon btn-circle" style="--size:56px">{{ app.icon }}</span>
-              <strong class="wo__title">{{ app.name }}</strong>
-            </button>
-          </li>
+            <li *ngFor="let app of cat[1]">
+              <button type="button" class="wo__card" (click)="openApp(app)">
+                <span class="wo__icon btn-circle" style="--size:56px">{{ app.icon }}</span>
+                <strong class="wo__title">{{ app.name }}</strong>
+              </button>
+            </li>
         </ul>
       </div>
     </section>

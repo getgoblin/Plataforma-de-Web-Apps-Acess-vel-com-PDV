@@ -13,30 +13,37 @@ export class UIService {
   private readonly _leftOpen  = signal(readBool(LS_UI.left, false));
   private readonly _rightOpen = signal(readBool(LS_UI.right, false));
 
-  leftOpen  = computed(() => this._leftOpen());
-  rightOpen = computed(() => this._rightOpen());
+  // readonly para fora
+  readonly leftOpen  = this._leftOpen.asReadonly();
+  readonly rightOpen = this._rightOpen.asReadonly();
 
   // overlay: montado/visível
   private readonly _isOverlayMounted = signal(false);
-  isOverlayMounted = computed(() => this._isOverlayMounted());
+  readonly isOverlayMounted = this._isOverlayMounted.asReadonly();
 
   // retângulo do botão (coordenadas absolutas)
   private readonly _btnRect = signal<BtnRect | null>(null);
-  btnRect = computed(() => this._btnRect());
+  readonly btnRect = this._btnRect.asReadonly();
 
   // montar/desmontar overlay
   openOverlay()  { this._isOverlayMounted.set(true); }
-  closeOverlay() { 
-    this._isOverlayMounted.set(false); 
-    // mantém _btnRect (continua válido até o próximo clique)
-  }
+  closeOverlay() { this._isOverlayMounted.set(false); }
 
   // salvar posição do botão (TopBar) no momento do clique
   setBtnRect(r: BtnRect) { this._btnRect.set(r); }
 
   constructor() {
+    // persiste estados
     effect(() => writeBool(LS_UI.left,  this._leftOpen()));
     effect(() => writeBool(LS_UI.right, this._rightOpen()));
+
+    // sincroniza entre abas
+    try {
+      window.addEventListener('storage', (e) => {
+        if (e.key === LS_UI.left)  this._leftOpen.set(readBool(LS_UI.left,  this._leftOpen()));
+        if (e.key === LS_UI.right) this._rightOpen.set(readBool(LS_UI.right, this._rightOpen()));
+      });
+    } catch {}
   }
 
   toggleLeft()  { this._leftOpen.update(v => !v); }

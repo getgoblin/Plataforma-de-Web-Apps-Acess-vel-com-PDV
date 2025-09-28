@@ -1,0 +1,20 @@
+<article class="wframe" [class.is-max]="isMax" aria-label="Janela">
+  <header class="wframe__titlebar">
+    <div class="wframe__left">
+      <span class="wframe__icon">{{ icon }}</span>
+      <h3 class="wframe__title">{{ title }}</h3>
+    </div>
+
+    <div class="wframe__right">
+      <button type="button" class="ctrl" (click)="minimize()" aria-label="Minimizar">—</button>
+      <button *ngIf="!isMax" type="button" class="ctrl" (click)="maximize()" aria-label="Maximizar">□</button>
+      <button *ngIf="isMax"  type="button" class="ctrl" (click)="restore()"  aria-label="Restaurar">▭</button>
+      <button type="button" class="ctrl is-danger" (click)="close()" aria-label="Fechar">×</button>
+    </div>
+  </header>
+
+  <!-- rolagem interna do app -->
+  <section class="wframe__content">
+    <ng-content></ng-content>
+  </section>
+</article>

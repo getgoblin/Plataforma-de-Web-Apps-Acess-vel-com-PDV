@@ -1,0 +1,9 @@
+<ul class="slots" role="presentation" aria-hidden="true">
+  <li *ngFor="let _ of [].constructor(count); let i = index">
+    <span
+      class="slot"
+      [class.is-occupied]="i < occupied"
+      [class.is-focused]="i === focusedIndex"
+    ></span>
+  </li>
+</ul>

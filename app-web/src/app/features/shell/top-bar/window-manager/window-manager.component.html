@@ -1,15 +1,16 @@
-<nav aria-label="Gerenciador de janelas">
-  <ul role="list" class="wm__list">
-    <!-- cada janela vira um <li> com botão -->
-    <!-- estrutura base sem lógica -->
-    <!-- exemplo futuro:
-    <li class="wm__item">
-      <button type="button" aria-pressed="true" data-helper-id="wm-slot">
-        <span class="wm__icon" aria-hidden="true">🧾</span>
-        <span class="visually-hidden">PDV (focado)</span>
-      </button>
-      <button type="button" class="wm__close" aria-label="Fechar PDV" data-helper-id="wm-close">×</button>
-    </li>
-    -->
-  </ul>
-</nav>
+<ul class="wm" aria-label="Janelas abertas">
+  <li *ngFor="let w of wins()">
+    <button
+      type="button"
+      class="btn-circle wm__bubble"
+      [class.is-active]="isFocused(w.id)"
+      (click)="focus(w.id)"
+      [attr.aria-pressed]="isFocused(w.id) ? 'true' : 'false'">
+      <span class="wm__icon">{{ iconFor(w.appId) }}</span>
+      <span class="wm__close"
+            role="button"
+            aria-label="Fechar"
+            (click)="$event.stopPropagation(); close(w.id)">×</span>
+    </button>
+  </li>
+</ul>

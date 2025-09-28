@@ -1,9 +1,10 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UIService } from '../../../core/services/ui.service';
-import { WidgetsService, type WidgetApp } from '../../../core/services/widgets.service';
+import { WidgetsService } from '../../../core/services/widgets.service';
 import { WindowsService } from '../../../core/services/windows.service';
 import { WidgetsButtonComponent } from '../../../shared/components/widgets-button/widgets-button.component';
+import type { WidgetApp } from '../../../models/widget';
 
 @Component({
   selector: 'app-widgets-overlay',
@@ -19,10 +20,10 @@ export class WidgetsOverlayComponent {
 
   categories = this.widgets.categories;
 
-  noop(ev: Event) { ev.stopPropagation(); } // evita fechar ao clicar no fundo
+  noop(ev: Event) { ev.stopPropagation(); }
 
   openApp(app: WidgetApp) {
-    this.windows.open(app);
-    this.ui.closeOverlay(); // fecha overlay ao escolher app
+    this.windows.openByAppId(app.id, app.name); // ✅ cria/foca a janela
+    this.ui.closeOverlay();                      // fecha o overlay
   }
 }
