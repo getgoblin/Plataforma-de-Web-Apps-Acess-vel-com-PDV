@@ -7,6 +7,23 @@
   --text: #EAEAEA;
 }
 
+/* ===== GLOBAL: travar a página em 100% e zerar scroll ===== */
+:root, *, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;         /* 🔒 tira a barra de rolagem do documento */
+  background: #1f1f1f;      /* opcional: garante fundo consistente */
+}
+
+/* Angular root ocupa 100% sempre */
+app-root {
+  display: block;
+  height: 100%;
+}
+
+
 /* ===========================
    🧼 RESET LEVE
    =========================== */

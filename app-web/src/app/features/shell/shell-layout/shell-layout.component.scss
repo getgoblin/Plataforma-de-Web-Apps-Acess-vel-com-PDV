@@ -1,24 +1,23 @@
-/* ===========================
-   🧱 GRID DO SHELL
-   =========================== */
-:host { display:block; }
+:host {
+  display: block;
+  height: 100%;           /* 🔒 o shell acompanha o app-root (100%) */
+}
 
+/* Header fixo (56px) */
 .shell__header{
-  position: relative;      
-  z-index: 100;            /* + mantém top-bar clicável acima das ondas/dialog */
+  height: 56px;
   background: transparent;
   border-bottom: 1px solid var(--line);
 }
 
-
+/* Corpo ocupa exatamente o resto da viewport, sem rolagem externa */
 .shell__body{
-  height: calc(100dvh - 56px);
+  height: calc(100dvh - 56px);   /* 🔒 cabe justo abaixo do header */
   display: grid;
   grid-template-columns: 72px 1fr 280px;
   min-height: 0;
-  overflow: hidden;            /* <- evita rolagem */
+  overflow: hidden;              /* 🔒 sem rolagem no grid inteiro */
 }
-
 
 .shell__left, .shell__main, .shell__right { min-height: 0; }
 .shell__left  { background: transparent; border-right: 1px solid var(--line); }
