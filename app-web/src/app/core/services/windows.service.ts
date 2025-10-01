@@ -1,6 +1,5 @@
 import { Injectable, signal, computed, effect } from '@angular/core';
 import { AppWindow } from '../../models/window';
-import { WidgetApp } from '../../models/widget';
 
 const LS_WINS  = 'app:windows';
 const LS_FOCUS = 'app:windows:focus';
@@ -27,16 +26,15 @@ export class WindowsService {
     } catch {}
   }
 
-  open(app: WidgetApp) { this.openByAppId(app.id, app.name); }
+openByAppId(appId: string) {
+  const existing = this._windows().find(w => w.appId === appId);
+  if (existing) { this._focused.set(existing.id); return; }
+  const id = (crypto.randomUUID?.() ?? Math.random().toString(36).slice(2));
+  const win: AppWindow = { id: `w-${id}`, title: appId, appId, state: 'normal' as const };
+  this._windows.update(ws => [...ws, win]);
+  this._focused.set(win.id);
+}
 
-  openByAppId(appId: string, title?: string) {
-    const existing = this._windows().find(w => w.appId === appId);
-    if (existing) { this._focused.set(existing.id); return; }
-    const id = (crypto.randomUUID?.() ?? Math.random().toString(36).slice(2));
-    const win: AppWindow = { id: `w-${id}`, title: title ?? appId, appId, state: 'normal' as const };
-    this._windows.update(ws => [...ws, win]);
-    this._focused.set(win.id);
-  }
 
   focus(id: string) { if (this._windows().some(w => w.id === id)) this._focused.set(id); }
   close(id: string) {

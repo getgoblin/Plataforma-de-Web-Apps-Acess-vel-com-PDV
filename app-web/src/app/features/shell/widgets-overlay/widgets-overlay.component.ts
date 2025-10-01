@@ -4,7 +4,7 @@ import { UIService } from '../../../core/services/ui.service';
 import { WidgetsService } from '../../../core/services/widgets.service';
 import { WindowsService } from '../../../core/services/windows.service';
 import { WidgetsButtonComponent } from '../../../shared/components/widgets-button/widgets-button.component';
-import type { WidgetApp } from '../../../models/widget';
+import type { WidgetMeta } from '../../../models/widget'; // <- troca WidgetApp por WidgetMeta
 
 @Component({
   selector: 'app-widgets-overlay',
@@ -22,8 +22,9 @@ export class WidgetsOverlayComponent {
 
   noop(ev: Event) { ev.stopPropagation(); }
 
-  openApp(app: WidgetApp) {
-    this.windows.openByAppId(app.id, app.name); // ✅ cria/foca a janela
-    this.ui.closeOverlay();                      // fecha o overlay
-  }
+openApp(app: WidgetMeta) {
+  this.windows.openByAppId(app.id);
+  this.ui.closeOverlay();
+}
+
 }

@@ -3,11 +3,11 @@
 
   <div class="content-slot">
     <ng-container *ngIf="focused() as w; else empty">
-      <ng-container *ngIf="cmpFor(w.appId) as Cmp; else missing">
+      <ng-container *ngIf="cmp() as Cmp; else loadingTpl">
         <app-window-frame
           [windowId]="w.id"
-          [title]="w.title"
-          [icon]="metaFor(w.appId)?.icon || '•'"
+          [title]="meta()?.name || ''" 
+          [icon]="meta()?.icon || '•'"
           [state]="w.state || 'normal'">
           <ng-container *ngComponentOutlet="Cmp"></ng-container>
         </app-window-frame>
@@ -17,8 +17,9 @@
     <ng-template #empty>
       <div class="empty-state"></div>
     </ng-template>
-    <ng-template #missing>
-      <div class="empty-state">Registro do widget não encontrado.</div>
+
+    <ng-template #loadingTpl>
+      <div class="empty-state">Carregando widget…</div>
     </ng-template>
   </div>
 </section>

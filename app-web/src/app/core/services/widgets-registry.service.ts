@@ -1,21 +1,61 @@
-import { Injectable, Type } from '@angular/core';
-import { WidgetApp } from '../../models/widget';
-import { AppTesteWidgetComponent } from '../../widgets/app-teste/app-teste/app-teste.widget';
+import { Injectable, Type, signal, computed } from '@angular/core';
+import { WidgetMeta } from '../../models/widget';
 
-export type WidgetDef = WidgetApp & { component: Type<any> };
+type Entry = {
+  /** carrega só o META (nome, ícone, categoria) */
+  loadMeta: () => Promise<WidgetMeta>;
+  /** carrega o componente standalone do widget */
+  loadComponent: () => Promise<Type<any>>;
+};
 
 @Injectable({ providedIn: 'root' })
 export class WidgetsRegistryService {
-  private readonly defs: WidgetDef[] = [
-    { id: 'app-teste', name: 'App Teste', icon: '🧪', category: 'Demo', component: AppTesteWidgetComponent },
+  /** 🔌 Registre cada widget aqui com imports LITERAIS */
+  private readonly entries: Entry[] = [
+    {
+      // app-teste
+      loadMeta: () =>
+        import('../../widgets/app-teste/app-teste/app-teste.widget')
+          .then(m => m.WIDGET_META as WidgetMeta),
+      loadComponent: () =>
+        import('../../widgets/app-teste/app-teste/app-teste.widget')
+          .then(m => m.WIDGET_COMPONENT as Type<any>),
+    },
+    // { loadMeta: () => import('...').then(m => m.WIDGET_META), loadComponent: () => import('...').then(m => m.WIDGET_COMPONENT) },
   ];
 
-  list(): WidgetApp[] { return this.defs.map(({ component, ...app }) => app); }
-  getComponent(appId: string): Type<any> | null {
-    return this.defs.find(d => d.id === appId)?.component ?? null;
+  /** cache de metas e lookup de loaders por id */
+  private readonly _metas = signal<WidgetMeta[]>([]);
+  metas = computed(() => this._metas());
+  private compLoaderById = new Map<string, () => Promise<Type<any>>>();
+
+  constructor() { this.init(); }
+
+  private async init() {
+    const metas: WidgetMeta[] = [];
+    for (const e of this.entries) {
+      try {
+        const meta = await e.loadMeta();
+        if (!meta?.id) continue;
+        metas.push(meta);
+        this.compLoaderById.set(meta.id, e.loadComponent);
+      } catch (err) {
+        console.error('[WidgetsRegistry] Falha ao carregar meta:', err);
+      }
+    }
+    this._metas.set(metas);
   }
-  getMeta(appId: string): WidgetApp | null {
-    const d = this.defs.find(x => x.id === appId);
-    return d ? { id: d.id, name: d.name, icon: d.icon, category: d.category } : null;
+
+  /** lista para o overlay */
+  list(): WidgetMeta[] { return this.metas(); }
+
+  /** meta por id (título/ícone/categoria) */
+  getMeta(id: string): WidgetMeta | null {
+    return this.metas().find(m => m.id === id) ?? null;
+  }
+
+  /** loader do componente por id */
+  getLoader(id: string): (() => Promise<Type<any>>) | null {
+    return this.compLoaderById.get(id) ?? null;
   }
 }
