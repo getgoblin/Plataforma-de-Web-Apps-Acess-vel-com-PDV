@@ -1,15 +1,16 @@
-:host{ display: contents; } /* não ocupa célula da grid */
+:host { display: contents; } /* não ocupa célula na grid */
 
 .slots{
   position: absolute;
   left: var(--wm-offset-left, 112px);
-  bottom: -14px;
+  top: 50%;
+  transform: translateY(-50%);
   display: flex;
-  gap: 8px;
+  gap: 4px;                  /* slots mais próximos */
   margin: 0;
   padding: 0;
   list-style: none;
-  z-index: 0;
+  z-index: 1;                /* ficam abaixo das abas reais */
   pointer-events: none;
 }
 
@@ -19,21 +20,15 @@
   width: var(--size);
   height: var(--size);
   border-radius: 50%;
-  background-color: #292929;   /* ✅ sólido */
-  border: 2px solid #000;      /* outline preto */
-  box-shadow: none;            /* nada de glow nos slots */
-  opacity: 1;                  /* garante sem transparência */
-  mix-blend-mode: normal;      /* evita blend com o fundo */
-  transition: border-color .2s ease, box-shadow .2s ease;
+  background-color: #292929; /* sólido */
+  /* sem borda, sem glow */
+  box-shadow: none;
+  opacity: 1;
+  mix-blend-mode: normal;
+  transition: transform .15s ease;
 }
 
-/* ocupados continuam sólidos; só muda a borda sutilmente */
-.slot.is-occupied{ border-color: #0b0b0b; }
+/* opcional: sutil diferença para slots ocupados */
+.slot.is-occupied{ transform: scale(0.98); }
 
-/* foco: mantém fill sólido; só adiciona contorno/glow */
-.slot.is-focused{
-  border-color: #53E3A6;
-  box-shadow:
-    0 0 0 2px rgba(83,227,166,.65),
-    0 0 0 6px rgba(83,227,166,.15);
-}
+/* sem destaque especial para foco aqui — quem destaca é a bolinha ativa */

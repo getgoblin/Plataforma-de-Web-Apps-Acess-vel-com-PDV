@@ -1,16 +1,12 @@
 <ul class="wm" aria-label="Janelas abertas">
   <li *ngFor="let w of wins()">
-    <button
-      type="button"
-      class="btn-circle wm__bubble"
-      [class.is-active]="isFocused(w.id)"
-      (click)="focus(w.id)"
-      [attr.aria-pressed]="isFocused(w.id) ? 'true' : 'false'">
-      <span class="wm__icon">{{ iconFor(w.appId) }}</span>
-      <span class="wm__close"
-            role="button"
-            aria-label="Fechar"
-            (click)="$event.stopPropagation(); close(w.id)">×</span>
-    </button>
+<button type="button"
+        class="wm__bubble"
+        [class.is-active]="isFocused(w.id)"
+        (click)="focus(w.id)">
+  <span class="wm__icon">{{ iconFor(w.appId) }}</span>
+  <span class="wm__close" (click)="$event.stopPropagation(); close(w.id)">×</span>
+</button>
+
   </li>
 </ul>

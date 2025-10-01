@@ -1,31 +1,40 @@
+:host { display: contents; } /* não ocupa célula na grid da TopBar */
+
 .wm{
   position: absolute;
   left: var(--wm-offset-left, 112px);
-  bottom: -14px;                 /* invade um pouco a área abaixo */
-  display: flex; gap: 8px; margin: 0; padding: 0; list-style: none;
-  z-index: 1;                    /* acima dos slots; abaixo do menu user */
-  pointer-events: none;          /* não bloquear; apenas as bolinhas clicam */
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  gap: 4px;
+  margin: 0; padding: 0; list-style: none;
+  z-index: 2;
+  pointer-events: none;
 }
+
 .wm__bubble{
   --size: 36px;
   position: relative;
-  width: var(--size); height: var(--size);
+  width: var(--size);
+  height: var(--size);
   border-radius: 50%;
-  border: 1px solid var(--line);
-  background: #292929; color: var(--text);
+  border: 0;                 /* sem contorno padrão */
+  background: #292929;
+  color: var(--text);
   display: grid; place-items: center;
-  transition: background-color .2s ease, transform .05s ease, border-color .2s ease;
   pointer-events: auto;
-  &:hover{ background:#2f2f2f; }
-  &:active{ transform: translateY(1px); }
-  &.is-active{
-    border-color:#53E3A6;
-    box-shadow:
-      0 0 0 2px rgba(83,227,166,.65),
-      0 0 0 6px rgba(83,227,166,.15);
-  }
+  box-shadow: none;          /* base: sem sombra/halo */
+  transition: background-color .15s ease;
 }
+.wm__bubble:hover { background:#2f2f2f; }
+
+/* ✅ APENAS a aba da janela ativa ganha um outline verde */
+.wm__bubble.is-active{
+  box-shadow: 0 0 0 2px #53E3A6;
+}
+
 .wm__icon{ font-size: 15px; line-height: 1; }
+
 .wm__close{
   position: absolute; top: -8px; right: -8px;
   width: 18px; height: 18px; border-radius: 50%;
