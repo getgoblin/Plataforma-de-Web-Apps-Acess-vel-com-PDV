@@ -2,10 +2,12 @@
   <app-top-bar></app-top-bar>
 </header>
 
-
 <div class="shell__body" [style.gridTemplateColumns]="gridCols()">
   <aside class="shell__left" aria-label="Menu auxiliar (Helper)">
     <app-left-bar></app-left-bar>
+    <div class="shell__grip shell__grip--left"
+         role="separator" aria-orientation="vertical"
+         (mousedown)="startDrag('left', $event)"></div>
   </aside>
 
   <main id="main-content" class="shell__main" tabindex="-1">
@@ -14,8 +16,10 @@
 
   <aside class="shell__right" aria-label="Painel de Logs">
     <app-right-bar></app-right-bar>
+    <div class="shell__grip shell__grip--right"
+         role="separator" aria-orientation="vertical"
+         (mousedown)="startDrag('right', $event)"></div>
   </aside>
 </div>
 
-<!-- Overlay (montado somente quando aberto) -->
 <app-widgets-overlay *ngIf="overlayOpen()"></app-widgets-overlay>

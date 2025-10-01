@@ -1,7 +1,4 @@
-:host {
-  display: block;
-  height: 100%;           /* 🔒 o shell acompanha o app-root (100%) */
-}
+:host { display: block; height: 100%; }
 
 /* Header fixo (56px) */
 .shell__header{
@@ -10,16 +7,38 @@
   border-bottom: 1px solid var(--line);
 }
 
-/* Corpo ocupa exatamente o resto da viewport, sem rolagem externa */
+/* Corpo: 3 colunas (left | main | right) */
 .shell__body{
-  height: calc(100dvh - 56px);   /* 🔒 cabe justo abaixo do header */
+  height: calc(100dvh - 56px);
   display: grid;
-  grid-template-columns: 72px 1fr 280px;
+  grid-template-columns: 72px 1fr 280px; /* sobrescrito via [style] */
   min-height: 0;
-  overflow: hidden;              /* 🔒 sem rolagem no grid inteiro */
+  overflow: hidden;
 }
 
-.shell__left, .shell__main, .shell__right { min-height: 0; }
+.shell__left, .shell__main, .shell__right { min-height: 0; position: relative; }
 .shell__left  { background: transparent; border-right: 1px solid var(--line); }
 .shell__right { background: transparent; border-left:  1px solid var(--line); }
 .shell__main  { background: transparent; color: var(--text); overflow: hidden; }
+
+/* Grips internos (não criam colunas novas) */
+.shell__grip{
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 6px;
+  cursor: col-resize;
+  background: transparent;
+  z-index: 1;              /* 👈 fica atrás dos botões das barras */
+  pointer-events: auto;
+}
+.shell__grip--left  { right: -3px; }  /* “pega” a borda */
+.shell__grip--right { left: -3px;  }
+
+.shell__grip::before{
+  content: "";
+  position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent 40%, rgba(255,255,255,.08) 50%, transparent 60%);
+  opacity: 0;
+  transition: opacity .15s ease;
+}
+.shell__grip:hover::before{ opacity: 1; }
