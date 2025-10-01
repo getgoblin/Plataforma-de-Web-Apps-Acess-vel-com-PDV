@@ -14,27 +14,33 @@ import { WidgetMeta } from '../../../models/widget';
   styleUrl: './main-area.component.scss'
 })
 export class MainAreaComponent {
+  // === refs ===
   @ViewChild('ambient', { static: true }) ambient!: ElementRef<HTMLDivElement>;
 
+  // === deps ===
   private readonly wins = inject(WindowsService);
   private readonly registry = inject(WidgetsRegistryService);
 
-  // ✅ TIPADO: evita "unknown" e "any"
+  // === selectors/state ===
   focused = computed<AppWindow | null>(() => {
     const id = this.wins.focusedId();
     return this.wins.windows().find((w: AppWindow) => w.id === id) ?? null;
   });
 
-  cmp = signal<Type<any> | null>(null);
+  cmp  = signal<Type<any> | null>(null);
   meta = signal<WidgetMeta | null>(null);
   loading = signal(false);
 
+  // === bootstrap: carrega meta + componente do widget focado ===
   constructor() {
-    // ✅ effect síncrono + IIFE assíncrona (evita Promise no effect)
     effect(() => {
       const w = this.focused();
       (async () => {
-        if (!w) { this.cmp.set(null); this.meta.set(null); return; }
+        if (!w) {
+          this.cmp.set(null);
+          this.meta.set(null);
+          return;
+        }
 
         this.loading.set(true);
         this.cmp.set(null);
@@ -53,7 +59,7 @@ export class MainAreaComponent {
     });
   }
 
-  /** Move o foco do BG conforme o ponteiro */
+  // === ambient-bg pointer parallax ===
   @HostListener('pointermove', ['$event'])
   onPointerMove(e: PointerEvent) {
     const el = this.ambient.nativeElement;
@@ -64,7 +70,6 @@ export class MainAreaComponent {
     el.style.setProperty('--posY', String(Math.round(y)));
   }
 
-  /** Ao sair, suaviza voltando ao centro */
   @HostListener('pointerleave')
   onLeave() {
     const el = this.ambient.nativeElement;

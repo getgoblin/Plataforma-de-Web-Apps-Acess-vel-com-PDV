@@ -1,34 +1,35 @@
+/* === host === */
 :host { display: contents; } /* não ocupa célula na grid */
 
+/* === container === */
 .slots{
   position: absolute;
   left: var(--wm-offset-left, 112px);
   top: 50%;
   transform: translateY(-50%);
   display: flex;
-  gap: 4px;                  /* slots mais próximos */
+  gap: 4px;      /* slots mais próximos */
   margin: 0;
   padding: 0;
   list-style: none;
-  z-index: 1;                /* ficam abaixo das abas reais */
+  z-index: 1;    /* abaixo das bolinhas ativas do window-manager */
   pointer-events: none;
 }
 
+/* === slot === */
 .slot{
   --size: 36px;
   display: block;
   width: var(--size);
   height: var(--size);
   border-radius: 50%;
-  background-color: #292929; /* sólido */
-  /* sem borda, sem glow */
-  box-shadow: none;
+  background-color: #292929;  /* sólido */
+  box-shadow: none;           /* sem glow/borda */
   opacity: 1;
   mix-blend-mode: normal;
   transition: transform .15s ease;
 }
 
-/* opcional: sutil diferença para slots ocupados */
-.slot.is-occupied{ transform: scale(0.98); }
-
-/* sem destaque especial para foco aqui — quem destaca é a bolinha ativa */
+/* --- estados --- */
+.slot.is-occupied { transform: scale(0.98); }
+/* foco visual é responsabilidade das bolinhas reais (wm) */

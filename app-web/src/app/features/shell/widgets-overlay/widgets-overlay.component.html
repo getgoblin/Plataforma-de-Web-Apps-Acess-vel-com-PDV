@@ -1,28 +1,34 @@
+<!-- === overlay root === -->
 <div class="wo" (click)="noop($event)">
-  <!-- Painel do overlay colado no topo -->
-  <section class="wo__panel" role="dialog" aria-labelledby="widgets-title" aria-modal="true" (click)="noop($event)">
 
-    <!-- HEADER do overlay: botão centralizado na MESMA faixa da top-bar -->
+  <!-- === panel (dialog fixo no topo) === -->
+  <section
+    class="wo__panel"
+    role="dialog"
+    aria-labelledby="widgets-title"
+    aria-modal="true"
+    (click)="noop($event)">
+
+    <!-- --- header: mesmo alinhamento da TopBar --- -->
     <header class="wo__hdr">
       <div class="wo__hdr-side"></div>
-
-      <!-- 👇 o mesmo componente do topo, agora NO MEIO do header do overlay -->
       <app-widgets-button></app-widgets-button>
-
       <div class="wo__hdr-side"></div>
     </header>
 
-    <!-- Título do catálogo logo abaixo do header -->
+    <!-- --- titlebar --- -->
     <div class="wo__titlebar">
       <h2 id="widgets-title">Widget-apps</h2>
     </div>
 
-    <!-- Catálogo -->
+    <!-- === content (catálogo) === -->
     <section class="wo__content" aria-label="Catálogo de aplicativos">
+      <!-- --- empty state --- -->
       <div class="wo__empty" *ngIf="categories().length === 0">
         <p>Sem apps disponíveis.</p>
       </div>
 
+      <!-- --- listagem por categoria --- -->
       <div class="wo__section" *ngFor="let cat of categories()">
         <h3 class="wo__cat">{{ cat[0] }}</h3>
         <ul class="wo__grid" role="list">
@@ -35,6 +41,9 @@
         </ul>
       </div>
     </section>
+    <!-- === end: content === -->
 
   </section>
+  <!-- === end: panel === -->
 </div>
+<!-- === end: overlay root === -->

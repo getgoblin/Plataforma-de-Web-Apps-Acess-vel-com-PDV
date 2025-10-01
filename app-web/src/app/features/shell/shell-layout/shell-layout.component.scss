@@ -1,13 +1,13 @@
 :host { display: block; height: 100%; }
 
-/* Header fixo (56px) */
+/* === header (fixo 56px) === */
 .shell__header{
   height: 56px;
   background: transparent;
   border-bottom: 1px solid var(--line);
 }
 
-/* Corpo: 3 colunas (left | main | right) */
+/* === body/grid: 3 colunas (left | main | right) === */
 .shell__body{
   height: calc(100dvh - 56px);
   display: grid;
@@ -16,24 +16,29 @@
   overflow: hidden;
 }
 
-.shell__left, .shell__main, .shell__right { min-height: 0; position: relative; }
+/* --- columns common --- */
+.shell__left, .shell__main, .shell__right {
+  min-height: 0;
+  position: relative;
+}
 .shell__left  { background: transparent; border-right: 1px solid var(--line); }
 .shell__right { background: transparent; border-left:  1px solid var(--line); }
 .shell__main  { background: transparent; color: var(--text); overflow: hidden; }
 
-/* Grips internos (não criam colunas novas) */
+/* === grips internos (sem adicionar colunas) === */
 .shell__grip{
   position: absolute;
   top: 0; bottom: 0;
   width: 6px;
   cursor: col-resize;
   background: transparent;
-  z-index: 1;              /* 👈 fica atrás dos botões das barras */
+  z-index: 1;              /* abaixo dos botões das barras */
   pointer-events: auto;
 }
 .shell__grip--left  { right: -3px; }  /* “pega” a borda */
 .shell__grip--right { left: -3px;  }
 
+/* --- hover cue sutil --- */
 .shell__grip::before{
   content: "";
   position: absolute; inset: 0;

@@ -1,24 +1,29 @@
+/* === container === */
 .rightbar{
   position: relative;
   height: 100%;
   display: flex;
   flex-direction: column;
-  overflow: visible;              /* permite o botão “sair” pra esquerda */
+  overflow: visible;              /* botão pode “sair” para a esquerda */
   border-left: 1px solid var(--line);
   background: transparent;
 }
 
+/* --- header --- */
 .rightbar__header{
-  display:flex; align-items:center; justify-content:center;
-  padding:8px; border-bottom:1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  border-bottom: 1px solid var(--line);
 }
 
-/* Botão circular, centro exatamente na divisa da coluna */
+/* === toggle/handle === */
 .rightbar__toggle{
   --size: 36px;
   position: absolute;
   top: 50%;
-  left: calc(-1 * var(--size) / 2); /* metade para fora do painel */
+  left: calc(-1 * var(--size) / 2); /* metade “para fora” do painel */
   transform: translateY(-50%);
   width: var(--size);
   height: var(--size);
@@ -29,11 +34,8 @@
   display: grid;
   place-items: center;
   z-index: 2;
-
   transition: background-color .2s ease, transform .05s ease;
 }
 .rightbar__toggle:hover        { background: #333; }
 .rightbar__toggle:active       { transform: translateY(-50%) scale(.98); }
-.rightbar__toggle:focus-visible{
-  outline: 2px solid #fff; outline-offset: 2px;
-}
+.rightbar__toggle:focus-visible{ outline: 2px solid #fff; outline-offset: 2px; }

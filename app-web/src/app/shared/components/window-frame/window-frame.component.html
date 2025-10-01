@@ -1,4 +1,12 @@
-<article class="wframe" [class.is-max]="isMax" aria-label="Janela">
+<!-- === window frame (root) === -->
+<article
+  class="wframe"
+  [class.is-min]="isMin"
+  [class.is-max]="isMax"
+  [class.is-normal]="isNormal"
+  aria-label="Janela">
+
+  <!-- === titlebar (drag area + controls) === -->
   <header class="wframe__titlebar">
     <div class="wframe__left">
       <h3 class="wframe__title">{{ title }}</h3>
@@ -12,8 +20,18 @@
     </div>
   </header>
 
-  <!-- rolagem interna do app -->
+  <!-- === content (widget host) === -->
   <section class="wframe__content">
     <ng-content></ng-content>
   </section>
+
+  <!-- === grips (resize) — 4 lados + 4 cantos === -->
+  <div class="wframe__grip-n"  title="Redimensionar"></div>
+  <div class="wframe__grip-s"  title="Redimensionar"></div>
+  <div class="wframe__grip-e"  title="Redimensionar"></div>
+  <div class="wframe__grip-w"  title="Redimensionar"></div>
+  <div class="wframe__grip-ne" title="Redimensionar"></div>
+  <div class="wframe__grip-nw" title="Redimensionar"></div>
+  <div class="wframe__grip-se" title="Redimensionar"></div>
+  <div class="wframe__grip-sw" title="Redimensionar"></div>
 </article>

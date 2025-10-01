@@ -1,6 +1,8 @@
+// === deps/imports ===
 import { Injectable, Type, signal, computed } from '@angular/core';
 import { WidgetMeta } from '../../models/widget';
 
+// === types ===
 type Entry = {
   /** carrega só o META (nome, ícone, categoria) */
   loadMeta: () => Promise<WidgetMeta>;
@@ -8,9 +10,10 @@ type Entry = {
   loadComponent: () => Promise<Type<any>>;
 };
 
+// === service ===
 @Injectable({ providedIn: 'root' })
 export class WidgetsRegistryService {
-  /** 🔌 Registre cada widget aqui com imports LITERAIS */
+  // --- tabela de registros (adicione seus widgets aqui) ---
   private readonly entries: Entry[] = [
     {
       // app-teste
@@ -24,13 +27,15 @@ export class WidgetsRegistryService {
     // { loadMeta: () => import('...').then(m => m.WIDGET_META), loadComponent: () => import('...').then(m => m.WIDGET_COMPONENT) },
   ];
 
-  /** cache de metas e lookup de loaders por id */
+  // --- cache/metas & lookup de loaders por id ---
   private readonly _metas = signal<WidgetMeta[]>([]);
-  metas = computed(() => this._metas());
+  readonly metas = computed(() => this._metas());
   private compLoaderById = new Map<string, () => Promise<Type<any>>>();
 
+  // --- ctor: bootstrap ---
   constructor() { this.init(); }
 
+  // === bootstrap/loader ===
   private async init() {
     const metas: WidgetMeta[] = [];
     for (const e of this.entries) {
@@ -46,6 +51,7 @@ export class WidgetsRegistryService {
     this._metas.set(metas);
   }
 
+  // === queries/api ===
   /** lista para o overlay */
   list(): WidgetMeta[] { return this.metas(); }
 

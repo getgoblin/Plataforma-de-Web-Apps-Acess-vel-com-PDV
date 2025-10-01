@@ -1,3 +1,4 @@
+/* === leftbar container === */
 .leftbar{
   position: relative;
   height: 100%;
@@ -7,37 +8,32 @@
   background: transparent;
 }
 
+/* === list === */
 .leftbar__list{
-  list-style: none; margin: 0; padding: 0;
-  display: grid; gap: 10px;
-  justify-items:left;  /* ícones sempre centralizados */
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+  justify-items: left;
   transition: column-gap .25s ease, row-gap .25s ease;
 }
 
+/* --- list item --- */
 .leftbar__list li{
   display: grid;
   justify-items: left;
 }
 
-/* expandido: ícone + texto em linha, mantendo o botão do mesmo tamanho */
-.leftbar.is-open .leftbar__list{
-  justify-items: start;
-}
-
+/* === expanded layout (ícone + texto) === */
+.leftbar.is-open .leftbar__list{ justify-items: start; }
 .leftbar.is-open .leftbar__list li{
-  grid-auto-flow: column;             /* ícone -> texto */
+  grid-auto-flow: column;
   align-items: center;
   column-gap: 10px;
 }
 
-/* quando a leftbar está aberta, libera espaço para o texto */
-.leftbar.is-open .leftbar__label{
-  max-width: 180px;   /* pode ajustar */
-  opacity: 1;
-  margin-left: 8px;   /* espacinho entre o ícone e o texto */
-}
-
-/* rótulo */
+/* === label (colapsa/expande) === */
 .leftbar__label{
   display: inline-block;
   color: var(--text);
@@ -54,19 +50,24 @@
 
   transition: max-width .25s ease, opacity .2s ease, margin-left .2s ease;
 }
+.leftbar.is-open .leftbar__label{
+  max-width: 180px;
+  opacity: 1;
+  margin-left: 8px;
+}
 
-/* Botões circulares do Left: tamanho e fundo fixos */
+/* === action buttons (círculos) === */
 .leftbar .btn-circle{
-  --size: 36px;           /* 🔒 tamanho único */
-  background: #292929;    /* 🔒 fundo maciço */
+  --size: 36px;
+  background: #292929;
   border: 1px solid var(--line);
   color: var(--text);
-  font-size: 16px;        /* tamanho do ícone */
-  line-height: 1;         /* evita “pular” */
+  font-size: 16px;
+  line-height: 1;
 }
 .leftbar .btn-circle:hover{ background: #2f2f2f; }
 
-/* estado ativo (usa seu padrão de glow verde) */
+/* --- estado ativo (glow suave verde) --- */
 .leftbar .btn-circle.is-active{
   border-color: #53E3A6;
   box-shadow:
@@ -74,20 +75,21 @@
     0 0 0 6px rgba(83,227,166,.15);
 }
 
-
-/* alça circular (mantém padrão) */
+/* === toggle/handle === */
 .leftbar__toggle{
   --size: 36px;
   position: absolute;
   top: 50%;
   right: calc(-1 * var(--size) / 2);
   transform: translateY(-50%);
-  width: var(--size); height: var(--size);
+  width: var(--size);
+  height: var(--size);
   border-radius: 50%;
   border: 1px solid var(--line);
   background: #2a2a2a;
   color: var(--text);
-  display: grid; place-items: center;
+  display: grid;
+  place-items: center;
   z-index: 2;
   transition: background-color .2s ease, transform .05s ease;
 }

@@ -1,23 +1,34 @@
+// === deps/imports ===
 import { Injectable, signal, computed, effect } from '@angular/core';
-import { AppWindow } from '../../models/window';
+import { AppWindow, WinRect, WinState } from '../../models/window';
 
+// === consts/storage-keys ===
 const LS_WINS  = 'app:windows';
 const LS_FOCUS = 'app:windows:focus';
 
+// === service ===
 @Injectable({ providedIn: 'root' })
 export class WindowsService {
+  // --- signals (estado interno) ---
   private readonly _windows = signal<AppWindow[]>(WindowsService.readWins());
   private readonly _focused = signal<string | null>(WindowsService.readFocus());
 
+  // --- selectors (públicos) ---
   readonly windows   = computed(() => this._windows());
   readonly focusedId = computed(() => this._focused());
 
+  // === ctor: persistência + sync cross-tab ===
   constructor() {
-    effect(() => { try { localStorage.setItem(LS_WINS, JSON.stringify(this._windows())); } catch {} });
+    // persiste a lista de janelas
+    effect(() => {
+      try { localStorage.setItem(LS_WINS, JSON.stringify(this._windows())); } catch {}
+    });
+    // persiste o foco atual
     effect(() => {
       const f = this._focused();
       try { f ? localStorage.setItem(LS_FOCUS, f) : localStorage.removeItem(LS_FOCUS); } catch {}
     });
+    // sincroniza entre abas
     try {
       window.addEventListener('storage', (e) => {
         if (e.key === LS_WINS)  this._windows.set(WindowsService.readWins());
@@ -26,27 +37,65 @@ export class WindowsService {
     } catch {}
   }
 
-openByAppId(appId: string) {
-  const existing = this._windows().find(w => w.appId === appId);
-  if (existing) { this._focused.set(existing.id); return; }
-  const id = (crypto.randomUUID?.() ?? Math.random().toString(36).slice(2));
-  const win: AppWindow = { id: `w-${id}`, title: appId, appId, state: 'normal' as const };
-  this._windows.update(ws => [...ws, win]);
-  this._focused.set(win.id);
-}
+  // === commands (API pública) ===
+  // --- abrir (foca existente se já houver appId aberto) ---
+  openByAppId(appId: string) {
+    const existing = this._windows().find(w => w.appId === appId);
+    if (existing) { this._focused.set(existing.id); return; }
+    const id = (crypto.randomUUID?.() ?? Math.random().toString(36).slice(2));
+    const win: AppWindow = { id: `w-${id}`, title: appId, appId, state: 'maximized' };
+    this._windows.update(ws => [...ws, win]);
+    this._focused.set(win.id);
+  }
 
-
-  focus(id: string) { if (this._windows().some(w => w.id === id)) this._focused.set(id); }
+  // --- foco/fechar ---
+  focus(id: string) {
+    if (this._windows().some(w => w.id === id)) this._focused.set(id);
+  }
   close(id: string) {
     const next = this._windows().filter(w => w.id !== id);
     this._windows.set(next);
     if (this._focused() === id) this._focused.set(next.at(-1)?.id ?? null);
   }
 
+  // --- posição/tamanho (estado NORMAL) ---
+  /** inicializa/atualiza o rect do estado NORMAL (merge parcial) */
+  setRect(id: string, rect: Partial<WinRect>) {
+    this._windows.update(ws =>
+      ws.map(w => w.id === id
+        ? { ...w, rect: { ...(w.rect ?? { x:0, y:0, w:0, h:0 }), ...rect } }
+        : w
+      )
+    );
+  }
+
+  // --- estados de janela ---
+  minimize(id: string) { this.patchState(id, 'minimized'); }
+  maximize(id: string) { this.patchState(id, 'maximized'); }
+  restore(id: string)  { this.patchState(id, 'normal'); }
+
+  // === internals ===
+  // --- troca de estado + mantém foco na janela alvo ---
+  private patchState(id: string, state: WinState) {
+    this._windows.update(ws => ws.map(w => w.id === id ? { ...w, state } : w));
+    this._focused.set(id);
+  }
+
+  // --- leitura localStorage segura ---
   private static readWins(): AppWindow[] {
-    try { return JSON.parse(localStorage.getItem(LS_WINS) || '[]') as AppWindow[]; } catch { return []; }
+    try { return JSON.parse(localStorage.getItem(LS_WINS) || '[]') as AppWindow[]; }
+    catch { return []; }
   }
   private static readFocus(): string | null {
-    try { return localStorage.getItem(LS_FOCUS); } catch { return null; }
+    try { return localStorage.getItem(LS_FOCUS); }
+    catch { return null; }
   }
+
+  // === helpers (opcionais) ===
+  getWindow(id: string): AppWindow | null {
+    return this._windows().find(w => w.id === id) ?? null;
+  }
+  isFocused(id: string): boolean { return this._focused() === id; }
+  isMinimized(id: string): boolean { return this.getWindow(id)?.state === 'minimized'; }
+  isMaximized(id: string): boolean { return this.getWindow(id)?.state === 'maximized'; }
 }

@@ -17,12 +17,24 @@ export class WindowManagerComponent {
   wins = this.winSvc.windows;
   focusedId = this.winSvc.focusedId;
 
-  focus = (id: string) => this.winSvc.focus(id);
-  close = (id: string) => this.winSvc.close(id);
-  isFocused = (id: string) => this.focusedId() === id;
+    focus = (id: string) => {
+      const w = this.wins().find(x => x.id === id);
+      if (!w) return;
+      if (w.state === 'minimized') this.winSvc.restore(id);
+      this.winSvc.focus(id);
+    };
+
+
+  close  = (id: string) => this.winSvc.close(id);
+
+  isActive(id: string): boolean {
+    const f = this.focusedId();
+    const w = this.wins().find(x => x.id === id);
+    return !!w && w.state !== 'minimized' && f === id;
+  }
 
   iconFor(appId: string): string {
-    const meta = this.registry.getMeta?.(appId);
+    const meta = this.registry.getMeta(appId);
     return meta?.icon ?? '•';
   }
 }

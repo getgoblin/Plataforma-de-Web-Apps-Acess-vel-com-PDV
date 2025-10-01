@@ -1,8 +1,10 @@
-<section class="rightbar"
-         [class.is-open]="rightOpen()"
-         [attr.aria-labelledby]="rightOpen() ? 'logger-title' : null">
+<!-- === rightbar root === -->
+<section
+  class="rightbar"
+  [class.is-open]="rightOpen()"
+  [attr.aria-labelledby]="rightOpen() ? 'logger-title' : null">
 
-  <!-- alça circular -->
+  <!-- === grabber/toggle === -->
   <button
     type="button"
     class="rightbar__toggle"
@@ -13,11 +15,11 @@
     {{ rightOpen() ? '⟩' : '⟨' }}
   </button>
 
-  <!-- header só quando aberto -->
+  <!-- === header (apenas aberto) === -->
   <header class="rightbar__header" *ngIf="rightOpen()">
     <h2 id="logger-title">Logger</h2>
   </header>
 
-  <!-- conteúdo só quando aberto -->
+  <!-- === content (apenas aberto) === -->
   <app-logger *ngIf="rightOpen()" id="logger-panel"></app-logger>
 </section>

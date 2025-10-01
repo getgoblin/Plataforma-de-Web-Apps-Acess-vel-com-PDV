@@ -1,37 +1,31 @@
+// === deps/imports ===
 import { Injectable, signal, computed, effect } from '@angular/core';
 
+// === consts/keys ===
 const LS_UI = {
   left: 'app:ui:leftOpen',
   right: 'app:ui:rightOpen',
 };
 
+// === types ===
 type BtnRect = { x: number; y: number; w: number; h: number };
 
+// === service ===
 @Injectable({ providedIn: 'root' })
 export class UIService {
-  // estados das barras
-  private readonly _leftOpen  = signal(readBool(LS_UI.left, false));
+  // --- signals (internos) ---
+  private readonly _leftOpen  = signal(readBool(LS_UI.left,  false));
   private readonly _rightOpen = signal(readBool(LS_UI.right, false));
+  private readonly _isOverlayMounted = signal(false);
+  private readonly _btnRect = signal<BtnRect | null>(null);
 
-  // readonly para fora
+  // --- signals (públicos readonly) ---
   readonly leftOpen  = this._leftOpen.asReadonly();
   readonly rightOpen = this._rightOpen.asReadonly();
-
-  // overlay: montado/visível
-  private readonly _isOverlayMounted = signal(false);
   readonly isOverlayMounted = this._isOverlayMounted.asReadonly();
-
-  // retângulo do botão (coordenadas absolutas)
-  private readonly _btnRect = signal<BtnRect | null>(null);
   readonly btnRect = this._btnRect.asReadonly();
 
-  // montar/desmontar overlay
-  openOverlay()  { this._isOverlayMounted.set(true); }
-  closeOverlay() { this._isOverlayMounted.set(false); }
-
-  // salvar posição do botão (TopBar) no momento do clique
-  setBtnRect(r: BtnRect) { this._btnRect.set(r); }
-
+  // --- ctor: persistência + sync cross-tab ---
   constructor() {
     // persiste estados
     effect(() => writeBool(LS_UI.left,  this._leftOpen()));
@@ -46,6 +40,12 @@ export class UIService {
     } catch {}
   }
 
+  // === overlay api ===
+  openOverlay()  { this._isOverlayMounted.set(true); }
+  closeOverlay() { this._isOverlayMounted.set(false); }
+  setBtnRect(r: BtnRect) { this._btnRect.set(r); }
+
+  // === left/right toggles ===
   toggleLeft()  { this._leftOpen.update(v => !v); }
   toggleRight() { this._rightOpen.update(v => !v); }
 
@@ -55,7 +55,7 @@ export class UIService {
   closeRight(){ this._rightOpen.set(false); }
 }
 
-/* helpers */
+// === helpers (localStorage safe) ===
 function readBool(key: string, fallback: boolean): boolean {
   try {
     const v = localStorage.getItem(key);

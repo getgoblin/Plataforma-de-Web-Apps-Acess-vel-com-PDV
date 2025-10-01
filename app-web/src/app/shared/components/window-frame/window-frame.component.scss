@@ -1,64 +1,95 @@
+/* === root === */
 .wframe{
+  position: absolute; /* dentro de .content-slot (relative) */
+  display: grid;
+  grid-template-rows: auto 1fr;
+  left: 0; top: 0; width: 100%; height: 100%;
   border: 1px solid var(--line);
   border-radius: 12px;
   background: #1f1f1f;
   color: var(--text);
-  box-shadow: 0 10px 30px rgba(0,0,0,.35);
-  display: grid;
-  grid-template-rows: auto 1fr;
-  min-height: 220px;
-  max-height: 100%;
   overflow: hidden;
-  position: relative; /* p/ linhas laterais */
-  &.is-max{ border-radius: 0; }
+  transition:
+    border-radius .2s ease,
+    box-shadow .2s ease,
+    opacity .2s ease,
+    transform .25s ease;
 }
 
-/* linhas finas nas laterais internas do frame */
-.wframe::before,
-.wframe::after{
-  content: "";
-  position: absolute;
-  top: 0; bottom: 0;
-  width: 1px;
-  background: var(--line);
-  pointer-events: none;
-  z-index: 1;
-}
-.wframe::before{ left: 0; }
-.wframe::after { right: 0; }
-
-/* barra superior */
+/* === titlebar === */
 .wframe__titlebar{
+  height: 44px;
   display: grid;
   grid-template-columns: 1fr auto;
   align-items: center;
-  gap: 8px;
-  padding: 8px 10px;
+  padding: 0 10px;
   border-bottom: 1px solid var(--line);
-  background: #232323;
+  cursor: move; /* arrastar quando NORMAL */
 }
-.wframe__left{ display: inline-flex; align-items: center; gap: 8px; min-width: 0; }
-.wframe__icon{ font-size: 14px; line-height: 1; }
-.wframe__title{
-  margin: 0; font-size: 14px; font-weight: 600;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-}
+.wframe.is-max .wframe__titlebar{ cursor: default; }
+.wframe__title{ margin: 0; font-size: 14px; font-weight: 600; }
+.wframe__right{ display: flex; gap: 6px; align-items: center; }
 
-/* controles */
-.wframe__right{ display: inline-flex; align-items: center; gap: 6px; }
 .ctrl{
-  min-width: 24px; height: 24px; display: grid; place-items: center;
-  background: #2a2a2a; color: var(--text);
-  border: 1px solid var(--line); border-radius: 6px;
-  font-size: 12px; line-height: 1;
-  transition: background-color .2s ease, transform .05s ease;
-  &:hover{ background:#2f2f2f; }
-  &:active{ transform: translateY(1px); }
+  width: 26px; height: 26px; border-radius: 6px;
+  background: #282828; color: var(--text);
+  border: 1px solid var(--line);
+  display: grid; place-items: center;
+  transition: background-color .15s ease, transform .05s ease, border-color .15s ease;
 }
-.ctrl.is-danger{ border-color: #8a2b2b; }
+.ctrl:hover    { background: #2f2f2f; }
+.ctrl.is-danger{ border-color: #5c2d2d; }
 
-/* conteúdo do app: rola aqui dentro */
+/* === content === */
 .wframe__content{
   overflow: auto;
-  padding: 12px;
+  padding: 12px 16px;
+}
+
+/* === states === */
+.wframe.is-max{
+  left: 0; top: 0; width: 100%; height: 100%;
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.35);
+}
+.wframe.is-min{ display: none; } /* minimizada não ocupa a área */
+
+.wframe.is-normal .wframe__grip-e,
+.wframe.is-normal .wframe__grip-w,
+.wframe.is-normal .wframe__grip-n,
+.wframe.is-normal .wframe__grip-s,
+.wframe.is-normal .wframe__grip-ne,
+.wframe.is-normal .wframe__grip-nw,
+.wframe.is-normal .wframe__grip-se,
+.wframe.is-normal .wframe__grip-sw{ display:block; }
+
+/* === grips === */
+.wframe__grip-e,
+.wframe__grip-w,
+.wframe__grip-n,
+.wframe__grip-s,
+.wframe__grip-ne,
+.wframe__grip-nw,
+.wframe__grip-se,
+.wframe__grip-sw{
+  position: absolute;
+  display: none;
+  background: transparent;
+}
+.wframe__grip-e  { top: 0; right: -3px; width: 6px;  height: 100%; cursor: ew-resize; }
+.wframe__grip-w  { top: 0; left:  -3px; width: 6px;  height: 100%; cursor: ew-resize; }
+.wframe__grip-n  { left: 0; top:  -3px; width: 100%; height: 6px;  cursor: ns-resize; }
+.wframe__grip-s  { left: 0; bottom:-3px; width: 100%; height: 6px;  cursor: ns-resize; }
+.wframe__grip-ne { top:  -4px; right:-4px; width: 10px; height: 10px; cursor: nesw-resize; }
+.wframe__grip-nw { top:  -4px; left: -4px; width: 10px; height: 10px; cursor: nwse-resize; }
+.wframe__grip-se { bottom:-4px; right:-4px; width: 10px; height: 10px; cursor: nwse-resize; }
+.wframe__grip-sw { bottom:-4px; left: -4px; width: 10px; height: 10px; cursor: nesw-resize; }
+
+/* === minimize animation (fly to tab-slot) === */
+@keyframes wframe-minimize {
+  to { transform: translate(var(--minim-dx, 0), var(--minim-dy, 0)) scale(.12); opacity: .08; }
+}
+.wframe.is-anim-minimizing{
+  animation: wframe-minimize .18s ease forwards;
+  transform-origin: top left;
 }

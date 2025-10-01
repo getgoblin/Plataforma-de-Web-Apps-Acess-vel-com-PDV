@@ -1,21 +1,24 @@
+// === deps/imports ===
 import { Injectable, signal, computed, effect } from '@angular/core';
 import { User } from '../../models/user';
 
+// === consts/keys ===
 const LS_USER_KEY = 'app:user';
 
+// === service ===
 @Injectable({ providedIn: 'root' })
 export class UserService {
-  // carrega do localStorage ao iniciar
+  // --- state/signals ---
   private readonly _user = signal<User | null>(UserService.readUser());
 
-  /** sinal público somente leitura */
+  // --- selectors/computed ---
   readonly user = this._user.asReadonly();
-  /** apenas o nome (string vazia se null) */
   readonly userName = computed(() => this._user()?.name ?? '');
   readonly isLoggedIn = computed(() => !!this._user());
 
-  
+  // --- ctor: persistência + sync cross-tab ---
   constructor() {
+    // persiste user (ou remove)
     effect(() => {
       const u = this._user();
       try {
@@ -25,41 +28,38 @@ export class UserService {
     });
 
     // sincroniza entre abas
-    window.addEventListener('storage', (e) => {
-      if (e.key !== LS_USER_KEY) return;
-      this._user.set(UserService.readUser());
-    });
+    try {
+      window.addEventListener('storage', (e) => {
+        if (e.key !== LS_USER_KEY) return;
+        this._user.set(UserService.readUser());
+      });
+    } catch {}
   }
 
+  // === actions ===
   updateName(name: string) {
-  const u = this._user();
-  if (!u) return;
-  const trimmed = (name ?? '').trim();
-  if (!trimmed) return;
-  this._user.set({ ...u, name: trimmed });
-}
+    const u = this._user();
+    if (!u) return;
+    const trimmed = (name ?? '').trim();
+    if (!trimmed) return;
+    this._user.set({ ...u, name: trimmed });
+  }
 
-
-  /** login mínimo só com nome; ajuste conforme seu modelo */
   login(name: string) {
     const trimmed = (name ?? '').trim();
-    if (!trimmed) return; // opcional: lance erro ou valide no form
+    if (!trimmed) return; // valide no form se preferir
     const user: User = { id: UserService.cryptoRandom(), name: trimmed };
     this._user.set(user);
   }
 
-  logout() {
-    this._user.set(null);
-  }
+  logout() { this._user.set(null); }
 
-  /** helpers estáticos */
+  // === static helpers ===
   private static readUser(): User | null {
     try {
       const raw = localStorage.getItem(LS_USER_KEY);
       return raw ? (JSON.parse(raw) as User) : null;
-    } catch {
-      return null;
-    }
+    } catch { return null; }
   }
 
   private static cryptoRandom(): string {

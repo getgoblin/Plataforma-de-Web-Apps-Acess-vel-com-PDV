@@ -11,9 +11,11 @@ import { UserService } from '../../../core/services/user.service';
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent {
+  // === deps ===
   private readonly userSvc = inject(UserService);
-  private readonly router = inject(Router);
+  private readonly router  = inject(Router);
 
+  // === state ===
   name = '';
   pw = '';
   fading = false;
@@ -21,11 +23,12 @@ export class LoginComponent {
   userReadonly = true;
   pwReadonly = true;
 
+  // === actions ===
   submit() {
     const n = this.name?.trim();
     if (!n) return;
 
-    // animação: fade do form e “empurrar” título
+    // --- feedback visual (fade + desloca título) ---
     this.fading = true;
     setTimeout(() => {
       this.formSuccess = true;
