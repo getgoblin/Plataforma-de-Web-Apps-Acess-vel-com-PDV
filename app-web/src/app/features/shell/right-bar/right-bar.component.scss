@@ -1,15 +1,15 @@
-/* === container === */
+/* container */
 .rightbar{
   position: relative;
   height: 100%;
   display: flex;
   flex-direction: column;
-  overflow: visible;              /* botão pode “sair” para a esquerda */
+  overflow: visible;
   border-left: 1px solid var(--line);
   background: transparent;
 }
 
-/* --- header --- */
+/* header */
 .rightbar__header{
   display: flex;
   align-items: center;
@@ -18,12 +18,12 @@
   border-bottom: 1px solid var(--line);
 }
 
-/* === toggle/handle === */
+/* toggle/handle */
 .rightbar__toggle{
   --size: 36px;
   position: absolute;
   top: 50%;
-  left: calc(-1 * var(--size) / 2); /* metade “para fora” do painel */
+  left: calc(-1 * var(--size) / 2);
   transform: translateY(-50%);
   width: var(--size);
   height: var(--size);
@@ -39,3 +39,6 @@
 .rightbar__toggle:hover        { background: #333; }
 .rightbar__toggle:active       { transform: translateY(-50%) scale(.98); }
 .rightbar__toggle:focus-visible{ outline: 2px solid #fff; outline-offset: 2px; }
+
+/* estados (classe .is-hidden e .is-open devem estar refletidas no grid do shell) */
+.rightbar.is-hidden { visibility: hidden; }

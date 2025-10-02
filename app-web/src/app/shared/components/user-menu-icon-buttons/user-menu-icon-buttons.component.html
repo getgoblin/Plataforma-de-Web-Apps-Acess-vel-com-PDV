@@ -1,0 +1,9 @@
+<button type="button"
+        class="chip"
+        [class.is-active]="active"
+        [style.--size.px]="size"
+        (click)="onClick()"
+        [attr.aria-label]="ariaLabel || label">
+  <span class="chip__icon">{{ icon }}</span>
+  <span class="chip__label" *ngIf="showLabel">{{ label }}</span>
+</button>

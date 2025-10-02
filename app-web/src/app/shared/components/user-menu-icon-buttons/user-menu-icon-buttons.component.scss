@@ -1,0 +1,40 @@
+.chip{
+  --size: 36;
+  inline-size: auto;
+  min-inline-size: var(--size);
+  block-size: var(--size);
+  padding: 0 1px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  border-radius: 9999px;
+  border: 1px solid var(--line);
+  background: #262626;
+  color: var(--text);
+  font-size: 13px;
+  line-height: 1;
+  transition: background-color .2s ease, box-shadow .2s ease, border-color .2s ease;
+
+  &:hover{ background: #2e2e2e; }
+  &.is-active{
+    border-color: #53E3A6;
+    box-shadow:
+      0 0 0 2px rgba(83,227,166,.5),
+      0 0 0 6px rgba(83,227,166,.12);
+    background: #1f2a25;
+  }
+}
+
+.chip__icon{
+  display: inline-grid;
+  place-items: center;
+  font-size: 16px;
+  width: calc(var(--size) - 14px);  /* deixa todos com largura uniforme */
+  height: calc(var(--size) - 14px);
+  border-radius: 9999px;
+}
+
+.chip__label{ font-weight: 600; }

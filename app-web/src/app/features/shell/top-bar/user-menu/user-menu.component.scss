@@ -1,80 +1,16 @@
 @use 'sass:color';
 
-.user { position: relative; z-index: 3; justify-self: end; }
+.topbar__user { justify-self: end; position: relative; z-index: 3; }
 
-.dropdown{
+/* Dropdown container */
+.topbar__dropdown{
   position: absolute; right: 0; top: calc(100% + 6px);
-  min-width: 220px; padding: 6px; margin: 0; list-style: none;
-  border: 1px solid var(--line); border-radius: 8px;
-  background: #1f1f1f; box-shadow: 0 6px 20px rgba(0,0,0,.35); z-index: 20;
-}
-.dropdown > li { margin: 2px 0; }
-.dropdown button{
-  width: 100%; text-align: left; background: transparent; border: 0;
-  color: var(--text); padding: 8px 10px; border-radius: 6px;
-  transition: background-color .2s ease;
-  &:hover{ background: #2a2a2a; }
-}
-.sep { height: 1px; margin: 6px 4px; background: var(--line); }
-
-/* linha clicável inteira (label + switch) */
-.toggle-row{
-  width: 100%;
-  display: grid;
-  grid-template-columns: 1fr auto;
-  align-items: center;
-  gap: 12px;
-  border: 0;
-  background: transparent;
-  padding: 8px 10px;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color .2s ease;
-
-  &:hover{ background: #2a2a2a; }
-  &:focus-visible{ outline: 2px solid #fff; outline-offset: 2px; }
-  .label{ color: var(--text); text-align: left; }
+  min-width: 260px; padding: 10px; margin: 0; list-style: none;
+  border: 1px solid var(--line); border-radius: 10px;
+  background: #1f1f1f; box-shadow: 0 10px 30px rgba(0,0,0,.35); z-index: 20;
 }
 
-/* switch compacto e alinhado à direita */
-.switch{
-  --w: 44px; --h: 24px;               /* ajuste de tamanho aqui */
-  position: relative;
-  width: var(--w); height: var(--h);
-  border-radius: calc(var(--h) / 2);
-  border: 1px solid var(--line);
-  background: #2a2a2a;
-  transition: background-color .2s ease, border-color .2s ease;
-
-  .knob{
-    position: absolute;
-    top: 50%; left: 2px;              /* centraliza vertical */
-    width: calc(var(--h) - 4px);
-    height: calc(var(--h) - 4px);
-    border-radius: 50%;
-    background: #dcdcdc;
-    box-shadow: 0 1px 2px rgba(0,0,0,.35);
-    transform: translateY(-50%);      /* centraliza de fato */
-    transition: transform .2s ease, background-color .2s ease;
-  }
-
-  &.is-on{
-    background: #244e3e;
-    border-color: #53E3A6;
-    .knob{
-      transform: translateY(-50%) translateX(calc(var(--w) - var(--h)));
-      background: #53E3A6;
-    }
-  }
-}
-
-
-/* opcional: reduz animações para quem prefere menos movimento */
-@media (prefers-reduced-motion: reduce){
-  .toggle-row, .switch, .switch .knob { transition: none !important; }
-}
-
-
+/* Botão pill do usuário */
 $accent: #53E3A6; $darkText: #292929;
 .user-btn{
   background: $accent; color: $darkText; border: 0; border-radius: 9999px;
@@ -83,4 +19,71 @@ $accent: #53E3A6; $darkText: #292929;
   &:hover{ background: color.adjust($accent, $lightness: -6%); }
   &:active{ transform: translateY(1px); }
   &:focus-visible{ outline: 2px solid #fff; outline-offset: 2px; }
+}
+
+/* Helpers (só ícones, mesmo tamanho e centralizados) */
+.umenu__helpers{
+  --size: 48px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(var(--size), 1fr));
+  gap: 10px;
+  align-items: center;
+  justify-items: center;
+  margin-bottom: 8px;
+}
+
+/* Linha separadora */
+.umenu__sep{
+  border: 0; height: 1px; background: var(--line);
+  margin: 8px 0;
+}
+
+/* Lista de ações (Help/Logoff) */
+.umenu__list{
+  list-style: none; margin: 0; padding: 0;
+  & > li { margin: 0; padding: 0; }
+  & button{
+    width: 100%; text-align: left; background: transparent; border: 0;
+    color: var(--text); padding: 8px 10px; border-radius: 6px;
+    transition: background-color .2s ease;
+    &:hover{ background: #2a2a2a; }
+  }
+}
+
+/* Sliders (linhas) */
+.umenu__rows{ display: grid; gap: 10px; margin: 8px 0; }
+.umenu__row{
+  display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 12px;
+}
+.umenu__row-label{
+  color: var(--text); font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+/* Switch */
+.switch{
+  --h: 26px; --w: 46px; --p: 3px;
+  position: relative; width: var(--w); height: var(--h);
+  border: 1px solid var(--line); border-radius: 999px;
+  background: #262626; display: inline-grid; place-items: center;
+  padding: 0; cursor: pointer; outline: none;
+}
+.switch__track{
+  position: absolute; inset: 0; border-radius: inherit;
+  background: #262626;
+  transition: background-color .18s ease, border-color .18s ease;
+}
+.switch__thumb{
+  position: absolute; width: calc(var(--h) - 2*var(--p)); height: calc(var(--h) - 2*var(--p));
+  border-radius: 50%; background: #dcdcdc; left: var(--p);
+  transform: translateX(0);
+  transition: transform .18s ease, background-color .18s ease;
+}
+.switch.is-on{ border-color: #53E3A6; }
+.switch.is-on .switch__track{ background: rgba(83,227,166,.18); }
+.switch.is-on .switch__thumb{ background: #53E3A6; transform: translateX(calc(var(--w) - var(--h))); }
+
+
+.switch.is-disabled{
+  opacity: .45;
+  cursor: not-allowed;
 }

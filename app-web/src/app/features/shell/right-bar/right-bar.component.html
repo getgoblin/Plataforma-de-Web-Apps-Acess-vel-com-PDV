@@ -1,25 +1,30 @@
-<!-- === rightbar root === -->
 <section
   class="rightbar"
   [class.is-open]="rightOpen()"
-  [attr.aria-labelledby]="rightOpen() ? 'logger-title' : null">
+  [class.is-hidden]="rightHidden()"
+  [attr.aria-hidden]="rightHidden() ? 'true' : 'false'"
+  [attr.aria-labelledby]="rightOpen() ? 'rightbar-title' : null">
 
-  <!-- === grabber/toggle === -->
   <button
     type="button"
     class="rightbar__toggle"
-    [class.is-active]="rightOpen()"
-    [attr.aria-expanded]="rightOpen() ? 'true' : 'false'"
-    aria-controls="logger-panel"
+    [class.is-active]="rightOpen() && !rightHidden()"
+    [attr.aria-expanded]="rightOpen() && !rightHidden() ? 'true' : 'false'"
     (click)="toggleRight()">
     {{ rightOpen() ? '⟩' : '⟨' }}
   </button>
 
-  <!-- === header (apenas aberto) === -->
-  <header class="rightbar__header" *ngIf="rightOpen()">
-    <h2 id="logger-title">Logger</h2>
+  <header class="rightbar__header" *ngIf="rightOpen() && !rightHidden()">
+    <h2 id="rightbar-title">{{ title() }}</h2>
   </header>
 
-  <!-- === content (apenas aberto) === -->
-  <app-logger *ngIf="rightOpen()" id="logger-panel"></app-logger>
+  <ng-container *ngIf="rightOpen() && !rightHidden()">
+    <app-logger      *ngIf="tool() === 'logger'"></app-logger>
+    <app-todo-panel  *ngIf="tool() === 'todo'"></app-todo-panel>
+    <app-notes-panel *ngIf="tool() === 'notes'"></app-notes-panel>
+
+    <div class="rightbar__empty" *ngIf="!tool()">
+      <p>Selecione um serviço na barra da esquerda.</p>
+    </div>
+  </ng-container>
 </section>

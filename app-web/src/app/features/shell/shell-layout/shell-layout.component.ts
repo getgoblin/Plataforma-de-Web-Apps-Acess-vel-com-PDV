@@ -30,6 +30,7 @@ export class ShellLayoutComponent {
   private readonly MAX = 300;
   private readonly CLOSED = 54;
 
+
   private readonly _leftW  = signal<number>(this.MAX);
   private readonly _rightW = signal<number>(this.MAX);
 

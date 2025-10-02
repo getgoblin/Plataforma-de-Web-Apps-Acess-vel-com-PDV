@@ -1,13 +1,13 @@
-import { Component, inject, signal, ElementRef, AfterViewInit, OnDestroy, effect } from '@angular/core';
-import { UIService } from '../../../core/services/ui.service';
+import { Component, inject, signal, ElementRef, AfterViewInit, OnDestroy, effect, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { UIService, RightTool } from '../../../core/services/ui.service';
 
 @Component({
   selector: 'app-left-bar',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './left-bar.component.html',
-  styleUrl: './left-bar.component.scss'
+  styleUrl: './left-bar.component.scss',
 })
 export class LeftBarComponent implements AfterViewInit, OnDestroy {
   private readonly ui = inject(UIService);
@@ -16,31 +16,26 @@ export class LeftBarComponent implements AfterViewInit, OnDestroy {
   leftOpen = this.ui.leftOpen;
   toggleLeft = () => this.ui.toggleLeft();
 
-  hotkeysOn = signal(false);
-  helperOn  = signal(false);
-  visualOn  = signal(false);
-  toggleHotkeys = () => this.hotkeysOn.update(v => !v);
-  toggleHelper  = () => this.helperOn.update(v => !v);
-  toggleVisual  = () => this.visualOn.update(v => !v);
+  activeTool = this.ui.rightPanelTool;
+  isToolActive = (t: RightTool) => computed(() => this.activeTool() === t);
 
-  // ---- mostrar rótulos só quando couber ----
+  openLogger = () => this.ui.toggleRightTool('logger');
+  openTodo   = () => this.ui.toggleRightTool('todo');
+  openNotes  = () => this.ui.toggleRightTool('notes');
+
   private ro: ResizeObserver | null = null;
   private roCol: ResizeObserver | null = null;
-  private readonly LABEL_MIN_W = 140;           // largura mínima pra caber texto
+  private readonly LABEL_MIN_W = 140;
   canShowText = signal(false);
 
-  // pega os nós relevantes uma vez
   private get barEl(): HTMLElement | null {
     return this.host.nativeElement.querySelector('.leftbar') as HTMLElement | null;
   }
   private get colEl(): HTMLElement | null {
     return this.host.nativeElement.closest('.shell__left') as HTMLElement | null;
   }
-
   private measure = () => {
-    // mede a largura real disponível da barra
-    const el = this.barEl;
-    if (!el) return;
+    const el = this.barEl; if (!el) return;
     const w = el.getBoundingClientRect().width;
     this.canShowText.set(w >= this.LABEL_MIN_W);
   };
@@ -49,27 +44,22 @@ export class LeftBarComponent implements AfterViewInit, OnDestroy {
     const bar = this.barEl;
     const col = this.colEl;
 
-    // observa a barra
     if ('ResizeObserver' in window && bar) {
       this.ro = new ResizeObserver(this.measure);
       this.ro.observe(bar);
     }
-    // observa a coluna do grid (é ela que muda quando você arrasta a lateral)
     if ('ResizeObserver' in window && col) {
       this.roCol = new ResizeObserver(this.measure);
       this.roCol.observe(col);
     }
 
-    // mede na largada
     this.measure();
 
-    // quando abrir/fechar, mede depois do layout estabilizar
     effect(() => {
-      this.leftOpen(); // só pra reagir
+      this.leftOpen();
       requestAnimationFrame(() => requestAnimationFrame(this.measure));
     });
 
-    // fallback: resize da janela
     window.addEventListener('resize', this.measure);
   }
 

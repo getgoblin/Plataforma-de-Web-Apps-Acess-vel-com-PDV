@@ -18,9 +18,10 @@ export const HELPER_CONTENT: Readonly<Record<HelperKey, HelperItem>> = {
   'help-pdf':      { title: 'Ajuda',       description: 'Abrir manual em PDF.',   announce: 'Abrindo manual de ajuda.' },
   'logoff':        { title: 'Sair',        description: 'Encerrar sessão.',       announce: 'Encerrando sessão.' },
 
-  'hotkeys':       { title: 'Atalhos',     description: 'Ver atalhos.',           announce: 'Atalhos ativados.' },
-  'helper':        { title: 'Helper',      description: 'Dicas contextuais.',     announce: 'Helper ativado.' },
-  'visual':        { title: 'Leitor',      description: 'Leitura em voz alta.',   announce: 'Leitor ativado.' },
+  // helpers agora no UserMenu (toggle)
+  'hotkeys':       { title: 'Atalhos',     description: 'Ativar/desativar atalhos de teclado.', announce: 'Atalhos de teclado atualizados.' },
+  'helper':        { title: 'Helper',      description: 'Ativar/desativar dicas contextuais.',    announce: 'Dicas contextuais atualizadas.' },
+  'visual':        { title: 'Leitor',      description: 'Ativar/desativar leitor e acessibilidade.', announce: 'Leitor de tela atualizado.' },
 
   'right-expand':  { title: 'Logger',      description: 'Expandir/retrair logs.', announce: 'Painel de logs.' },
   'wm-slot':       { title: 'Janela',      description: 'Focar/minimizar janela.',announce: 'Janela selecionada.' },

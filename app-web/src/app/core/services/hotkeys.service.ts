@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 
 type HotkeyHandler = (ev: KeyboardEvent) => void;
 
@@ -15,23 +15,23 @@ function normKey(ev: KeyboardEvent) {
 @Injectable({ providedIn: 'root' })
 export class HotkeysService {
   private map = new Map<string, HotkeyHandler>();
+  readonly enabled = signal(false);
 
   constructor() {
     window.addEventListener('keydown', (ev) => {
+      if (!this.enabled()) return;           // só reage quando ligado
       const key = normKey(ev);
       const h = this.map.get(key);
       if (h) { ev.preventDefault(); h(ev); }
     });
   }
 
-  /** Registra um atalho (ex: "ctrl+k"). */
+  toggle() { this.enabled.update(v => !v); }
+  setEnabled(v: boolean) { this.enabled.set(v); }
+
   register(combo: string, handler: HotkeyHandler) {
     this.map.set(combo.toLowerCase(), handler);
     return () => this.unregister(combo);
   }
-
-  /** Remove um atalho. */
-  unregister(combo: string) {
-    this.map.delete(combo.toLowerCase());
-  }
+  unregister(combo: string) { this.map.delete(combo.toLowerCase()); }
 }
