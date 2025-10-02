@@ -1,5 +1,17 @@
-export const HELPER_CONTENT = {
-  'widgets-open':  { title: 'Aplicativos', description: 'Abrir lista de apps.', announce: 'Abrindo lista de aplicativos.' },
+export type HelperKey =
+  | 'widgets-open' | 'widgets-close'
+  | 'user-menu' | 'help-pdf' | 'logoff'
+  | 'hotkeys' | 'helper' | 'visual'
+  | 'right-expand' | 'wm-slot' | 'wm-close';
+
+export type HelperItem = Readonly<{
+  title: string;
+  description: string;
+  announce: string;
+}>;
+
+export const HELPER_CONTENT: Readonly<Record<HelperKey, HelperItem>> = {
+  'widgets-open':  { title: 'Aplicativos', description: 'Abrir lista de apps.',  announce: 'Abrindo lista de aplicativos.' },
   'widgets-close': { title: 'Fechar',      description: 'Fechar lista de apps.', announce: 'Fechando lista de aplicativos.' },
 
   'user-menu':     { title: 'Usuário',     description: 'Abrir menu do usuário.', announce: 'Menu do usuário aberto.' },

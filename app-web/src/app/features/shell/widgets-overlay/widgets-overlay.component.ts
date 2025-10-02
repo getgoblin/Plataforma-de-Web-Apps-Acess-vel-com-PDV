@@ -21,12 +21,21 @@ export class WidgetsOverlayComponent {
 
   // === selectors ===
   categories = this.widgets.categories;
+  trackById = (_: number, x: WidgetMeta) => x.id;
+
 
   // === events ===
   noop(ev: Event) { ev.stopPropagation(); }
 
-  openApp(app: WidgetMeta) {
+openApp(app: WidgetMeta) {
+  const existing = this.windows.windows().find(w => w.appId === app.id);
+  if (existing) {
+    if (existing.state === 'minimized') this.windows.unminimize(existing.id);
+    else this.windows.focus(existing.id);
+  } else {
     this.windows.openByAppId(app.id);
-    this.ui.closeOverlay();
   }
+  this.ui.closeOverlay();
+}
+
 }

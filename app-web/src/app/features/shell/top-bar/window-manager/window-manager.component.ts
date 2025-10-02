@@ -16,6 +16,16 @@ export class WindowManagerComponent {
 
   wins = this.winSvc.windows;
   focusedId = this.winSvc.focusedId;
+  
+  trackById = (_: number, w: { id: string }) => w.id;
+
+
+  clickBubble(id: string) {
+  const w = this.winSvc.windows().find(x => x.id === id);
+  if (!w) return;
+  if (w.state === 'minimized') this.winSvc.unminimize(id);
+  else this.winSvc.focus(id);
+}
 
     focus = (id: string) => {
       const w = this.wins().find(x => x.id === id);

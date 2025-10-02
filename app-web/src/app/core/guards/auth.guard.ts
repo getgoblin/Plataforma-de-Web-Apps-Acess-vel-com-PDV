@@ -7,9 +7,6 @@ export const authGuard: CanMatchFn = () => {
   const router = inject(Router);
 
   const hasUser = !!userSvc.user();
-  if (!hasUser) {
-    router.navigate(['/login']);
-    return false;
-  }
-  return true;
+  // ✅ evita side-effect (navigate). O Router decide redirecionar.
+  return hasUser || router.createUrlTree(['/login']);
 };

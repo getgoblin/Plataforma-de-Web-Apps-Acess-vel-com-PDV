@@ -1,3 +1,5 @@
+
+
 /* === leftbar container === */
 .leftbar{
   position: relative;
@@ -33,6 +35,11 @@
   column-gap: 10px;
 }
 
+.leftbar.is-open.can-text .leftbar__label{
+  max-width: 180px;   /* pode ajustar */
+  opacity: 1;
+  margin-left: 8px;   /* espacinho entre o ícone e o texto */
+}
 /* === label (colapsa/expande) === */
 .leftbar__label{
   display: inline-block;
@@ -43,19 +50,12 @@
   overflow: hidden;
   text-overflow: ellipsis;
 
-  /* estado base (colapsado) */
   max-width: 0;
   opacity: 0;
   margin-left: 0;
 
   transition: max-width .25s ease, opacity .2s ease, margin-left .2s ease;
 }
-.leftbar.is-open .leftbar__label{
-  max-width: 180px;
-  opacity: 1;
-  margin-left: 8px;
-}
-
 /* === action buttons (círculos) === */
 .leftbar .btn-circle{
   --size: 36px;

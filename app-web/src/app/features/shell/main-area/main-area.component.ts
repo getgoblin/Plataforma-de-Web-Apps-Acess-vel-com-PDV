@@ -32,32 +32,31 @@ export class MainAreaComponent {
   loading = signal(false);
 
   // === bootstrap: carrega meta + componente do widget focado ===
-  constructor() {
-    effect(() => {
-      const w = this.focused();
-      (async () => {
-        if (!w) {
-          this.cmp.set(null);
-          this.meta.set(null);
-          return;
-        }
+constructor() {
+  // carrega META + COMPONENT apenas quando o appId mudar
+  const appId = computed(() => this.focused()?.appId ?? null);
 
-        this.loading.set(true);
-        this.cmp.set(null);
-        this.meta.set(this.registry.getMeta(w.appId));
+  effect(() => {
+    const id = appId();
+    if (!id) { this.cmp.set(null); this.meta.set(null); this.loading.set(false); return; }
 
-        const loader = this.registry.getLoader(w.appId);
-        if (!loader) { this.loading.set(false); return; }
+    this.loading.set(true);
+    this.meta.set(this.registry.getMeta(id) ?? null);
 
-        try {
-          const Cmp = await loader();
-          this.cmp.set(Cmp);
-        } finally {
-          this.loading.set(false);
-        }
-      })();
-    });
-  }
+    const loader = this.registry.getLoader(id);
+    if (!loader) { this.cmp.set(null); this.loading.set(false); return; }
+
+    (async () => {
+      try {
+        const Cmp = await loader();
+        this.cmp.set(Cmp);             // ✅ mantém o mesmo Cmp enquanto só mexe no rect/estado
+      } finally {
+        this.loading.set(false);
+      }
+    })();
+  });
+}
+
 
   // === ambient-bg pointer parallax ===
   @HostListener('pointermove', ['$event'])

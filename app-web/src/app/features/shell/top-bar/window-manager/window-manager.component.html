@@ -1,12 +1,15 @@
-<ul class="wm">
-  <li *ngFor="let w of wins()">
-    <button type="button"
-            class="wm__bubble"
-            [attr.data-win]="w.id"             
-            [class.is-active]="isActive(w.id)"
-            (click)="focus(w.id)">
+<ul class="wm" role="list">
+  <li *ngFor="let w of wins(); trackBy: trackById">
+    <button
+      type="button"
+      class="wm__bubble"
+      [attr.data-win]="w.id"
+      [class.is-active]="isActive(w.id)"
+      [attr.aria-pressed]="isActive(w.id) ? 'true' : 'false'"
+      [attr.title]="w.title"
+      (click)="clickBubble(w.id)">
       <span class="wm__icon">{{ iconFor(w.appId) }}</span>
-      <span class="wm__close" (click)="$event.stopPropagation(); close(w.id)">×</span>
+      <span class="visually-hidden">{{ w.title }}</span>
     </button>
   </li>
 </ul>

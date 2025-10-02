@@ -70,9 +70,37 @@ export class WindowsService {
   }
 
   // --- estados de janela ---
-  minimize(id: string) { this.patchState(id, 'minimized'); }
-  maximize(id: string) { this.patchState(id, 'maximized'); }
-  restore(id: string)  { this.patchState(id, 'normal'); }
+minimize(id: string) {
+  this._windows.update(ws => ws.map(w => {
+    if (w.id !== id) return w;
+    // se já está minimizada, preserva prevState existente
+    const prev = w.state === 'minimized' ? (w.prevState ?? 'normal') : (w.state as Exclude<WinState,'minimized'>);
+    return { ...w, state: 'minimized', prevState: prev };
+  }));
+  this._focused.set(id);
+}
+
+unminimize(id: string) {
+  this._windows.update(ws => ws.map(w => {
+    if (w.id !== id) return w;
+    const back = w.prevState ?? 'normal';
+    const next = { ...w, state: back };
+    delete (next as any).prevState;
+    return next;
+  }));
+  this._focused.set(id);
+}
+
+// (opcional, só pra manter limpo: quando muda p/ max/normal, remove prevState)
+maximize(id: string) {
+  this._windows.update(ws => ws.map(w => w.id===id?({ ...w, state:'maximized', prevState: undefined }):w));
+  this._focused.set(id);
+}
+restore(id: string) {
+  this._windows.update(ws => ws.map(w => w.id===id?({ ...w, state:'normal', prevState: undefined }):w));
+  this._focused.set(id);
+}
+
 
   // === internals ===
   // --- troca de estado + mantém foco na janela alvo ---

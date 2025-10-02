@@ -1,5 +1,9 @@
 <!-- === leftbar root === -->
-<section class="leftbar" [class.is-open]="leftOpen()" aria-label="Menu Helper">
+<section class="leftbar"
+         [class.is-open]="leftOpen()"
+         [class.can-text]="canShowText()"
+         aria-label="Menu Helper">
+
 
   <!-- === grabber/toggle === -->
   <button

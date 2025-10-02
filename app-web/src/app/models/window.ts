@@ -1,12 +1,12 @@
 export type WinState = 'normal' | 'minimized' | 'maximized';
 
-export interface WinRect { x: number; y: number; w: number; h: number; }
+export type WinRect = { x:number; y:number; w:number; h:number; };
 
-export interface AppWindow {
+export type AppWindow = {
   id: string;
   title: string;
   appId: string;
   state: WinState;
-  /** último tamanho/posição no estado NORMAL (p/ restaurar igual estava) */
   rect?: WinRect;
-}
+  prevState?: Exclude<WinState, 'minimized'>; // ← guarda 'normal' ou 'maximized'
+};
