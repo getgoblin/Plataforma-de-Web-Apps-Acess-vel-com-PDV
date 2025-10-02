@@ -17,64 +17,65 @@ type DragSide = 'left' | 'right' | null;
   styleUrl: './shell-layout.component.scss',
 })
 export class ShellLayoutComponent {
-  // === deps ===
   private readonly ui = inject(UIService);
 
-  // === selectors (ui) ===
   overlayOpen = this.ui.isOverlayMounted;
   leftOpen  = this.ui.leftOpen;
   rightOpen = this.ui.rightOpen;
+  // 👇 NOVO: sinais de ocultar
+  leftHidden  = this.ui.leftHidden;
+  rightHidden = this.ui.rightHidden;
 
-  // === constraints/sizes ===
   private readonly MIN = 48;
   private readonly MAX = 300;
-  private readonly CLOSED = 54; // largura visual quando fechado
+  private readonly CLOSED = 54;
 
-  // === widths (controladas pelo Shell) ===
   private readonly _leftW  = signal<number>(this.MAX);
   private readonly _rightW = signal<number>(this.MAX);
 
-  // === flags: evita snap ao abrir quando abertura veio de drag ===
   private suppressNextOpenSnapLeft  = false;
   private suppressNextOpenSnapRight = false;
 
-  // === lifecycle: sincroniza open/close com largura ===
   constructor() {
     effect(() => {
-      if (!this.leftOpen()) {
-        this._leftW.set(this.MIN);
-      } else if (!this.suppressNextOpenSnapLeft) {
-        this._leftW.set(this.MAX); // abertura por botão => vai ao máximo
-      }
-      this.suppressNextOpenSnapLeft = false; // consome flag
+      if (!this.leftOpen()) this._leftW.set(this.MIN);
+      else if (!this.suppressNextOpenSnapLeft) this._leftW.set(this.MAX);
+      this.suppressNextOpenSnapLeft = false;
     });
 
     effect(() => {
-      if (!this.rightOpen()) {
-        this._rightW.set(this.MIN);
-      } else if (!this.suppressNextOpenSnapRight) {
-        this._rightW.set(this.MAX);
-      }
+      if (!this.rightOpen()) this._rightW.set(this.MIN);
+      else if (!this.suppressNextOpenSnapRight) this._rightW.set(this.MAX);
       this.suppressNextOpenSnapRight = false;
     });
   }
 
-  // === grid-template-columns (dinâmico durante drag) ===
   private readonly _dragging = signal<DragSide>(null);
+
+  // 👇 considera hidden => coluna vira 0px
   gridCols = computed(() => {
     const dragging = this._dragging();
-    const l = dragging === 'left'  ? this._leftW()  : (this.leftOpen()  ? this._leftW()  : this.CLOSED);
-    const r = dragging === 'right' ? this._rightW() : (this.rightOpen() ? this._rightW() : this.CLOSED);
+    const hiddenL = this.leftHidden();
+    const hiddenR = this.rightHidden();
+
+    const l = hiddenL
+      ? 0
+      : (dragging === 'left' ? this._leftW() : (this.leftOpen() ? this._leftW() : this.CLOSED));
+
+    const r = hiddenR
+      ? 0
+      : (dragging === 'right' ? this._rightW() : (this.rightOpen() ? this._rightW() : this.CLOSED));
+
     return `${l}px 1fr ${r}px`;
   });
 
-  // === drag: start ===
   startDrag(side: DragSide, ev: MouseEvent) {
+    // 👇 bloqueia drag se a barra estiver oculta
+    if ((side === 'left' && this.leftHidden()) || (side === 'right' && this.rightHidden())) return;
     this._dragging.set(side);
     ev.preventDefault();
   }
 
-  // === drag: end ===
   @HostListener('document:mouseup')
   onUp() {
     const side = this._dragging();
@@ -83,25 +84,15 @@ export class ShellLayoutComponent {
 
     if (side === 'left') {
       const w = this._leftW();
-      if (w <= this.MIN) {
-        this.ui.closeLeft();
-      } else {
-        // abertura via drag → NÃO snap para MAX
-        this.suppressNextOpenSnapLeft = true;
-        this.ui.openLeft();
-      }
+      if (w <= this.MIN) (this as any).ui.closeLeft?.();
+      else { this.suppressNextOpenSnapLeft = true; (this as any).ui.openLeft?.(); }
     } else if (side === 'right') {
       const w = this._rightW();
-      if (w <= this.MIN) {
-        this.ui.closeRight();
-      } else {
-        this.suppressNextOpenSnapRight = true;
-        this.ui.openRight();
-      }
+      if (w <= this.MIN) (this as any).ui.closeRight?.();
+      else { this.suppressNextOpenSnapRight = true; (this as any).ui.openRight?.(); }
     }
   }
 
-  // === drag: move (limites + cálculo relativo à shell__body) ===
   @HostListener('document:mousemove', ['$event'])
   onMove(e: MouseEvent) {
     const side = this._dragging();
@@ -121,7 +112,6 @@ export class ShellLayoutComponent {
   }
 }
 
-// === utils ===
 function clamp(v: number, a: number, b: number) {
   return Math.max(a, Math.min(b, Math.round(v)));
 }

@@ -47,3 +47,14 @@
   transition: opacity .15s ease;
 }
 .shell__grip:hover::before{ opacity: 1; }
+
+.shell__left.is-hidden,
+.shell__right.is-hidden{
+  overflow: hidden; /* evita bleed de conteúdos */
+}
+
+.shell__left.is-hidden .shell__grip,
+.shell__right.is-hidden .shell__grip{
+  display: none;
+}
+

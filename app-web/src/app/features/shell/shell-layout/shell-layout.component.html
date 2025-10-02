@@ -5,35 +5,31 @@
 
 <!-- === body/grid 3 colunas (left | main | right) === -->
 <div class="shell__body" [style.gridTemplateColumns]="gridCols()">
-  <!-- --- left panel --- -->
-  <aside class="shell__left" aria-label="Menu auxiliar (Helper)">
-    <app-left-bar></app-left-bar>
 
-    <!-- --- left grip (drag) --- -->
-    <div
-      class="shell__grip shell__grip--left"
-      role="separator" aria-orientation="vertical"
-      (mousedown)="startDrag('left', $event)">
-    </div>
-  </aside>
+<aside class="shell__left"
+       [class.is-hidden]="leftHidden()"
+       aria-label="Menu auxiliar (Helper)">
+  <app-left-bar></app-left-bar>
+  <div class="shell__grip shell__grip--left"
+       *ngIf="!leftHidden()"
+       role="separator" aria-orientation="vertical"
+       (mousedown)="startDrag('left', $event)"></div>
+</aside>
 
-  <!-- --- main area --- -->
-  <main id="main-content" class="shell__main" tabindex="-1">
-    <app-main-area></app-main-area>
-  </main>
+<main id="main-content" class="shell__main" tabindex="-1">
+  <app-main-area></app-main-area>
+</main>
 
-  <!-- --- right panel --- -->
-  <aside class="shell__right" aria-label="Painel de Logs">
-    <app-right-bar></app-right-bar>
+<aside class="shell__right"
+       [class.is-hidden]="rightHidden()"
+       aria-label="Painel de Logs">
+  <app-right-bar></app-right-bar>
+  <div class="shell__grip shell__grip--right"
+       *ngIf="!rightHidden()"
+       role="separator" aria-orientation="vertical"
+       (mousedown)="startDrag('right', $event)"></div>
+</aside>
 
-    <!-- --- right grip (drag) --- -->
-    <div
-      class="shell__grip shell__grip--right"
-      role="separator" aria-orientation="vertical"
-      (mousedown)="startDrag('right', $event)">
-    </div>
-  </aside>
-</div>
 
 <!-- === overlay (montado quando aberto) === -->
 <app-widgets-overlay *ngIf="overlayOpen()"></app-widgets-overlay>

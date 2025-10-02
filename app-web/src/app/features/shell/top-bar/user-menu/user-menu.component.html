@@ -1,0 +1,44 @@
+<nav class="user" aria-label="Menu do usuário" #wrap>
+  <button type="button"
+          class="user-btn"
+          aria-haspopup="menu"
+          [attr.aria-expanded]="open() ? 'true' : 'false'"
+          aria-controls="user-menu"
+          (click)="toggle()">
+    {{ userName() || '—' }}
+  </button>
+
+  <ul id="user-menu" class="dropdown" role="menu" [hidden]="!open()">
+    <li role="none">
+      <button role="menuitem" type="button" (click)="openHelp()">Help</button>
+    </li>
+    <li role="none">
+      <button role="menuitem" type="button" (click)="logoff()">Logoff</button>
+    </li>
+
+    <li role="separator" class="sep"></li>
+
+<li role="none">
+  <button type="button"
+          class="toggle-row"
+          role="switch"
+          [attr.aria-checked]="leftHidden() ? 'true' : 'false'"
+          (click)="toggleHideLeft()">
+    <span class="label">Ocultar Left bar</span>
+    <span class="switch" [class.is-on]="leftHidden()"><span class="knob"></span></span>
+  </button>
+</li>
+
+<li role="none">
+  <button type="button"
+          class="toggle-row"
+          role="switch"
+          [attr.aria-checked]="rightHidden() ? 'true' : 'false'"
+          (click)="toggleHideRight()">
+    <span class="label">Ocultar Right bar</span>
+    <span class="switch" [class.is-on]="rightHidden()"><span class="knob"></span></span>
+  </button>
+</li>
+
+  </ul>
+</nav>
