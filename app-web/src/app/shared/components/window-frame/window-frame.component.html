@@ -1,37 +1,25 @@
-<!-- === window frame (root) === -->
-<article
-  class="wframe"
-  [class.is-min]="isMin"
-  [class.is-max]="isMax"
-  [class.is-normal]="isNormal"
-  aria-label="Janela">
+<article class="wframe" [class.is-min]="isMin" [class.is-max]="isMax" [class.is-normal]="isNormal" aria-label="Janela">
 
-  <!-- === titlebar (drag area + controls) === -->
-  <header class="wframe__titlebar">
-    <div class="wframe__left">
-      <h3 class="wframe__title">{{ title }}</h3>
-    </div>
+  <!-- titlebar vem do componente -->
+  <app-window-top
+    [title]="title"
+    [isMax]="isMax"
+    (dragIntent)="onTitlebarDown($event)"
+    (minimize)="minimize()"
+    (maximize)="maximize()"
+    (restore)="restore()"
+    (close)="close()">
+  </app-window-top>
 
-    <div class="wframe__right">
-      <button type="button" class="ctrl" (click)="minimize()" aria-label="Minimizar">—</button>
-      <button *ngIf="!isMax" type="button" class="ctrl" (click)="maximize()" aria-label="Maximizar">□</button>
-      <button *ngIf="isMax"  type="button" class="ctrl" (click)="restore()"  aria-label="Restaurar">▭</button>
-      <button type="button" class="ctrl is-danger" (click)="close()" aria-label="Fechar">×</button>
-    </div>
-  </header>
+  <section class="wframe__content"><ng-content></ng-content></section>
 
-  <!-- === content (widget host) === -->
-  <section class="wframe__content">
-    <ng-content></ng-content>
-  </section>
-
-  <!-- === grips (resize) — 4 lados + 4 cantos === -->
-  <div class="wframe__grip-n"  title="Redimensionar"></div>
-  <div class="wframe__grip-s"  title="Redimensionar"></div>
-  <div class="wframe__grip-e"  title="Redimensionar"></div>
-  <div class="wframe__grip-w"  title="Redimensionar"></div>
-  <div class="wframe__grip-ne" title="Redimensionar"></div>
-  <div class="wframe__grip-nw" title="Redimensionar"></div>
-  <div class="wframe__grip-se" title="Redimensionar"></div>
-  <div class="wframe__grip-sw" title="Redimensionar"></div>
+  <!-- grips com diretiva -->
+  <div class="wframe__grip-n"  wGrip="n"  (gripDown)="onGripDown($event)" title="Redimensionar"></div>
+  <div class="wframe__grip-s"  wGrip="s"  (gripDown)="onGripDown($event)" title="Redimensionar"></div>
+  <div class="wframe__grip-e"  wGrip="e"  (gripDown)="onGripDown($event)" title="Redimensionar"></div>
+  <div class="wframe__grip-w"  wGrip="w"  (gripDown)="onGripDown($event)" title="Redimensionar"></div>
+  <div class="wframe__grip-ne" wGrip="ne" (gripDown)="onGripDown($event)" title="Redimensionar"></div>
+  <div class="wframe__grip-nw" wGrip="nw" (gripDown)="onGripDown($event)" title="Redimensionar"></div>
+  <div class="wframe__grip-se" wGrip="se" (gripDown)="onGripDown($event)" title="Redimensionar"></div>
+  <div class="wframe__grip-sw" wGrip="sw" (gripDown)="onGripDown($event)" title="Redimensionar"></div>
 </article>
