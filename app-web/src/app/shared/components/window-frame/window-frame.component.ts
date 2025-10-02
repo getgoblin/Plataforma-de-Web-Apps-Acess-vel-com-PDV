@@ -33,6 +33,7 @@ export class WindowFrameComponent implements OnChanges, OnDestroy {
 
   // === resize observer (encaixe quando sidebars mudam) ===
   private ro: ResizeObserver | null = null;
+  private roScheduled = false; // rAF latch
 
   // === gesture state ===
 // === gesture state → modo atual e dados iniciais do gesto ===
@@ -51,17 +52,25 @@ export class WindowFrameComponent implements OnChanges, OnDestroy {
 
 
   // === lifecycle ===
-  ngAfterViewInit() {
-    // aplica rect quando normal
-    if (this.isNormal) this.applyCurrentRectOrDefault();
 
-    // observa mudanças de tamanho da área útil (main-area) e ajusta a janela
-    const slot = this.slotEl();
-    if ('ResizeObserver' in window && slot) {
-      this.ro = new ResizeObserver(() => this.fitRectIntoSlotBounds());
-      this.ro.observe(slot);
+    ngAfterViewInit() {
+      if (this.isNormal) this.applyCurrentRectOrDefault();
+      const slot = this.slotEl();
+      if ('ResizeObserver' in window && slot) {
+        this.ro = new ResizeObserver(() => this.onSlotResize());
+        this.ro.observe(slot);
+      }
     }
-  }
+
+    // agenda uma única medição por frame
+    private onSlotResize() {
+      if (this.roScheduled) return;
+      this.roScheduled = true;
+      requestAnimationFrame(() => {
+        this.roScheduled = false;
+        this.fitRectIntoSlotBounds();
+      });
+    }
 
   ngOnChanges(ch: SimpleChanges) {
     if ('state' in ch) {
@@ -172,7 +181,7 @@ private onMove = (e: MouseEvent) => {
     const h = Math.max(saved.h, this.MIN_H);
     const slotBox = slot.getBoundingClientRect();
     let x = Math.round(e.clientX - slotBox.left - w / 2);
-    let y = Math.round(e.clientY - slotBox.top  - 22); // ~meia titlebar
+    let y = Math.round(e.clientY - slotBox.top - Math.round(this.titlebarH() / 2)); // ~meia titlebar
     x = clamp(x, 0, Math.max(0, W - w));
     y = clamp(y, 0, Math.max(0, H - h));
 
@@ -305,6 +314,13 @@ private onMove = (e: MouseEvent) => {
     const w = this.wins.windows().find(x => x.id === this.windowId);
     return w?.rect ?? null;
   }
+
+  // === helpers (DOM) ===
+private titlebarH(): number {
+  const el = this.q('.wframe__titlebar');
+  return el?.offsetHeight || 22; // fallback
+}
+
 
   private defaultCenteredRect(W: number, H: number, fx = 0.5, fy = 0.5): WinRect {
     const w = Math.max(Math.round(W * fx), this.MIN_W);
