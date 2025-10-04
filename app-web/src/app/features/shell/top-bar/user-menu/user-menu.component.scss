@@ -23,14 +23,11 @@ $accent: #53E3A6; $darkText: #292929;
 
 /* Helpers (só ícones, mesmo tamanho e centralizados) */
 .umenu__helpers{
-  --size: 48px;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(var(--size), 1fr));
   gap: 10px;
-  align-items: center;
-  justify-items: center;
   margin-bottom: 8px;
 }
+
 
 /* Linha separadora */
 .umenu__sep{

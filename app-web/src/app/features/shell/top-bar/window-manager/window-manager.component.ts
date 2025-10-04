@@ -47,4 +47,6 @@ export class WindowManagerComponent {
     const meta = this.registry.getMeta(appId);
     return meta?.icon ?? '•';
   }
+
+  
 }

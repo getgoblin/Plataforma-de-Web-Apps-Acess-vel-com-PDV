@@ -1,14 +1,17 @@
-.chip{
-  --size: 36;
-  inline-size: auto;
+/* Container: pílula + label + slider */
+.chip-switch{
+  --size: 36;                       /* altura do item */
+  --h: 26px; --w: 46px; --p: 3px;   /* dimensões do slider */
+
+  inline-size: 100%;
   min-inline-size: var(--size);
   block-size: var(--size);
-  padding: 0 1px;
+  padding: 0 8px;
 
-  display: inline-flex;
+  display: grid;
+  grid-template-columns: 1fr auto;
   align-items: center;
-  justify-content: center;
-  gap: 8px;
+  gap: 12px;
 
   border-radius: 9999px;
   border: 1px solid var(--line);
@@ -16,25 +19,62 @@
   color: var(--text);
   font-size: 13px;
   line-height: 1;
-  transition: background-color .2s ease, box-shadow .2s ease, border-color .2s ease;
 
-  &:hover{ background: #2e2e2e; }
-  &.is-active{
-    border-color: #53E3A6;
-    box-shadow:
-      0 0 0 2px rgba(83,227,166,.5),
-      0 0 0 6px rgba(83,227,166,.12);
-    background: #1f2a25;
+  transition: background-color .2s ease, border-color .2s ease;
+  cursor: pointer;
+
+  /* mantém apenas um leve hover no container (sem contorno quando ON) */
+  &:hover{ background:#2e2e2e; }
+
+  /* estado desabilitado */
+  &.is-disabled{
+    opacity:.45;
+    cursor:not-allowed;
   }
 }
 
-.chip__icon{
-  display: inline-grid;
-  place-items: center;
-  font-size: 16px;
-  width: calc(var(--size) - 14px);  /* deixa todos com largura uniforme */
-  height: calc(var(--size) - 14px);
-  border-radius: 9999px;
+/* Label */
+.chip-switch__label{
+  font-weight:600;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
 }
 
-.chip__label{ font-weight: 600; }
+/* Slider */
+.switch{
+  position: relative;
+  width: var(--w);
+  height: var(--h);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #262626;
+  display: inline-grid;
+  place-items: center;
+  pointer-events: none; /* quem recebe o click é o botão pai */
+}
+.switch__track{
+  position:absolute; inset:0; border-radius:inherit;
+  background:#262626;
+  transition: background-color .18s ease, border-color .18s ease;
+}
+.switch__thumb{
+  position:absolute;
+  width: calc(var(--h) - 2*var(--p));
+  height: calc(var(--h) - 2*var(--p));
+  border-radius:50%;
+  background:#dcdcdc;
+  left: var(--p);
+  transform: translateX(0);
+  transition: transform .18s ease, background-color .18s ease;
+}
+
+/* === ON: só a bolinha muda e desliza (sem contorno no componente) === */
+itch.is-on .switch__track{
+  /* sem glow/sem fundo verde no trilho */
+  background:#262626;
+}
+.switch.is-on .switch__thumb{
+  background:#53E3A6;
+  transform: translateX(calc(var(--w) - var(--h)));
+}

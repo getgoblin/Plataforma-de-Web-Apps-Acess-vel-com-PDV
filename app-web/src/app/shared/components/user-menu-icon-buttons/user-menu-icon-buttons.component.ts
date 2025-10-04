@@ -9,13 +9,20 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./user-menu-icon-buttons.component.scss'],
 })
 export class UserMenuIconButtonComponent {
-  @Input() icon: string = '';              // ex: "⌨" | "?" | "👁"
-  @Input() active = false;                 // destaca quando ligado
-  @Input() showLabel = true;               // opcional (default true)
-  @Input() label: string = '';             // texto opcional (não usaremos agora)
-  @Input() size = 36;                      // px (todos iguais)
-  @Input() ariaLabel: string = '';         // acessibilidade
+  /** Texto do item */
+  @Input() label: string = '';
+  /** Estado do slider */
+  @Input() on = false;
+  /** Desabilita interação */
+  @Input() disabled = false;
+  /** Altura (px) do item/slider */
+  @Input() size = 36;
+  /** A11y: aria-label (se não quiser exibir label visual) */
+  @Input() ariaLabel: string = '';
 
+  /** Clique no botão (o pai alterna `on`) */
   @Output() pressed = new EventEmitter<void>();
-  onClick() { this.pressed.emit(); }
+  onClick() { if (!this.disabled) this.pressed.emit(); }
+
+  get ariaPressed(): 'true' | 'false' { return this.on ? 'true' : 'false'; }
 }

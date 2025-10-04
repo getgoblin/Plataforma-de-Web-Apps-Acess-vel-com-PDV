@@ -13,58 +13,43 @@
     <!-- Helpers: ícones SOMENTE, mesmo tamanho, centralizados -->
     <div class="umenu__helpers" aria-label="Atalhos rápidos">
       <app-user-menu-icon-button
-        icon="⌨"
-        [active]="hotkeysOn()"
-        (click)="toggleHotkeys()">
+        label="Atalhos de Teclado ⌨"
+        [on]="hotkeysOn()"
+        (pressed)="toggleHotkeys()">
       </app-user-menu-icon-button>
 
       <app-user-menu-icon-button
-        icon="?"
-        [active]="helperOn()"
-        (click)="toggleHelper()">
+        label="Helper ? "
+        [on]="helperOn()"
+        (pressed)="toggleHelper()">
       </app-user-menu-icon-button>
 
       <app-user-menu-icon-button
-        icon="👁"
-        [active]="visualOn()"
-        (click)="toggleVisual()">
+        label="Visual 👁"
+        [on]="visualOn()"
+        (pressed)="toggleVisual()">
       </app-user-menu-icon-button>
-      <!-- Adicione mais ícones aqui quando quiser -->
     </div>
+
 
     <hr class="umenu__sep" aria-hidden="true" />
 
-    <!-- Sliders de ocultar barras -->
-    <div class="umenu__rows">
-      <div class="umenu__row">
-        <span class="umenu__row-label">Ocultar Left bar</span>
-        <button
-          type="button"
-          class="switch"
-          [class.is-on]="leftHidden()"
-          (click)="toggleHideLeft()"
-          [attr.aria-pressed]="leftHidden() ? 'true' : 'false'">
-          <span class="switch__track"></span>
-          <span class="switch__thumb"></span>
-        </button>
-      </div>
+<!-- Sliders de ocultar barras -->
+<div class="umenu__rows">
+  <app-user-menu-icon-button
+    label="Ocultar Left bar"
+    [on]="leftHidden()"
+    (pressed)="toggleHideLeft()">
+  </app-user-menu-icon-button>
 
-      <!-- Right: SEMPRE aparece; só funciona quando rightOpen() -->
-      <div class="umenu__row">
-        <span class="umenu__row-label">Ocultar Right bar</span>
-        <button
-          type="button"
-          class="switch"
-          [class.is-on]="rightHidden()"
-          [class.is-disabled]="!canToggleRight()"
-          [disabled]="!canToggleRight()"
-          (click)="canToggleRight() && toggleHideRight()"
-          [attr.aria-pressed]="rightHidden() ? 'true' : 'false'">
-          <span class="switch__track"></span>
-          <span class="switch__thumb"></span>
-        </button>
-      </div>
-    </div>
+  <app-user-menu-icon-button
+    label="Ocultar Right bar"
+    [on]="rightHidden()"
+    [disabled]="!canToggleRight()"
+    (pressed)="canToggleRight() && toggleHideRight()">
+  </app-user-menu-icon-button>
+</div>
+
 
     <hr class="umenu__sep" aria-hidden="true" />
 

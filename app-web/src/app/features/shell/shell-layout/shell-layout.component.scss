@@ -1,5 +1,13 @@
 :host { display: block; height: 100%; }
 
+/* =========================
+   Variáveis de largura
+   ========================= */
+.shell__body{
+  --left-col: 72px;   /* >= largura colapsada da leftbar (56px) */
+  --right-col: 280px;
+}
+
 /* === header (fixo 56px) === */
 .shell__header{
   height: 56px;
@@ -11,34 +19,44 @@
 .shell__body{
   height: calc(100dvh - 56px);
   display: grid;
-  grid-template-columns: 72px 1fr 280px; /* sobrescrito via [style] */
+  grid-template-columns: var(--left-col) 1fr var(--right-col);
   min-height: 0;
   overflow: hidden;
+  position: relative; /* base p/ overlays */
 }
+
+/* Modificadores opcionais */
+.shell__body.--left-hidden  { grid-template-columns: 0 1fr var(--right-col); }
+.shell__body.--right-hidden { grid-template-columns: var(--left-col) 1fr 0; }
 
 /* --- columns common --- */
 .shell__left, .shell__main, .shell__right {
   min-height: 0;
   position: relative;
 }
-.shell__left  { background: transparent; border-right: 1px solid var(--line); }
-.shell__right { background: transparent; border-left:  1px solid var(--line); }
-.shell__main  { background: transparent; color: var(--text); overflow: hidden; }
 
-/* === grips internos (sem adicionar colunas) === */
+.shell__left  {
+  background: transparent;
+  border-right: 1px solid var(--line);
+  overflow: visible;            /* NUNCA clipa a leftbar / glow */
+}
+
+.shell__right { background: transparent; border-left:  1px solid var(--line); }
+.shell__main  { background: transparent; color: var(--text); overflow: hidden; position: relative; z-index: 0; }
+
+/* === grips (ficam abaixo da leftbar expandida) === */
 .shell__grip{
   position: absolute;
   top: 0; bottom: 0;
   width: 6px;
   cursor: col-resize;
   background: transparent;
-  z-index: 1;              /* abaixo dos botões das barras */
+  z-index: 1;
   pointer-events: auto;
 }
-.shell__grip--left  { right: -3px; }  /* “pega” a borda */
-.shell__grip--right { left: -3px;  }
+.shell__grip--left  { right: -3px; }
+.shell__grip--right { left:  -3px; }
 
-/* --- hover cue sutil --- */
 .shell__grip::before{
   content: "";
   position: absolute; inset: 0;
@@ -48,13 +66,9 @@
 }
 .shell__grip:hover::before{ opacity: 1; }
 
+/* Hidden */
 .shell__left.is-hidden,
-.shell__right.is-hidden{
-  overflow: hidden; /* evita bleed de conteúdos */
-}
+.shell__right.is-hidden{ overflow: hidden; }
 
 .shell__left.is-hidden .shell__grip,
-.shell__right.is-hidden .shell__grip{
-  display: none;
-}
-
+.shell__right.is-hidden .shell__grip{ display: none; }

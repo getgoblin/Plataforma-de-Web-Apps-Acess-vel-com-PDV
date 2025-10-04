@@ -1,9 +1,17 @@
-<button type="button"
-        class="chip"
-        [class.is-active]="active"
-        [style.--size.px]="size"
-        (click)="onClick()"
-        [attr.aria-label]="ariaLabel || label">
-  <span class="chip__icon">{{ icon }}</span>
-  <span class="chip__label" *ngIf="showLabel">{{ label }}</span>
+<button
+  type="button"
+  class="chip-switch"
+  [class.is-on]="on"
+  [class.is-disabled]="disabled"
+  [style.--size.px]="size"
+  (click)="onClick()"
+  [attr.aria-pressed]="ariaPressed"
+  [attr.aria-label]="ariaLabel || label">
+
+  <span class="chip-switch__label">{{ label }}</span>
+
+  <span class="switch" aria-hidden="true" [class.is-on]="on">
+    <span class="switch__track"></span>
+    <span class="switch__thumb"></span>
+  </span>
 </button>

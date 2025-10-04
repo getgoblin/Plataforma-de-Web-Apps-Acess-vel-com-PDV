@@ -12,6 +12,9 @@
   pointer-events: none;
 }
 
+.wm > li { position: relative; }
+
+
 .wm__bubble{
   --size: 36px;
   position: relative;
@@ -35,11 +38,31 @@
 
 .wm__icon{ font-size: 15px; line-height: 1; }
 
+/* Mini 'x' no canto superior direito da bolha */
 .wm__close{
-  position: absolute; top: -8px; right: -8px;
-  width: 18px; height: 18px; border-radius: 50%;
-  background: #1f1f1f; border: 1px solid var(--line);
-  display: grid; place-items: center; font-size: 12px; line-height: 1;
-  opacity: .85;
+  position: absolute;
+  top: -6px;               /* encosta no canto */
+  right: -6px;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  border: 0;
+  background: #5a5a5a;     /* cinza */
+  color: #fff;             /* 'x' branco */
+  font-size: 12px; line-height: 1;
+  display: grid; place-items: center;
+
+  z-index: 3;              /* acima da bolha */
+  opacity: 0;              /* aparece só no hover/focus */
+  pointer-events: auto;
+  transition: opacity .15s ease, transform .15s ease, background-color .15s ease;
 }
-.wm__close:hover{ opacity: 1; }
+
+/* mostra no hover/focus do item */
+.wm > li:hover .wm__close,
+.wm > li:focus-within .wm__close{
+  opacity: 1;
+  transform: none;
+}
+
+.wm__close:hover{ background:#6a6a6a; }
+.wm__close:focus-visible{ outline: 2px solid #fff; outline-offset: 2px; }

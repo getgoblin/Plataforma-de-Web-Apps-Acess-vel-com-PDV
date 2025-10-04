@@ -1,57 +1,29 @@
-<!-- === leftbar root === -->
-<section class="leftbar"
-         [class.is-open]="leftOpen()"
-         [class.can-text]="canShowText()"
-         aria-label="Serviços">
-
-  <!-- === grabber/toggle === -->
-  <button
-    type="button"
-    class="leftbar__toggle"
-    [attr.aria-expanded]="leftOpen() ? 'true' : 'false'"
-    aria-controls="leftbar-panel"
-    (click)="toggleLeft()">
-    {{ leftOpen() ? '⟨' : '⟩' }}
-  </button>
-
-  <!-- === services === -->
-  <nav aria-label="Serviços rápidos">
+<section class="leftbar" aria-label="Serviços">
+  <nav class="leftbar__scroll" aria-label="Serviços rápidos">
     <ul role="list" class="leftbar__list">
-      <!-- Logger -->
       <li>
-        <button
-          type="button"
-          class="btn-circle"
-          [class.is-active]="isToolActive('logger')()"
-          aria-label="Abrir Logger"
-          (click)="openLogger()">🧾</button>
-        <span class="leftbar__label">Logger</span>
+        <app-left-bar-icon-buttons
+          glyph="▣" label="Logger"
+          [active]="isToolActive('logger')()"
+          (click)="openLogger()">
+        </app-left-bar-icon-buttons>
       </li>
 
-      <!-- To-do -->
       <li>
-        <button
-          type="button"
-          class="btn-circle"
-          [class.is-active]="isToolActive('todo')()"
-          aria-label="Abrir To-do"
-          (click)="openTodo()">✅</button>
-        <span class="leftbar__label">To-do</span>
+        <app-left-bar-icon-buttons
+          glyph="☑" label="To-do"
+          [active]="isToolActive('todo')()"
+          (click)="openTodo()">
+        </app-left-bar-icon-buttons>
       </li>
 
-      <!-- Notes -->
       <li>
-        <button
-          type="button"
-          class="btn-circle"
-          [class.is-active]="isToolActive('notes')()"
-          aria-label="Abrir Notas"
-          (click)="openNotes()">📝</button>
-        <span class="leftbar__label">Notas</span>
+        <app-left-bar-icon-buttons
+          glyph="✎" label="Notas"
+          [active]="isToolActive('notes')()"
+          (click)="openNotes()">
+        </app-left-bar-icon-buttons>
       </li>
     </ul>
   </nav>
-
-  <!-- placeholder (se precisar) -->
-  <section id="leftbar-panel" hidden aria-label="Opções"></section>
 </section>
