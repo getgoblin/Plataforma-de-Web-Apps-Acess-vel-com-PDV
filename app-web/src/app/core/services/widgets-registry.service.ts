@@ -16,6 +16,15 @@ export class WidgetsRegistryService {
   // --- tabela de registros (adicione seus widgets aqui) ---
   private readonly entries: Entry[] = [
     {
+      // PDV
+      loadMeta: () =>
+        import('../../widgets/pdv/pdv/pdv.widget')
+          .then(m => m.WIDGET_META as WidgetMeta),
+      loadComponent: () =>
+        import('../../widgets/pdv/pdv/pdv.widget')
+          .then(m => m.WIDGET_COMPONENT as Type<any>),
+    },
+    {
       // app-teste
       loadMeta: () =>
         import('../../widgets/app-teste/app-teste/app-teste.widget')

@@ -1,0 +1,79 @@
+<section class="rp__wrap">
+  <div class="rp__pgto">
+    <div class="rp__group-title">Forma de pagamento</div>
+    <div class="rp__pgto-row">
+      <div class="rp__btns" data-help="Escolher forma de pagamento.">
+        <button class="rp__btn" [class.is-active]="pdv.formaPgto() === 'dinheiro'" (click)="setPgto('dinheiro')" data-help="Receber em dinheiro.">Dinheiro</button>
+        <button class="rp__btn" [class.is-active]="pdv.formaPgto() === 'cartao'" (click)="setPgto('cartao')">Cartão</button>
+        <button class="rp__btn" [class.is-active]="pdv.formaPgto() === 'pix'" (click)="setPgto('pix')" data-help="Receber via PIX.">PIX</button>
+      </div>
+      <button class="rp__btn rp__btn--history" (click)="openHistory()">Histórico</button>
+    </div>
+
+    <div class="rp__parcelas" *ngIf="pdv.formaPgto() === 'cartao'">
+      <div class="rp__group-title">Parcelas</div>
+      <div class="rp__desc-row">
+        <select class="rp__select" [value]="parcelasSel()" (change)="onParcelasChange($event)" data-help="Escolher número de parcelas.">
+          <option *ngFor="let n of parcelasOpts()" [value]="n">{{ n }}x de R$ {{ (totalAPagar() / n) | number:'1.2-2' }}</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="rp__desc">
+    <div class="rp__group-title">Desconto total</div>
+    <div class="rp__desc-row">
+      <select class="rp__select" [value]="tipoDesc()" (change)="onTipoChange($event)" data-help="Tipo de desconto aplicado ao total.">
+        <option value="valor">R$ Valor</option>
+        <option value="percentual">% Percentual</option>
+      </select>
+      <input type="number" class="rp__input" [value]="valorDesc()" (input)="onValorInput($event)" data-help="Valor do desconto (em R$ ou %)."/>
+    </div>
+    <div class="rp__hint">
+      <ng-container *ngIf="tipoDesc() === 'valor'; else pctHint">Máximo: R$ {{ maxDescValorBase() | number:'1.2-2' }}</ng-container>
+      <ng-template #pctHint>Intervalo permitido: 0–100%</ng-template>
+    </div>
+    <div class="rp__calc">
+      <div>Subtotal: <strong>R$ {{ subtotal() | number:'1.2-2' }}</strong></div>
+      <div>Descontos unitários: <strong>- R$ {{ totalDescontosUnit() | number:'1.2-2' }}</strong></div>
+      <div>Desconto total aplicado: <strong>- R$ {{ descontoTotalAplicado() | number:'1.2-2' }}</strong></div>
+      <div>Valor descontado: <strong>R$ {{ valorDescontado() | number:'1.2-2' }}</strong></div>
+    </div>
+  </div>
+
+  <div class="rp__total">
+    <div class="rp__grand">Total a pagar</div>
+    <div class="rp__amount">R$ {{ totalAPagar() | number:'1.2-2' }}</div>
+    <div *ngIf="pdv.formaPgto() === 'cartao'" class="rp__hint">Selecionado: {{ parcelasSel() }}x de R$ {{ (totalAPagar() / parcelasSel()) | number:'1.2-2' }} (total R$ {{ totalAPagar() | number:'1.2-2' }})</div>
+    <div class="rp__actions">
+      <button class="rp__confirm" (click)="confirmar()" data-help="Finalizar a venda e registrar o pedido.">Confirmar compra</button>
+      <button class="rp__cancel" (click)="cancelar()" data-help="Cancelar a venda em andamento.">Cancelar</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Modal: Histórico (shared modal) ===== -->
+<app-modal [open]="historyOpen()" title="Histórico de lançamentos" (close)="closeHistory()">
+  <div modal-body>
+    <table class="rp__hist">
+      <thead>
+        <tr><th>#</th><th>Cliente</th><th>Data</th><th>Total</th><th></th></tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let oc of pageItems()">
+          <td>{{ oc.numero }}</td>
+          <td>{{ displayCliente(oc) }}</td>
+          <td>{{ oc.dataISO | date:'short' }}</td>
+          <td>R$ {{ oc.totalAPagar | number:'1.2-2' }}</td>
+          <td class="rp__cell-actions"><button class="rp__danger" (click)="requestDelete(oc.numero)">Excluir</button></td>
+        </tr>
+        <tr *ngIf="!pageItems().length"><td colspan="5" class="rp__empty">Nenhum lançamento encontrado.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div modal-foot>
+    <button class="rp__btn" (click)="prevPage()" [disabled]="page() <= 1" data-help="Página anterior.">Anterior</button>
+    <span>Página {{ page() }} de {{ totalPages() }}</span>
+    <button class="rp__btn" (click)="nextPage()" [disabled]="page() >= totalPages()">Próxima</button>
+  </div>
+</app-modal>

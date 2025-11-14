@@ -23,7 +23,7 @@
   width: var(--size);
   height: var(--size);
   border-radius: 50%;
-  background-color: #292929;  /* sólido */
+  background-color: var(--slot-bg);  /* sólido */
   box-shadow: none;           /* sem glow/borda */
   opacity: 1;
   mix-blend-mode: normal;
@@ -33,3 +33,5 @@
 /* --- estados --- */
 .slot.is-occupied { transform: scale(0.98); }
 /* foco visual é responsabilidade das bolinhas reais (wm) */
+
+

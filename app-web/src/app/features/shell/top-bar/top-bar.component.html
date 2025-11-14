@@ -1,7 +1,8 @@
 <div class="topbar" role="none">
-  <app-tab-slots [count]="6"
-                 [occupied]="occupiedCount()"
-                 [focusedIndex]="focusedIndex()"></app-tab-slots>
+  <app-tab-slots
+    [count]="6"
+    [occupied]="occupiedCount()"
+    [focusedIndex]="focusedIndex()"></app-tab-slots>
 
   <nav class="topbar__windows" aria-label="Janelas abertas">
     <app-window-manager></app-window-manager>
@@ -11,6 +12,5 @@
     <app-widgets-button></app-widgets-button>
   </div>
 
-  <!-- user menu isolado -->
   <app-user-menu class="topbar__user"></app-user-menu>
 </div>

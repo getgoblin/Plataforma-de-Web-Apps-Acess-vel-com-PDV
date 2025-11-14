@@ -15,6 +15,7 @@ $accent: #53E3A6;
 
   &.is-firing{
     transition-delay: .30s;
-    background: #292929;
+    background: var(--surface-2);
   }
 }
+

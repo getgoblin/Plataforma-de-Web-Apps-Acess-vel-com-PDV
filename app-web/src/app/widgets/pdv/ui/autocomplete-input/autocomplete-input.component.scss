@@ -1,0 +1,22 @@
+.ac__wrap{ position: relative; }
+.ac__input{
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--text);
+}
+.ac__list{
+  position: absolute;
+  left: 0; right: 0; top: calc(100% + 4px);
+  max-height: 220px; overflow: auto;
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: 6px; box-shadow: var(--shadow-1);
+  padding: 4px; margin: 0; list-style: none; z-index: 20;
+}
+.ac__item{ padding: 8px 10px; border-radius: 4px; cursor: pointer; }
+.ac__item:hover, .ac__item.is-active{ background: var(--hover); }
+

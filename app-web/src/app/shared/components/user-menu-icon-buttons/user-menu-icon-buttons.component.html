@@ -6,7 +6,8 @@
   [style.--size.px]="size"
   (click)="onClick()"
   [attr.aria-pressed]="ariaPressed"
-  [attr.aria-label]="ariaLabel || label">
+  [attr.aria-label]="ariaLabel || label"
+  [attr.data-help]="help">
 
   <span class="chip-switch__label">{{ label }}</span>
 

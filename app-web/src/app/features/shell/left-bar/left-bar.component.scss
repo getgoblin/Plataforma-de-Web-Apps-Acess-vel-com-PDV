@@ -6,7 +6,7 @@
   position: absolute;
   inset: 0 auto 0 0;
   width: var(--w-collapsed);
-  background: var(--sidebar-bg, #1b1b1b);
+  background: var(--surface-2);
   border-right: 1px solid var(--line);
   box-shadow: 1px 0 15px rgba(0,0,0,.07);
   transition: width .2s linear;
@@ -29,7 +29,7 @@
 }
 .leftbar__scroll::-webkit-scrollbar{ width: 5px; }
 .leftbar__scroll::-webkit-scrollbar-thumb{
-  border-radius: 10px; background-color: #BFBFBF;
+  border-radius: 10px; background-color: var(--scrollbar-thumb);
 }
 .leftbar__scroll{ scrollbar-width: thin; }
 
@@ -53,3 +53,4 @@
   max-inline-size: 100%;
   box-sizing: border-box;
 }
+

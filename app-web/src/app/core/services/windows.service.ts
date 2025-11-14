@@ -43,7 +43,15 @@ export class WindowsService {
     const existing = this._windows().find(w => w.appId === appId);
     if (existing) { this._focused.set(existing.id); return; }
     const id = (crypto.randomUUID?.() ?? Math.random().toString(36).slice(2));
-    const win: AppWindow = { id: `w-${id}`, title: appId, appId, state: 'maximized' };
+    const win: AppWindow = { id: `w-${id}`, title: appId, appId, state: 'normal' };
+    this._windows.update(ws => [...ws, win]);
+    this._focused.set(win.id);
+  }
+
+  // --- abrir SEMPRE nova janela (permite multi-instância) ---
+  openNew(appId: string) {
+    const id = (crypto.randomUUID?.() ?? Math.random().toString(36).slice(2));
+    const win: AppWindow = { id: `w-${id}`, title: appId, appId, state: 'normal' };
     this._windows.update(ws => [...ws, win]);
     this._focused.set(win.id);
   }
@@ -127,3 +135,4 @@ restore(id: string) {
   isMinimized(id: string): boolean { return this.getWindow(id)?.state === 'minimized'; }
   isMaximized(id: string): boolean { return this.getWindow(id)?.state === 'maximized'; }
 }
+

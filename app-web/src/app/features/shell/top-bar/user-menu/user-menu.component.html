@@ -6,61 +6,29 @@
     [attr.aria-expanded]="open() ? 'true' : 'false'"
     aria-controls="user-menu"
     (click)="toggleMenu()">
-    {{ userName() || '—' }}
+    {{ userName() || '�' }}
   </button>
 
   <div class="topbar__dropdown" id="user-menu" role="menu" [hidden]="!open()">
-    <!-- Helpers: ícones SOMENTE, mesmo tamanho, centralizados -->
     <div class="umenu__helpers" aria-label="Atalhos rápidos">
-      <app-user-menu-icon-button
-        label="Atalhos de Teclado ⌨"
-        [on]="hotkeysOn()"
-        (pressed)="toggleHotkeys()">
-      </app-user-menu-icon-button>
-
-      <app-user-menu-icon-button
-        label="Helper ? "
-        [on]="helperOn()"
-        (pressed)="toggleHelper()">
-      </app-user-menu-icon-button>
-
-      <app-user-menu-icon-button
-        label="Visual 👁"
-        [on]="visualOn()"
-        (pressed)="toggleVisual()">
-      </app-user-menu-icon-button>
+      <app-user-menu-icon-button label="Atalhos de Teclado ?" [on]="hotkeysOn()" (pressed)="toggleHotkeys()" help="Ativa/desativa atalhos de teclado globais."></app-user-menu-icon-button>
+      <app-user-menu-icon-button label="Helper ?" [on]="helperOn()" (pressed)="toggleHelper()" help="Mostra dicas contextuais ao passar o mouse."></app-user-menu-icon-button>
+      <app-user-menu-icon-button label="Visual ??" [on]="visualOn()" (pressed)="toggleVisual()" help="Ajustes de acessibilidade e leitor."></app-user-menu-icon-button>
+      <app-user-menu-icon-button label="Modo Dia/Noite" [on]="isLight()" (pressed)="toggleTheme()" help="Alterna entre tema claro e escuro."></app-user-menu-icon-button>
     </div>
 
+    <hr class="umenu__sep" aria-hidden="true" />
+
+    <div class="umenu__rows">
+      <app-user-menu-icon-button label="Ocultar Left bar" [on]="leftHidden()" (pressed)="toggleHideLeft()" help="Mostra/oculta a barra esquerda."></app-user-menu-icon-button>
+      <app-user-menu-icon-button label="Ocultar Right bar" [on]="rightHidden()" [disabled]="!canToggleRight()" (pressed)="canToggleRight() && toggleHideRight()" help="Mostra/oculta a barra direita."></app-user-menu-icon-button>
+    </div>
 
     <hr class="umenu__sep" aria-hidden="true" />
 
-<!-- Sliders de ocultar barras -->
-<div class="umenu__rows">
-  <app-user-menu-icon-button
-    label="Ocultar Left bar"
-    [on]="leftHidden()"
-    (pressed)="toggleHideLeft()">
-  </app-user-menu-icon-button>
-
-  <app-user-menu-icon-button
-    label="Ocultar Right bar"
-    [on]="rightHidden()"
-    [disabled]="!canToggleRight()"
-    (pressed)="canToggleRight() && toggleHideRight()">
-  </app-user-menu-icon-button>
-</div>
-
-
-    <hr class="umenu__sep" aria-hidden="true" />
-
-    <!-- Ações -->
     <ul class="umenu__list" role="none">
-      <li role="none">
-        <button role="menuitem" type="button" (click)="openHelp()">Help</button>
-      </li>
-      <li role="none">
-        <button role="menuitem" type="button" (click)="onLogoff()">Logoff</button>
-      </li>
+      <li role="none"><button role="menuitem" type="button" (click)="openHelp()" data-help="Abrir manual em PDF em nova aba.">Help</button></li>
+      <li role="none"><button role="menuitem" type="button" (click)="onLogoff()" data-help="Encerrar sessão e voltar ao login.">Logoff</button></li>
     </ul>
   </div>
 </nav>

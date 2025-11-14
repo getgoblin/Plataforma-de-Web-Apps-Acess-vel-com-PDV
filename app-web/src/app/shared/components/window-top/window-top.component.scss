@@ -11,7 +11,7 @@
   padding: 0 10px;
   border-bottom: 1px solid var(--line);
   cursor: move;
-  background: #2f2f2f;   /* 👈 cor somente do topo */
+  background: var(--surface-2);   /* 👈 cor somente do topo */
   color: var(--text);     /* mantém contraste do texto/ícones */
 }
 .wframe__title{ margin: 0; font-size: 14px; font-weight: 600; }
@@ -20,10 +20,11 @@
 /* Controles */
 .ctrl{
   width: 26px; height: 26px; border-radius: 6px;
-  background: #282828; color: var(--text);
+  background: var(--surface); color: var(--text);
   border: 1px solid var(--line);
   display: grid; place-items: center;
   transition: background-color .15s ease, transform .05s ease, border-color .15s ease;
 }
-.ctrl:hover    { background: #2f2f2f; }
+.ctrl:hover    { background: var(--surface-2); }
 .ctrl.is-danger{ border-color: #5c2d2d; }
+

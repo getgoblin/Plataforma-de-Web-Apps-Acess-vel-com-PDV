@@ -1,49 +1,27 @@
 <!-- === overlay root === -->
-<div class="wo" (click)="noop($event)">
-
-  <!-- === panel (dialog fixo no topo) === -->
-  <section
-    class="wo__panel"
-    role="dialog"
-    aria-labelledby="widgets-title"
-    aria-modal="true"
-    (click)="noop($event)">
-
-    <!-- --- header: mesmo alinhamento da TopBar --- -->
+<div class="wo" (click)="close()">
+  <section class="wo__panel" role="dialog" aria-labelledby="widgets-title" aria-modal="true" (click)="noop($event)">
     <header class="wo__hdr">
       <div class="wo__hdr-side"></div>
       <app-widgets-button></app-widgets-button>
       <div class="wo__hdr-side"></div>
     </header>
 
-    <!-- --- titlebar --- -->
-    <div class="wo__titlebar">
-      <h2 id="widgets-title">Widget-apps</h2>
-    </div>
+    <div class="wo__titlebar"><h2 id="widgets-title">Widget-apps</h2></div>
 
-    <!-- === content (catálogo) === -->
     <section class="wo__content" aria-label="Catálogo de aplicativos">
-      <!-- --- empty state --- -->
-      <div class="wo__empty" *ngIf="categories().length === 0">
-        <p>Sem apps disponíveis.</p>
-      </div>
-
-      <!-- --- listagem por categoria --- -->
+      <div class="wo__empty" *ngIf="categories().length === 0"><p>Sem apps disponíveis.</p></div>
       <div class="wo__section" *ngFor="let cat of categories()">
         <h3 class="wo__cat">{{ cat[0] }}</h3>
         <ul class="wo__grid" role="list">
           <li *ngFor="let app of cat[1]; trackBy: trackById">
-            <button type="button" class="wo__card" (click)="openApp(app)">
-              <span class="wo__icon btn-circle" style="--size:56px">{{ app.icon }}</span>
+            <button type="button" class="wo__card" (click)="openApp(app)" [attr.aria-label]="'Abrir ' + app.name" [attr.data-help]="'Abrir ' + app.name">
+              <span class="wo__icon btn-circle" style="--size:56px" aria-hidden="true">{{ app.icon }}</span>
               <strong class="wo__title">{{ app.name }}</strong>
             </button>
           </li>
         </ul>
       </div>
     </section>
-    <!-- === end: content === -->
-
   </section>
-  <!-- === end: panel === -->
 </div>
-<!-- === end: overlay root === -->

@@ -29,14 +29,14 @@
   height: var(--size);
   border-radius: 50%;
   border: 1px solid var(--line);
-  background: #2a2a2a;
+  background: var(--surface);
   color: var(--text);
   display: grid;
   place-items: center;
   z-index: 2;
   transition: background-color .2s ease, transform .05s ease;
 }
-.rightbar__toggle:hover        { background: #333; }
+.rightbar__toggle:hover        { background: var(--hover); }
 .rightbar__toggle:active       { transform: translateY(-50%) scale(.98); }
 .rightbar__toggle:focus-visible{ outline: 2px solid #fff; outline-offset: 2px; }
 

@@ -1,0 +1,8 @@
+.tp__row{ display: grid; grid-template-columns: 1.4fr 1.4fr 1fr 1fr auto; gap: 10px; align-items: end; }
+.tp__anonimo{
+  display: inline-flex; align-items: center; gap: 8px; padding: 8px 10px;
+  background: var(--surface-2); border: 1px solid var(--line); border-radius: 6px; user-select: none;
+}
+.tp__anonimo input{ width: 16px; height: 16px; }
+.tp__col{ display: grid; gap: 4px; align-content: start; }
+.tp__hint{ color: #e66; font-size: 12px; }

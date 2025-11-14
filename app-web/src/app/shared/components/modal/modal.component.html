@@ -1,1 +1,16 @@
-<p>modal works!</p>
+<div *ngIf="open" class="m__wrap">
+  <div class="m__backdrop" (click)="onBackdropClick()"></div>
+  <section #dialog class="m__dialog" role="dialog" aria-modal="true" tabindex="-1" [attr.aria-label]="title || null">
+    <header class="m__head">
+      <h3 class="m__title">{{ title }}</h3>
+      <button type="button" class="m__close" aria-label="Fechar" (click)="requestClose()">✕</button>
+    </header>
+    <div class="m__body">
+      <ng-content select="[modal-body]"></ng-content>
+    </div>
+    <footer class="m__foot">
+      <ng-content select="[modal-foot]"></ng-content>
+    </footer>
+  </section>
+  
+</div>

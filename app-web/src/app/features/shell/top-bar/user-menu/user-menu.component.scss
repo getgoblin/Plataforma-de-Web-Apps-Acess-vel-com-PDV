@@ -1,4 +1,4 @@
-@use 'sass:color';
+@use "sass:color";
 
 .topbar__user { justify-self: end; position: relative; z-index: 3; }
 
@@ -7,80 +7,47 @@
   position: absolute; right: 0; top: calc(100% + 6px);
   min-width: 260px; padding: 10px; margin: 0; list-style: none;
   border: 1px solid var(--line); border-radius: 10px;
-  background: #1f1f1f; box-shadow: 0 10px 30px rgba(0,0,0,.35); z-index: 20;
+  background: var(--surface); box-shadow: var(--shadow-2); z-index: 20;
 }
 
-/* BotÃ£o pill do usuÃ¡rio */
-$accent: #53E3A6; $darkText: #292929;
+/* Botão pill do usuário */
 .user-btn{
-  background: $accent; color: $darkText; border: 0; border-radius: 9999px;
+  background: var(--accent); color: var(--on-accent); border: 0; border-radius: 9999px;
   padding: 8px 14px; font-weight: 600;
   transition: background-color .2s ease, transform .05s ease, box-shadow .2s ease;
-  &:hover{ background: color.adjust($accent, $lightness: -6%); }
+  &:hover{ background: color.adjust(#53E3A6, $lightness: -6%); }
   &:active{ transform: translateY(1px); }
   &:focus-visible{ outline: 2px solid #fff; outline-offset: 2px; }
 }
 
-/* Helpers (sÃ³ Ã­cones, mesmo tamanho e centralizados) */
-.umenu__helpers{
-  display: grid;
-  gap: 10px;
-  margin-bottom: 8px;
-}
-
+/* Helpers (só ícones, mesmo tamanho e centralizados) */
+.umenu__helpers{ display: grid; gap: 10px; margin-bottom: 8px; }
 
 /* Linha separadora */
-.umenu__sep{
-  border: 0; height: 1px; background: var(--line);
-  margin: 8px 0;
-}
+.umenu__sep{ border: 0; height: 1px; background: var(--line); margin: 8px 0; }
 
-/* Lista de aÃ§Ãµes (Help/Logoff) */
+/* Lista de ações (Help/Logoff) */
 .umenu__list{
   list-style: none; margin: 0; padding: 0;
   & > li { margin: 0; padding: 0; }
   & button{
     width: 100%; text-align: left; background: transparent; border: 0;
-    color: var(--text); padding: 8px 10px; border-radius: 6px;
-    transition: background-color .2s ease;
-    &:hover{ background: #2a2a2a; }
+    color: var(--text); padding: 8px 10px; border-radius: 6px; transition: background-color .2s ease;
+    &:hover{ background: var(--hover); }
   }
 }
 
-/* Sliders (linhas) */
-.umenu__rows{ display: grid; gap: 10px; margin: 8px 0; }
-.umenu__row{
-  display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 12px;
-}
-.umenu__row-label{
-  color: var(--text); font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-}
-
-/* Switch */
+/* Switch base (usado dentro dos ícones) */
 .switch{
   --h: 26px; --w: 46px; --p: 3px;
   position: relative; width: var(--w); height: var(--h);
   border: 1px solid var(--line); border-radius: 999px;
-  background: #262626; display: inline-grid; place-items: center;
+  background: var(--surface-2); display: inline-grid; place-items: center;
   padding: 0; cursor: pointer; outline: none;
 }
-.switch__track{
-  position: absolute; inset: 0; border-radius: inherit;
-  background: #262626;
-  transition: background-color .18s ease, border-color .18s ease;
-}
-.switch__thumb{
-  position: absolute; width: calc(var(--h) - 2*var(--p)); height: calc(var(--h) - 2*var(--p));
-  border-radius: 50%; background: #dcdcdc; left: var(--p);
-  transform: translateX(0);
-  transition: transform .18s ease, background-color .18s ease;
-}
-.switch.is-on{ border-color: #53E3A6; }
-.switch.is-on .switch__track{ background: rgba(83,227,166,.18); }
-.switch.is-on .switch__thumb{ background: #53E3A6; transform: translateX(calc(var(--w) - var(--h))); }
-
-
-.switch.is-disabled{
-  opacity: .45;
-  cursor: not-allowed;
-}
+.switch__track{ position: absolute; inset: 0; border-radius: inherit; background: var(--surface-2); transition: background-color .18s ease, border-color .18s ease; }
+.switch__thumb{ position: absolute; width: calc(var(--h) - 2*var(--p)); height: calc(var(--h) - 2*var(--p)); border-radius: 50%; background: var(--switch-thumb); left: var(--p); transform: translateX(0); transition: transform .18s ease, background-color .18s ease; }
+.switch.is-on{ border-color: var(--accent); }
+.switch.is-on .switch__track{ background: color-mix(in srgb, var(--accent) 18%, transparent); }
+.switch.is-on .switch__thumb{ background: var(--accent); transform: translateX(calc(var(--w) - var(--h))); }
+.switch.is-disabled{ opacity: .45; cursor: not-allowed; }

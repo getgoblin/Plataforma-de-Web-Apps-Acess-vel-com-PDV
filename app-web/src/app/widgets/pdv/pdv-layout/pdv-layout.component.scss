@@ -1,0 +1,6 @@
+.pdv__wrap{ display: grid; grid-template-rows: auto 1fr; gap: 12px; height: 100%; }
+.pdv__top{ padding: 12px; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; }
+.pdv__body{ display: grid; grid-template-columns: 2fr 1fr; gap: 12px; min-height: 0; }
+.pdv__left{ min-height: 0; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 12px; }
+.pdv__right{ min-height: 0; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 12px; }
+

@@ -20,6 +20,10 @@ export class UserMenuIconButtonComponent {
   /** A11y: aria-label (se não quiser exibir label visual) */
   @Input() ariaLabel: string = '';
 
+  @Input() help: string = '';  // texto do tooltip (Helper)
+
+
+  
   /** Clique no botão (o pai alterna `on`) */
   @Output() pressed = new EventEmitter<void>();
   onClick() { if (!this.disabled) this.pressed.emit(); }

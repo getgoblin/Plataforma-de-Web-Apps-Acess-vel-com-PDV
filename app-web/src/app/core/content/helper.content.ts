@@ -14,9 +14,9 @@ export const HELPER_CONTENT: Readonly<Record<HelperKey, HelperItem>> = {
   'widgets-open':  { title: 'Aplicativos', description: 'Abrir lista de apps.',  announce: 'Abrindo lista de aplicativos.' },
   'widgets-close': { title: 'Fechar',      description: 'Fechar lista de apps.', announce: 'Fechando lista de aplicativos.' },
 
-  'user-menu':     { title: 'Usu√°rio',     description: 'Abrir menu do usu√°rio.', announce: 'Menu do usu√°rio aberto.' },
+  'user-menu':     { title: 'Usu·rio',     description: 'Abrir menu do usu·rio.', announce: 'Menu do usu·rio aberto.' },
   'help-pdf':      { title: 'Ajuda',       description: 'Abrir manual em PDF.',   announce: 'Abrindo manual de ajuda.' },
-  'logoff':        { title: 'Sair',        description: 'Encerrar sess√£o.',       announce: 'Encerrando sess√£o.' },
+  'logoff':        { title: 'Sair',        description: 'Encerrar sess„o.',       announce: 'Encerrando sess„o.' },
 
   // helpers agora no UserMenu (toggle)
   'hotkeys':       { title: 'Atalhos',     description: 'Ativar/desativar atalhos de teclado.', announce: 'Atalhos de teclado atualizados.' },

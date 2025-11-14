@@ -1,0 +1,7 @@
+.rc__wrap{ display: grid; grid-template-rows: auto 1fr; min-height: 0; gap: 8px; }
+.rc__head{ display: flex; align-items: center; justify-content: space-between; }
+.rc__title{ margin: 0; font-size: 14px; font-weight: 600; color: var(--text); }
+.rc__subtotal{ color: var(--text-muted); }
+.rc__list{ min-height: 0; max-height: 420px; overflow: auto; display: grid; gap: 6px; }
+.rc__empty{ color: var(--text-muted); padding: 12px; text-align: center; }
+

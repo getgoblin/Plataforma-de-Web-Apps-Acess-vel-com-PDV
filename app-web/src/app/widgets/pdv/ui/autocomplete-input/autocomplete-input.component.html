@@ -1,0 +1,28 @@
+<div class="ac__wrap">
+  <input #inputEl
+         type="text"
+         class="ac__input"
+         [attr.id]="afId" [attr.name]="disableBrowserAutofill ? afName : null"
+         [attr.autocomplete]="disableBrowserAutofill ? 'new-password' : null"
+         autocapitalize="none" autocorrect="off" spellcheck="false"
+         [readonly]="readonlyHack"
+         [attr.aria-label]="ariaLabel || placeholder"
+         [placeholder]="placeholder"
+         [value]="value" (focus)="onFocus()"
+         [disabled]="disabled"
+         (input)="onInput($event)"
+         (keydown)="keydown($event)"
+         (blur)="onBlur()"
+  />
+
+  <ul *ngIf="open()" class="ac__list" role="listbox">
+    <li *ngFor="let it of options(); let i = index"
+        class="ac__item" [class.is-active]="i === (highlighted())"
+        (mousedown)="$event.preventDefault()"
+        (click)="pick(it)"
+        role="option">
+      {{ displayWith(it) }}
+    </li>
+  </ul>
+</div>
+

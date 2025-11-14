@@ -1,0 +1,13 @@
+/* basic, theme-aware modal */
+.m__wrap{ position: fixed; inset: 0; z-index: 2147483647; pointer-events: auto; }
+.m__backdrop{ position: absolute; inset: 0; background: var(--overlay, rgba(0,0,0,.55)); pointer-events: auto; }
+.m__dialog{ position: absolute; left: 50%; top: 10%; transform: translateX(-50%); z-index: 1;
+  width: min(920px, 90vw); max-height: 80vh; display: grid; grid-template-rows: auto 1fr auto;
+  background: var(--surface); color: var(--text); border: 1px solid var(--line); border-radius: 10px; box-shadow: var(--shadow-2);
+  outline: none; pointer-events: auto;
+}
+.m__head, .m__foot{ padding: 10px 12px; border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; }
+.m__foot{ border-bottom: none; border-top: 1px solid var(--line); justify-content: center; gap: 8px; }
+.m__title{ margin: 0; font-size: 16px; font-weight: 700; }
+.m__body{ padding: 10px 12px; overflow: auto; }
+.m__close{ background: var(--surface-2); color: var(--text); border: 1px solid var(--line); border-radius: 6px; padding: 6px 8px; }

@@ -1,0 +1,22 @@
+<article class="ri__wrap">
+  <div class="ri__main">
+    <div class="ri__name">{{ item.nome }}</div>
+    <div class="ri__code">{{ item.codigo }}</div>
+  </div>
+  <div class="ri__qty">
+    <label>Qtd</label>
+    <input type="number" min="1" [value]="item.qtd" (change)="onQtyChange($event)"/>
+  </div>
+  <div class="ri__disc">
+    <label>Desc %</label>
+    <input type="number" min="0" max="100" [value]="item.descontoPctUnit" (change)="onDescChange($event)"/>
+    <small class="ri__hint">0-100%</small>
+  </div>
+  <div class="ri__price">
+    <div class="ri__unit">R$ {{ item.precoUnit | number:'1.2-2' }}</div>
+    <div class="ri__total">R$ {{ (item.precoUnit * item.qtd * (1 - item.descontoPctUnit/100)) | number:'1.2-2' }}</div>
+  </div>
+  <div class="ri__actions">
+    <button class="ri__btn" (click)="remove()" title="Remover">x</button>
+  </div>
+</article>

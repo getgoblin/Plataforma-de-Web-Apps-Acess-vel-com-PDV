@@ -1,0 +1,55 @@
+<section class="pdv" (keydown.enter)="addFromQuery()">
+  <header class="pdv__top">
+    <input
+      type="text"
+      class="pdv__search"
+      placeholder="Buscar por nome ou SKU (Enter para adicionar)"
+      [(ngModel)]="query"
+      autofocus
+    />
+    <div class="pdv__total">
+      Total: <strong>{{ total() | currency:'BRL':'symbol-narrow':'1.2-2' }}</strong>
+    </div>
+  </header>
+
+  <div class="pdv__content">
+    <table class="pdv__table" *ngIf="items().length; else empty">
+      <thead>
+        <tr>
+          <th style="width:48px"></th>
+          <th>Item</th>
+          <th style="width:120px">Preço</th>
+          <th style="width:140px">Qtd</th>
+          <th style="width:140px">Subtotal</th>
+          <th style="width:48px"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let it of items(); trackBy: trackById">
+          <td class="cell__sku">{{ skuOf(it.productId) }}</td>
+          <td>{{ it.name }}</td>
+          <td class="cell__price">{{ it.unitPrice | currency:'BRL':'symbol-narrow':'1.2-2' }}</td>
+          <td class="cell__qty">
+            <button type="button" (click)="dec(it.productId)">-</button>
+            <input type="number" min="1" [value]="it.qty" (change)="setQty(it.productId, $any($event.target).value)" />
+            <button type="button" (click)="inc(it.productId)">+</button>
+          </td>
+          <td class="cell__subtotal">{{ (it.unitPrice * it.qty) | currency:'BRL':'symbol-narrow':'1.2-2' }}</td>
+          <td class="cell__remove">
+            <button type="button" (click)="remove(it.productId)" aria-label="Remover">×</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <ng-template #empty>
+      <div class="pdv__empty">Carrinho vazio. Busque um produto acima.</div>
+    </ng-template>
+  </div>
+
+  <footer class="pdv__actions">
+    <button type="button" class="btn btn--primary" (click)="finalize()" [disabled]="!items().length">Finalizar Venda</button>
+    <button type="button" class="btn" (click)="clear()" [disabled]="!items().length">Cancelar</button>
+  </footer>
+</section>
+

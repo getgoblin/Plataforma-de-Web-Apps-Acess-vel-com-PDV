@@ -1,3 +1,5 @@
+:host{ display:block; }
+
 /* Container: pílula + label + slider */
 .chip-switch{
   --size: 36;                       /* altura do item */
@@ -15,7 +17,7 @@
 
   border-radius: 9999px;
   border: 1px solid var(--line);
-  background: #262626;
+  background: var(--surface-2);
   color: var(--text);
   font-size: 13px;
   line-height: 1;
@@ -24,7 +26,7 @@
   cursor: pointer;
 
   /* mantém apenas um leve hover no container (sem contorno quando ON) */
-  &:hover{ background:#2e2e2e; }
+  &:hover{ background: var(--hover); }
 
   /* estado desabilitado */
   &.is-disabled{
@@ -48,14 +50,14 @@
   height: var(--h);
   border: 1px solid var(--line);
   border-radius: 999px;
-  background: #262626;
+  background: var(--surface-2);
   display: inline-grid;
   place-items: center;
   pointer-events: none; /* quem recebe o click é o botão pai */
 }
 .switch__track{
   position:absolute; inset:0; border-radius:inherit;
-  background:#262626;
+  background: var(--surface-2);
   transition: background-color .18s ease, border-color .18s ease;
 }
 .switch__thumb{
@@ -63,18 +65,19 @@
   width: calc(var(--h) - 2*var(--p));
   height: calc(var(--h) - 2*var(--p));
   border-radius:50%;
-  background:#dcdcdc;
+  background: var(--switch-thumb, #dcdcdc);
   left: var(--p);
   transform: translateX(0);
   transition: transform .18s ease, background-color .18s ease;
 }
 
 /* === ON: só a bolinha muda e desliza (sem contorno no componente) === */
-itch.is-on .switch__track{
+/* ON state */
+.switch.is-on .switch__track{
   /* sem glow/sem fundo verde no trilho */
-  background:#262626;
+  background: var(--surface-2);
 }
 .switch.is-on .switch__thumb{
-  background:#53E3A6;
+  background: var(--accent);
   transform: translateX(calc(var(--w) - var(--h)));
 }

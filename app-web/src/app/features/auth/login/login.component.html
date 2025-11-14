@@ -22,6 +22,7 @@
         (focus)="userReadonly=false"
         [(ngModel)]="name"
         placeholder="Username"
+        data-help="Digite seu e-mail cadastrado (ex.: admin@example.com)."
         spellcheck="false"
         autocapitalize="off"
         autocorrect="off"
@@ -37,10 +38,11 @@
         [readonly]="pwReadonly"
         (focus)="pwReadonly=false"
         [(ngModel)]="pw"
-        placeholder="Password" />
+        placeholder="Password"
+        data-help="Digite sua senha. Deixe em branco para testar a interface sem autenticar." />
 
       <!-- --- submit --- -->
-      <button type="submit" id="login-button" class="btn-primary">Login</button>
+      <button type="submit" id="login-button" class="btn-primary" data-help="Entrar no sistema.">Login</button>
     </form>
     <!-- === end: form === -->
   </section>

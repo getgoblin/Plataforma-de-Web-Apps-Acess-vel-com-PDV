@@ -3,13 +3,13 @@
 /* === tokens === */
 $primary: #53E3A6;
 
-/* === placeholders === */
-::placeholder { color: white; opacity: 1; }
+/* === placeholders (default: dark) === */
+::placeholder { color: rgba(255,255,255,.9); opacity: 1; }
 ::-ms-input-placeholder { color: rgba(255,255,255,.9); }
 :-ms-input-placeholder  { color: rgba(255,255,255,.9); }
 
 /* === layout root === */
-:host { display:block; min-height:100dvh; background: var(--bg); color:#fff; }
+:host { display:block; min-height:100dvh; background: var(--bg); color: var(--text); }
 
 /* === wrapper === */
 .login-wrapper{
@@ -97,4 +97,40 @@ $primary: #53E3A6;
 /* === a11y: reduce motion === */
 @media (prefers-reduced-motion: reduce){
   .login-title, .login-form, .login-form input, .login-form button { transition: none !important; }
+}
+
+/* ===========================
+   Light theme adjustments (contrast)
+   Apply only when the HTML root has .theme-light
+   =========================== */
+:host-context(.theme-light){
+  color: var(--text);
+
+  .login-title{ color: var(--text); }
+
+  .login-form{
+    input{
+      color: var(--text);
+      background: #ffffff;
+      border: 1px solid var(--line);
+
+      &:hover { background: #F9FAFB; }
+      &:focus {
+        background: #ffffff;
+        color: var(--text);
+        border-color: var(--accent);
+      }
+
+      /* placeholders in light mode */
+      &::placeholder { color: #9CA3AF; opacity: 1; }
+      &::-ms-input-placeholder { color: #9CA3AF; }
+      &:-ms-input-placeholder  { color: #9CA3AF; }
+    }
+
+    /* keep the CTA visible; use green button */
+    button{
+      background: $primary;
+      color: #fff;
+    }
+  }
 }

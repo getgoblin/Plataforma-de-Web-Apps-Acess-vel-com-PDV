@@ -3,28 +3,22 @@
   <!-- --- ambient background --- -->
   <div class="ambient-bg" #ambient aria-hidden="true"></div>
 
-  <!-- === content slot (recebe a janela focada) === -->
+  <!-- === content slot (todas as janelas não minimizadas) === -->
   <div class="content-slot">
-    <ng-container *ngIf="focused() as w; else empty">
+    <ng-container *ngFor="let w of visible(); trackBy: trackById">
       <app-window-frame
         [windowId]="w.id"
-        [title]="meta()?.name || ''"
-        [state]="w.state || 'normal'">
+        [title]="(metaFor(w.appId)?.name || w.title)"
+        [state]="w.state || 'normal'"
+        [zIndex]="zFor(w.id)">
 
-        <!-- --- widget lazy (com loading local) --- -->
-        <ng-container *ngIf="cmp(); else loading">
-          <ng-container [ngComponentOutlet]="cmp()"></ng-container>
+        <ng-container *ngIf="cmpFor(w.appId) as Cmp; else loading">
+          <ng-container [ngComponentOutlet]="Cmp"></ng-container>
         </ng-container>
-
         <ng-template #loading>
           <div class="empty-state">Carregando widget…</div>
         </ng-template>
       </app-window-frame>
     </ng-container>
-
-    <!-- --- vazio (sem mensagem) --- -->
-    <ng-template #empty>
-      <div class="empty-state"></div>
-    </ng-template>
   </div>
 </section>

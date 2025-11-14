@@ -1,0 +1,16 @@
+.ri__wrap{
+  display: grid; grid-template-columns: 1.6fr auto auto auto auto; gap: 8px;
+  align-items: start; background: var(--surface-2); border: 1px solid var(--line);
+  border-radius: 8px; padding: 8px 10px; position: relative;
+}
+.ri__name{ font-weight: 600; }
+.ri__code{ color: var(--text-muted); font-size: 12px; }
+.ri__qty, .ri__disc{ display: grid; gap: 4px; }
+.ri__qty input, .ri__disc input{ width: 80px; padding: 6px 8px; border-radius: 6px; border:1px solid var(--line); background: var(--surface); color: var(--text); }
+.ri__hint{ color: var(--text-muted); font-size: 12px; }
+.ri__price{ text-align: right; }
+.ri__unit{ color: var(--text-muted); font-size: 12px; }
+.ri__total{ font-weight: 700; }
+.ri__actions{ display: flex; gap: 6px; justify-self: end; opacity: .2; transition: opacity .15s ease; }
+.ri__wrap:hover .ri__actions, .ri__wrap:focus-within .ri__actions{ opacity: 1; }
+.ri__btn{ background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 6px 8px; color: var(--text); }

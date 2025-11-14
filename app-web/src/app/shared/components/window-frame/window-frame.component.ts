@@ -1,4 +1,4 @@
-import { Component, Input, ElementRef, inject, OnChanges, SimpleChanges, OnDestroy } from '@angular/core';
+import { Component, Input, ElementRef, inject, OnChanges, SimpleChanges, OnDestroy, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { WindowsService } from '../../../core/services/windows.service';
 import { WinRect } from '../../../models/window';
@@ -19,6 +19,7 @@ export class WindowFrameComponent implements OnChanges, OnDestroy {
   @Input({ required: true }) windowId!: string;
   @Input({ required: true }) title!: string;
   @Input() state: 'normal' | 'minimized' | 'maximized' = 'normal';
+  @Input() zIndex: number = 0;
 
   get isMin()    { return this.state === 'minimized'; }
   get isMax()    { return this.state === 'maximized'; }
@@ -60,8 +61,16 @@ export class WindowFrameComponent implements OnChanges, OnDestroy {
   }
   ngOnDestroy(){ try { this.ro?.disconnect(); } catch {} this.ro = null; }
 
+  // foca a janela ao clicar em qualquer área do frame
+  @HostListener('mousedown', ['$event'])
+  onFrameMouseDown(ev: MouseEvent) {
+    this.wins.focus(this.windowId);
+  }
+
   // === titlebar events vindos do window-top ===
   onTitlebarDown(e: MouseEvent) {
+    // ao clicar na barra, traz a janela para frente
+    this.wins.focus(this.windowId);
     // mesma lógica que você já tinha para pending-restore ou move
     if (this.isMax) {
       e.preventDefault();
@@ -155,16 +164,30 @@ export class WindowFrameComponent implements OnChanges, OnDestroy {
       if (isResize) {
         const draggedE = this.dragMode.includes('e'), draggedW = this.dragMode.includes('w');
         const draggedN = this.dragMode.includes('n'), draggedS = this.dragMode.includes('s');
-        const expandedX = r.w >= (this.startRect!.w - 0.5), expandedY = r.h >= (this.startRect!.h - 0.5);
-        const hitX = (draggedE && nearRight) || (draggedW && nearLeft);
-        const hitY = (draggedS && nearBot)   || (draggedN && nearTop);
+        // considerar snap somente quando houve expansão visível nesse eixo
+        const expandedX = r.w >= (this.startRect!.w + 0.5);
+        const expandedY = r.h >= (this.startRect!.h + 0.5);
 
         let nx = r.x, ny = r.y, nw = r.w, nh = r.h;
-        if (hitX && expandedX) { nx = 0; nw = W; }
-        if (hitY && expandedY) { ny = 0; nh = H; }
+
+        // snap apenas da borda ARRASTADA (não maximiza e sim encosta no limite)
+        if (draggedW && nearLeft && expandedX) {
+          const right = r.x + r.w;
+          nx = 0; nw = clamp(right - nx, this.MIN_W, W);
+        }
+        if (draggedE && nearRight && expandedX) {
+          nx = r.x; nw = clamp(W - nx, this.MIN_W, W - nx);
+        }
+        if (draggedN && nearTop && expandedY) {
+          const bottom = r.y + r.h;
+          ny = 0; nh = clamp(bottom - ny, this.MIN_H, H);
+        }
+        if (draggedS && nearBot && expandedY) {
+          ny = r.y; nh = clamp(H - ny, this.MIN_H, H - ny);
+        }
 
         const snapped = (nx!==r.x)||(ny!==r.y)||(nw!==r.w)||(nh!==r.h);
-        if (snapped) { const newR: WinRect = { x:nx, y:ny, w:nw, h:nh }; this.applyRect(newR); this.wins.setRect(this.windowId, newR); this.wins.restore(this.windowId); }
+        if (snapped) { const newR: WinRect = { x:nx, y:ny, w:nw, h:nh }; this.applyRect(newR); this.wins.setRect(this.windowId, newR); }
         else this.wins.setRect(this.windowId, r);
       } else {
         this.wins.setRect(this.windowId, r);
@@ -183,7 +206,12 @@ export class WindowFrameComponent implements OnChanges, OnDestroy {
   private applyCurrentRectOrDefault() {
     const slot = this.slotEl(); const saved = this.currentRect();
     if (saved) { this.applyRect(this.clampedToSlot(saved)); return; }
-    const W=slot.clientWidth,H=slot.clientHeight; const rect = this.defaultCenteredRect(W,H,0.5,0.5);
+    const W=slot.clientWidth,H=slot.clientHeight; 
+    // tamanho padrão um pouco menor que a área e com deslocamento por índice (efeito cascata)
+    let rect = this.defaultCenteredRect(W,H,0.6,0.6);
+    const idx = this.wins.windows().findIndex(w => w.id === this.windowId);
+    const off = Math.max(0, Math.min(idx, 8)) * 24; // limita deslocamento a 8 passos
+    rect = this.clampedToSlot({ x: rect.x + off, y: rect.y + off, w: rect.w, h: rect.h });
     this.applyRect(rect); this.wins.setRect(this.windowId, rect);
   }
   private fitRectIntoSlotBounds() {

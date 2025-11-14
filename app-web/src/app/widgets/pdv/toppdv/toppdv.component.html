@@ -1,0 +1,31 @@
+<form class="tp__form" (submit)="onSubmit($event)" autocomplete="off">
+  <div class="tp__row">
+    <div class="tp__col">
+      <pdv-autocomplete-input [placeholder]="'Nome'" [ariaLabel]="'Nome do cliente'" data-help="Nome completo do cliente. Use sugest�es para preencher mais rápido."
+        [value]="nome()" (valueChange)="onNomeChange($event)" [search]="searchNome" [displayWith]="displayNome" (itemSelected)="pickCliente($event)" [disabled]="pdv.cliente().anonimo" />
+    </div>
+
+    <div class="tp__col">
+      <pdv-autocomplete-input [placeholder]="'Email'" [ariaLabel]="'Email do cliente'" data-help="E-mail do cliente para contato/envio de nota."
+        [value]="email()" (valueChange)="onEmailChange($event)" [search]="searchEmail" [displayWith]="displayEmail" (itemSelected)="pickCliente($event)" [disabled]="pdv.cliente().anonimo" />
+      <small class="tp__hint" *ngIf="emailValido() === false">E-mail inválido</small>
+    </div>
+
+    <div class="tp__col">
+      <pdv-autocomplete-input [placeholder]="'Telefone'" [ariaLabel]="'Telefone do cliente'" data-help="Telefone para contato/WhatsApp."
+        [value]="telefone()" (valueChange)="onTelefoneChange($event)" [search]="searchTel" [displayWith]="displayTel" (itemSelected)="pickCliente($event)" [disabled]="pdv.cliente().anonimo" />
+      <small class="tp__hint" *ngIf="telefoneValido() === false">Telefone inválido</small>
+    </div>
+
+    <div class="tp__col">
+      <pdv-autocomplete-input [placeholder]="'CPF/RG'" [ariaLabel]="'Documento do cliente'" data-help="Documento do cliente (CPF/RG)."
+        [value]="documento()" (valueChange)="onDocumentoChange($event)" [search]="searchDoc" [displayWith]="displayDoc" (itemSelected)="pickCliente($event)" [disabled]="pdv.cliente().anonimo" />
+      <small class="tp__hint" *ngIf="documentoValido() === false">Documento inválido</small>
+    </div>
+
+    <label class="tp__anonimo" data-help="Marque para registrar a venda sem identificar o cliente.">
+      <input type="checkbox" [checked]="pdv.cliente().anonimo" (change)="toggleAnonimo()"/>
+      Cliente anônimo
+    </label>
+  </div>
+</form>

@@ -1,4 +1,4 @@
-@use 'sass:color';
+@use "sass:color";
 
 .topbar{
   display: grid;
@@ -6,10 +6,10 @@
   align-items: center;
   height: 56px;
   padding: 0 12px;
-  background: transparent;
+  background: var(--surface-2);
   position: relative;
   --wm-offset-left: 112px;
 }
 .topbar__windows { justify-self: start; }
-.topbar__widgets { justify-self: center; }
+.topbar__widgets { justify-self: center; z-index: 3; }
 .topbar__user    { justify-self: end; z-index: 3; }

@@ -1,0 +1,11 @@
+<section class="rc__wrap" aria-label="Resumo de compras">
+  <header class="rc__head">
+    <h3 class="rc__title">Resumo</h3>
+    <div class="rc__subtotal">Subtotal: {{ subtotal() | number:'1.2-2' }}</div>
+  </header>
+
+  <div class="rc__list">
+    <pdv-item-linha *ngFor="let item of itens(); trackBy: trackById" [item]="item"></pdv-item-linha>
+    <div *ngIf="!itens().length" class="rc__empty">Nenhum item no carrinho.</div>
+  </div>
+</section>

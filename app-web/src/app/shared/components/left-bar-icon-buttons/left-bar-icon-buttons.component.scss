@@ -20,7 +20,7 @@
 
   border-radius: 9999px;
   border: 1px solid var(--line);
-  background: #262626;
+  background: var(--surface);
   color: var(--text);
   padding: 0 12px 0 6px;
 
@@ -59,16 +59,16 @@
 
 /* hover da pílula (só quando expandida) */
 :host-context(.leftbar:hover) .lb-item:hover{
-  background: #53E3A6;
+  background: var(--accent);
   color: #fff;
   border-color: transparent;
 }
 
 /* ativo (expandida) — leve destaque */
 .lb-item.is-active{
-  border-color: #53E3A6;
+  border-color: var(--accent);
   box-shadow: 0 0 0 2px rgba(83,227,166,.55), 0 0 0 5px rgba(83,227,166,.15);
-  background: #1f2a25;
+  background: var(--surface);
 }
 
 /* ===== RECOLHIDA: vira CÍRCULO ===== */
@@ -82,7 +82,7 @@
 
 /* RECOLHIDA + ativo — FUNDO VERDE */
 :host-context(.leftbar:not(:hover)) .lb-item.is-active{
-  background: #53E3A6;     /* pinta o círculo */
+  background: var(--accent);     /* pinta o círculo */
   color: #fff;             /* ícone/emoji branco */
   border-color: transparent;
   box-shadow: none;
@@ -90,3 +90,5 @@
 :host-context(.leftbar:not(:hover)) .lb-item.is-active::after{
   content: none;           /* remove o contorno */
 }
+
+

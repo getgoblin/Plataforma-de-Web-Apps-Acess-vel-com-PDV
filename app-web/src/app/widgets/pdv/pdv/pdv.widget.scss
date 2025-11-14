@@ -1,0 +1,23 @@
+:host{display:block}
+.pdv{display:grid; gap:12px}
+.pdv__top{display:grid; grid-template-columns: 1fr auto; gap:12px; align-items:center}
+.pdv__search{height:40px; border-radius:8px; border:1px solid var(--line); background: var(--surface-2); color: var(--text); padding:0 12px}
+.pdv__total{font-size:18px}
+.pdv__content{min-height:180px; background: var(--surface); border:1px solid var(--line); border-radius:8px; padding:12px}
+table{width:100%; border-collapse:collapse}
+th, td{padding:8px; border-bottom:1px solid var(--line)}
+thead th{font-weight:600; color: var(--text); text-align:left}
+tbody td{color: var(--text)}
+.cell__price,.cell__subtotal{text-align:right}
+.cell__qty{display:flex; align-items:center; gap:6px}
+.cell__qty input{width:64px; height:32px; border-radius:6px; border:1px solid var(--line); background: var(--surface-2); color: var(--text); text-align:center}
+.cell__qty button{width:32px; height:32px; border-radius:6px; border:1px solid var(--line); background: var(--surface); color: var(--text)}
+.cell__remove button{width:32px; height:32px; border-radius:6px; border:1px solid var(--line); background: color-mix(in srgb, #ff5a5a 40%, transparent); color: var(--text)}
+.pdv__empty{opacity:.9; color: var(--text-muted); padding:24px; text-align:center}
+.pdv__actions{display:flex; gap:10px; justify-content:flex-end}
+.btn{height:40px; padding:0 14px; border-radius:8px; border:1px solid var(--line); background: var(--surface-2); color: var(--text)}
+.btn--primary{background: var(--accent); color: var(--on-accent); border-color: var(--accent)}
+
+
+
+

@@ -1,0 +1,13 @@
+<div class="lp__wrap">
+  <div class="lp__search" data-help="Busque por nome ou código. Pressione Enter para adicionar, ou clique em uma sugestão.">
+    <pdv-autocomplete-input [placeholder]="'Buscar produto (nome ou código)'"
+      [ariaLabel]="'Buscar produto'"
+      [search]="search" [listAll]="listAll" [openOnFocus]="true" [displayWith]="display"
+      [keepOpenAfterSelect]="true" [clearOnSelect]="true"
+      [value]="query()" (valueChange)="query.set($event)"
+      (itemSelected)="add($event)" (enterPressed)="addByQuery($event)" />
+  </div>
+
+  <pdv-resumo-compras></pdv-resumo-compras>
+</div>
+
