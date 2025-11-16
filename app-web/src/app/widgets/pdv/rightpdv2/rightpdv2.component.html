@@ -25,7 +25,7 @@
     <div class="rp__desc-row">
       <select class="rp__select" [value]="tipoDesc()" (change)="onTipoChange($event)" data-help="Tipo de desconto aplicado ao total.">
         <option value="valor">R$ Valor</option>
-        <option value="percentual">% Percentual</option>
+        <option value="percentual">%</option>
       </select>
       <input type="number" class="rp__input" [value]="valorDesc()" (input)="onValorInput($event)" data-help="Valor do desconto (em R$ ou %)."/>
     </div>

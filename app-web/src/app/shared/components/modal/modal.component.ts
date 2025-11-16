@@ -21,7 +21,6 @@ export class ModalComponent implements OnChanges, OnDestroy {
     if (changes['open']) {
       const o = !!this.open;
       try { document.body.classList.toggle('has-modal-open', o); } catch {}
-      // foco inicial no diálogo para acessibilidade
       if (o) setTimeout(() => this.dialog?.nativeElement?.focus?.(), 0);
     }
   }

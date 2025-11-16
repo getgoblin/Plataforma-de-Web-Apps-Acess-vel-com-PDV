@@ -6,7 +6,17 @@
 .ri__name{ font-weight: 600; }
 .ri__code{ color: var(--text-muted); font-size: 12px; }
 .ri__qty, .ri__disc{ display: grid; gap: 4px; }
-.ri__qty input, .ri__disc input{ width: 80px; padding: 6px 8px; border-radius: 6px; border:1px solid var(--line); background: var(--surface); color: var(--text); }
+.ri__disc-row{ display: grid; grid-template-columns: auto auto; gap: 4px; align-items: center; }
+.ri__qty input,
+.ri__disc input,
+.ri__disc select{
+  width: 92px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  border:1px solid var(--line);
+  background: var(--surface);
+  color: var(--text);
+}
 .ri__hint{ color: var(--text-muted); font-size: 12px; }
 .ri__price{ text-align: right; }
 .ri__unit{ color: var(--text-muted); font-size: 12px; }

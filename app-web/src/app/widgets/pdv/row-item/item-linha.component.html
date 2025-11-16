@@ -8,9 +8,26 @@
     <input type="number" min="1" [value]="item.qtd" (change)="onQtyChange($event)"/>
   </div>
   <div class="ri__disc">
-    <label>Desc %</label>
-    <input type="number" min="0" max="100" [value]="item.descontoPctUnit" (change)="onDescChange($event)"/>
-    <small class="ri__hint">0-100%</small>
+    <label>Desconto</label>
+    <div class="ri__disc-row">
+      <select [value]="tipoDesc()" (change)="onTipoDescChange($event)">
+        <option value="percentual">%</option>
+        <option value="valor">R$ Valor</option>
+      </select>
+    <input
+      type="number"
+      min="0"
+      [attr.max]="tipoDesc() === 'percentual' ? 100 : null"
+      [value]="tipoDesc() === 'percentual'
+        ? item.descontoPctUnit
+        : (item.precoUnit * item.qtd * (item.descontoPctUnit/100))"
+      (change)="onDescChange($event)"
+    />
+    </div>
+    <small class="ri__hint">
+      <ng-container *ngIf="tipoDesc() === 'percentual'; else valorHint">0-100% por item.</ng-container>
+      <ng-template #valorHint>Valor em R$ para este item.</ng-template>
+    </small>
   </div>
   <div class="ri__price">
     <div class="ri__unit">R$ {{ item.precoUnit | number:'1.2-2' }}</div>
